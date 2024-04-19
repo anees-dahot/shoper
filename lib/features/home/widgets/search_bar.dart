@@ -17,7 +17,7 @@ class CustomSearchBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: width * 0.7,
+          width: width * 0.75,
           height: height * 0.07,
           decoration: BoxDecoration(
             color: Colors.grey[200],
