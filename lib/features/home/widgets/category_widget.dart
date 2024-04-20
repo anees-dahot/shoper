@@ -1,57 +1,75 @@
 import 'package:flutter/material.dart';
 
 class CategoryWidget extends StatelessWidget {
-   CategoryWidget({super.key});
-
+  CategoryWidget({super.key});
 
   List category = [
-{
-"name": "Fruits",
-  "image":   'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-},
-{
-  "name": "Vegetables",
-  "image":  'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-},
-{
-  "name": "Meat",
-  "image":   'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-},
-{
-  "name": "Dairy",
-  "image":   'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-},
-  {
-  "name": "Others",
-  "image":   'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-},
-{
-  "name": "Others",
-  "image":   'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ',
-}
+    {
+      "name": "Adidas",
+      "image": 'assets/images/adidas.png',
+    },
+    {
+      "name": "Nike",
+      "image": 'assets/images/nike.png',
+    },
+    {
+      "name": "Puma",
+      "image": 'assets/images/puma.png',
+    },
+    {
+      "name": "Converse",
+      "image": 'assets/images/converse.png',
+    },
+     {
+      "name": "Gucci",
+      "image": 'assets/images/gucci.png',
+    },
+    {
+      "name": "Skechers",
+      "image": 'assets/images/skechers.png',
+    },
+    {
+      "name": "Power",
+      "image": 'assets/images/power.png',
+    },
+    {
+      "name": "Bata",
+      "image": 'assets/images/bata.png',
+    },
+     
   ];
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
- width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.1,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.14,
       child: ListView.builder(
-      itemCount:category.length ,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50)
-            ),
-           child: Image.network(category[index]['image']), 
-          ),
-        );
-      },),
+        itemCount: category.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal:  15.0),
+              child: Column(
+                children: [
+                  Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70),
+                        color: Colors.grey[200]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image.asset(
+                        category[index]['image'],
+                      ),
+                    ),
+                  ),
+                  Text(category[index]['name'])
+                ],
+              ));
+        },
+      ),
     );
   }
 }

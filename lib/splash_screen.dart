@@ -30,8 +30,9 @@ authService.getUserData(context);
     //generate future.delayed and then run any function
     Future.delayed(const Duration(seconds: 5), () {
       Provider.of<UserProvider>(context, listen: false).user.token.isNotEmpty
-        ? Navigator.pushNamedAndRemoveUntil(
-            context, BottomNavbr.routeName, (route) => false)
+        ?  Provider.of<UserProvider>(context, listen: false).user.type == 'user' ? Navigator.pushNamedAndRemoveUntil(
+            context, BottomNavbr.routeName, (route) => false) : Navigator.pushNamedAndRemoveUntil(
+            context, BottomNavbr.routeName, (route) => false) 
         : Navigator.pushNamedAndRemoveUntil(
             context, AuthScreen.routeName, (route) => false);
     });

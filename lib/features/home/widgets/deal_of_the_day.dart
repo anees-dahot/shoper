@@ -23,7 +23,7 @@ class DealOfTheDay extends StatelessWidget {
       child: Column(
         children: [
            Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

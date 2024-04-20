@@ -60,8 +60,8 @@ class CustomBanner extends StatelessWidget {
               )
             ],
           ),
-          Image.network(
-            'http://www.winkelstraat.nl/cdn-cgi/image/w=1280,h=1280,format=auto/img/2700/2700/trim/catalog/product/2/8/2834168_wsnl344-21-2-292-image_2.jpeg',
+          Image.asset(
+            'assets/images/shoes.png',
           )
         ],
       ),

@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         CustomSearchBar(width: width, height: height),
         SizedBox(
-          height: height * 0.02,
+          height: height * 0.025,
         ),
         //make a container for showing shop now banner with an image text adn button adn red bg color
         CustomBanner(width: width, height: height),
