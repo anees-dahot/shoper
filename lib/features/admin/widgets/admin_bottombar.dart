@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoper/features/account/screens/account_screen.dart';
+import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
 
-import '../features/admin/screens/home_screen.dart'; // For cart badge
+import '../screens/home_screen.dart'; // For cart badge
 
 class AdminBottomBar extends StatefulWidget {
   const AdminBottomBar({super.key});
@@ -19,7 +20,7 @@ class _BottomNavbrState extends State<AdminBottomBar> {
   int _selectedIndex = 0;
   final List<Widget> pages = [
     const DashboardScreen(), // Replace with your home screen
-    const WishlistScreen(), // Replace with your home screen
+    const AddProduct(), // Replace with your home screen
     const AccountScreen(), // Replace with your account screen
   ];
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoper/widgets/admin_bottombar.dart';
+import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
 

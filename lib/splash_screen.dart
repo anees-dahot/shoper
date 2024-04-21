@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shoper/features/admin/screens/home_screen.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/provider/user_controller.dart';
-import 'package:shoper/widgets/admin_bottombar.dart';
+import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 
 import 'features/auth/screens/loginscreen.dart';
