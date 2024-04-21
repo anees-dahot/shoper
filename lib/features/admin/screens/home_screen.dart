@@ -4,7 +4,7 @@ class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
 
-  static const String routeName = '/dashboard';
+  static const String routeName = '/admin-home';
 
   @override
   Widget build(BuildContext context) {
