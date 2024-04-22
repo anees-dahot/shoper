@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoper/features/account/screens/account_screen.dart';
 import 'package:shoper/features/admin/screens/add_product.dart';
+import 'package:shoper/features/admin/screens/analytics_Screen.dart';
+import 'package:shoper/features/admin/screens/orders_screen.dart';
 import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
 
 import '../screens/home_screen.dart'; // For cart badge
@@ -20,8 +22,8 @@ class _BottomNavbrState extends State<AdminBottomBar> {
   int _selectedIndex = 0;
   final List<Widget> pages = [
     const DashboardScreen(), // Replace with your home screen
-    const AddProduct(), // Replace with your home screen
-    const AccountScreen(), // Replace with your account screen
+    const AnalyticsScreen(), // Replace with your home screen
+    const OrdersScreen(), // Replace with your account screen
   ];
 
   void updatePage(int page) {
@@ -82,8 +84,8 @@ class _BottomNavbrState extends State<AdminBottomBar> {
                   child: Center(
                     child: FaIcon(
                       _selectedIndex == 1
-                          ? CupertinoIcons.heart_fill
-                          : CupertinoIcons.heart,
+                          ? CupertinoIcons.chart_bar_fill
+                          : CupertinoIcons.chart_bar,
                       color: Colors.white,
                       size: 30,
                     ),
@@ -104,8 +106,8 @@ class _BottomNavbrState extends State<AdminBottomBar> {
                   child: Center(
                     child: FaIcon(
                       _selectedIndex == 2
-                          ? CupertinoIcons.person_fill
-                          : CupertinoIcons.person,
+                          ? Icons.shopping_bag
+                          : Icons.shopping_bag_outlined,
                       color: Colors.white,
                       size: 30,
                     ),
