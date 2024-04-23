@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
@@ -33,6 +34,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const HomeScreen(),
       );
+    case AddProduct.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AddProduct(),
+      );  
     default:
       return MaterialPageRoute(
         settings: routeSettings,
