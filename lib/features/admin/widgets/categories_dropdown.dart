@@ -5,33 +5,30 @@ class MyDropdown extends StatefulWidget {
   final String? initialValue;
   final double width;
   final double height;
+  final void Function(String?) onChanged;
+  final String selectedValue;
   
 
   const MyDropdown({
-    Key? key,
+    super.key,
     required this.items,
-    this.initialValue, required this.width, required this.height,
+    this.initialValue, required this.width, required this.height, required this.onChanged, required this.selectedValue,
    
-  }) : super(key: key);
+  });
 
   @override
   State<MyDropdown> createState() => _MyDropdownState();
 }
 
 class _MyDropdownState extends State<MyDropdown> {
-  String? _selectedValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedValue = widget.initialValue;
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     return 
     
     Container(
+      padding: EdgeInsets.all(10),
       width: widget.width,
       height: widget.height,
       alignment: Alignment.centerLeft,
@@ -41,7 +38,9 @@ class _MyDropdownState extends State<MyDropdown> {
           border: Border.all(
               width: 1, color: const Color.fromARGB(255, 187, 187, 187))),
       child: DropdownButton<String>(
-      value: _selectedValue,
+        borderRadius: BorderRadius.circular(10),
+        underline: SizedBox(),
+      value: widget.selectedValue,
       isExpanded: true, // Makes the dropdown fill the available space
       items: widget.items.map((String item) {
         return DropdownMenuItem<String>(
@@ -49,12 +48,7 @@ class _MyDropdownState extends State<MyDropdown> {
           child: Text(item),
         );
       }).toList(),
-      onChanged: (String? newSelectedValue) {
-        setState(() {
-          _selectedValue = newSelectedValue;
-        });
-     
-      },
+      onChanged:widget.onChanged
     )
     );
     

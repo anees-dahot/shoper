@@ -13,11 +13,11 @@ class ImageSelectorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width * 0.9,
+      width: width * 0.95,
       height: height * 0.25,
      decoration: BoxDecoration(
       color: const Color.fromARGB(255, 246, 244, 244),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(14),
       border: Border.all(
         width: 1,
         color: const Color.fromARGB(255, 187, 187, 187)

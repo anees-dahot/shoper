@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -14,17 +15,20 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
-        backgroundColor: color,
+    return Container(
+      alignment: Alignment.center,
+     height: MediaQuery.of(context).size.height * 0.07,
+     width: MediaQuery.of(context).size.width * 0.95,
+      decoration: BoxDecoration(
+       color: color,
+       borderRadius: BorderRadius.circular(10)
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: color == null ? Colors.white : Colors.black,
-        ),
+        style: GoogleFonts.lato(textStyle: TextStyle(
+          color: color == null ? Colors.black : Colors.white,
+          fontSize: 16
+        ),)
       ),
     );
   }
