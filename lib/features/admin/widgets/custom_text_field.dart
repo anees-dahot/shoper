@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-class CustomTextFIeld extends StatelessWidget {
-   CustomTextFIeld({
+class CustomTextFIeldAdmin extends StatelessWidget {
+   CustomTextFIeldAdmin({
     super.key,
     required this.width,
     required this.height,
@@ -33,6 +33,12 @@ class CustomTextFIeld extends StatelessWidget {
         decoration: InputDecoration(
             hintText: hintText,
             border: const OutlineInputBorder(borderSide: BorderSide.none)),
+       validator: (value) {
+        if (value!.isEmpty || value == '') {
+          return 'Please enter your $hintText';
+        }
+        return null;
+      },  
       ),
     );
   }

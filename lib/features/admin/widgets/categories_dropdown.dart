@@ -38,6 +38,7 @@ class _MyDropdownState extends State<MyDropdown> {
           border: Border.all(
               width: 1, color: const Color.fromARGB(255, 187, 187, 187))),
       child: DropdownButton<String>(
+        
         borderRadius: BorderRadius.circular(10),
         underline: SizedBox(),
       value: widget.selectedValue,
@@ -48,7 +49,8 @@ class _MyDropdownState extends State<MyDropdown> {
           child: Text(item),
         );
       }).toList(),
-      onChanged:widget.onChanged
+      onChanged:widget.onChanged,
+      
     )
     );
     

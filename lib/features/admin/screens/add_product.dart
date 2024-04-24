@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
 import 'package:shoper/widgets/custom_button.dart';
-
-import '../widgets/custom_text_field.dart';
+import '../../../widgets/custom_textfield.dart';
 import '../widgets/image_selector_widget.dart';
 
 class AddProduct extends StatefulWidget {
@@ -21,16 +20,28 @@ class _AddProductState extends State<AddProduct> {
 
   final TextEditingController productPriceController = TextEditingController();
 
+  final productDetailsForm = GlobalKey<FormState>();
+
   final TextEditingController productQuantityController =
       TextEditingController();
 
-  
+
+
+      @override
+  void dispose() {
+    super.dispose();
+    productNameController.dispose();
+    productDescController.dispose();
+    productPriceController.dispose();
+    productQuantityController.dispose();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-  String _selectedValue = "adidas";    
+    String _selectedValue = "adidas";
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -56,76 +67,91 @@ class _AddProductState extends State<AddProduct> {
           ),
           body: SingleChildScrollView(
             child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ImageSelectorWidget(width: width, height: height),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextFIeld(
-                      controller: productNameController,
-                      hintText: 'Product Name',
+              child: Form(
+                key: productDetailsForm,
+                child: Column(
+                  children: [
+                    ImageSelectorWidget(width: width, height: height),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      child: CustomTextField(
+                          controller: productNameController,
+                          hintText: 'Product Name',
+                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                     padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      child: CustomTextField(
+                          controller: productDescController,
+                          numberOfLines: 7,
+                          hintText: 'Description',
+                          ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      child: CustomTextField(
+                          controller: productPriceController,
+                          hintText: 'Price',
+                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                     padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      child: CustomTextField(
+                          controller: productQuantityController,
+                          hintText: 'Quantity',
+                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    MyDropdown(
+                      
                       width: width * 0.95,
-                      height: height * 0.08),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextFIeld(
-                      controller: productDescController,
-                      numberOfLines: 30,
-                      hintText: 'Description',
-                      width: width * 0.95,
-                      height: height * 0.3),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextFIeld(
-                      controller: productPriceController,
-                      hintText: 'Price',
-                      width: width * 0.95,
-                      height: height * 0.08),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomTextFIeld(
-                      controller: productQuantityController,
-                      hintText: 'Quantity',
-                      width: width * 0.95,
-                      height: height * 0.08),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  MyDropdown(
-                    width: width * 0.95,
-                    height: height * 0.08,
-                    items: const [
-                      'adidas',
-                      'nike',
-                      'puma',
-                      'converse',
-                    ],
-                    initialValue: "adidas", // Optional
-                    selectedValue: _selectedValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedValue = value!;
-                        print(_selectedValue);
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomButton(
-                    text: 'Save',
-                    onTap: () {},
-                    color: Colors.black,
-                  ),
-                  const SizedBox(
-                    height: 80,
-                  ),
-                ],
+                      height: height * 0.08,
+                      items: const [
+                        'adidas',
+                        'nike',
+                        'puma',
+                        'converse',
+                      ],
+                      initialValue: "adidas", // Optional
+                      selectedValue: _selectedValue,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedValue = value!;
+                          print(_selectedValue);
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomButton(
+                      text: 'Save',
+                      onTap: () {
+                        if (productDetailsForm.currentState!.validate()) {
+                          print('sds');
+                        }
+                      },
+                      color: Colors.black,
+                    ),
+                    const SizedBox(
+                      height: 80,
+                    ),
+                  ],
+                ),
               ),
             ),
           )),

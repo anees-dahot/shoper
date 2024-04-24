@@ -78,7 +78,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 leading: Radio(
-                  activeColor: Colors.orange,
+                  activeColor: Colors.black,
                   value: Auth.signup,
                   groupValue: _auth,
                   onChanged: (Auth? val) {
@@ -113,7 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         const SizedBox(height: 10),
                         CustomButton(
                           text: 'Sign Up',
-                           color: Colors.orange,
+                           color: Colors.black,
                           onTap: () {
                             if (_signUpFormKey.currentState!.validate()) {
                               signUpUser();
@@ -135,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 leading: Radio(
-                  activeColor: Colors.orange,
+                  activeColor: Colors.black,
                   value: Auth.signin,
                   groupValue: _auth,
                   onChanged: (Auth? val) {
@@ -165,7 +165,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         const SizedBox(height: 10),
                         CustomButton(
                           text: 'Sign In',
-                          color: Colors.orange,
+                          color: Colors.black,
                           onTap: () {
                             if (_signInFormKey.currentState!.validate()) {
                               signInUser();
