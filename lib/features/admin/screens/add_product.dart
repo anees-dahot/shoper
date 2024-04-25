@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoper/constants/utils.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
+import 'package:shoper/features/admin/widgets/product_image_slider.dart';
 import 'package:shoper/widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../widgets/image_selector_widget.dart';
 
 class AddProduct extends StatefulWidget {
   static const routeName = "add-product";
-  AddProduct({super.key});
+  const AddProduct({super.key});
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -25,23 +29,29 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController productQuantityController =
       TextEditingController();
 
+  List images = [];
 
+  void selectImages() async {
+    var res = await pickImages();
+    setState(() {
+      images = res;
+    });
+  }
 
-      @override
+  @override
   void dispose() {
     super.dispose();
     productNameController.dispose();
     productDescController.dispose();
     productPriceController.dispose();
     productQuantityController.dispose();
-
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    String _selectedValue = "adidas";
+    String selectedValue = "adidas";
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -71,53 +81,56 @@ class _AddProductState extends State<AddProduct> {
                 key: productDetailsForm,
                 child: Column(
                   children: [
-                    ImageSelectorWidget(width: width, height: height),
+                    images.isEmpty ? ImageSelectorWidget(
+                      onTap: selectImages,
+                      width: width,
+                      height: height,
+                    ) : GestureDetector(onTap: selectImages,child: ProductImageSlider(imageUrls: images)),
                     const SizedBox(
                       height: 20,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: CustomTextField(
-                          controller: productNameController,
-                          hintText: 'Product Name',
-                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                     padding: const EdgeInsets.symmetric(horizontal:  10.0),
-                      child: CustomTextField(
-                          controller: productDescController,
-                          numberOfLines: 7,
-                          hintText: 'Description',
-                          ),
+                        controller: productNameController,
+                        hintText: 'Product Name',
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: CustomTextField(
-                          controller: productPriceController,
-                          hintText: 'Price',
-                       ),
+                        controller: productDescController,
+                        numberOfLines: 7,
+                        hintText: 'Description',
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Padding(
-                     padding: const EdgeInsets.symmetric(horizontal:  10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: CustomTextField(
-                          controller: productQuantityController,
-                          hintText: 'Quantity',
-                       ),
+                        controller: productPriceController,
+                        hintText: 'Price',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CustomTextField(
+                        controller: productQuantityController,
+                        hintText: 'Quantity',
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     MyDropdown(
-                      
                       width: width * 0.95,
                       height: height * 0.08,
                       items: const [
@@ -127,11 +140,11 @@ class _AddProductState extends State<AddProduct> {
                         'converse',
                       ],
                       initialValue: "adidas", // Optional
-                      selectedValue: _selectedValue,
+                      selectedValue: selectedValue,
                       onChanged: (value) {
                         setState(() {
-                          _selectedValue = value!;
-                          print(_selectedValue);
+                          selectedValue = value!;
+                          print(selectedValue);
                         });
                       },
                     ),

@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shoper/features/account/screens/account_screen.dart';
-import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/admin/screens/analytics_Screen.dart';
 import 'package:shoper/features/admin/screens/orders_screen.dart';
-import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
 
 import '../screens/home_screen.dart'; // For cart badge
 

@@ -27,7 +27,7 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
           )),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

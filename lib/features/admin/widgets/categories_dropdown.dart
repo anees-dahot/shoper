@@ -28,7 +28,7 @@ class _MyDropdownState extends State<MyDropdown> {
     return 
     
     Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       width: widget.width,
       height: widget.height,
       alignment: Alignment.centerLeft,
@@ -40,7 +40,7 @@ class _MyDropdownState extends State<MyDropdown> {
       child: DropdownButton<String>(
         
         borderRadius: BorderRadius.circular(10),
-        underline: SizedBox(),
+        underline: const SizedBox(),
       value: widget.selectedValue,
       isExpanded: true, // Makes the dropdown fill the available space
       items: widget.items.map((String item) {
