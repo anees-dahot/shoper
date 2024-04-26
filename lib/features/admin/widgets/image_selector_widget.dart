@@ -34,7 +34,8 @@ class ImageSelectorWidget extends StatelessWidget {
               CupertinoIcons.folder_open,
               size: 58,
             ),
-            Text('Select Product Images')
+            Text('Select Product Images'),
+            Text('(Long press image to select multiple)', style: TextStyle(fontSize: 10),)
           ],
         ),
       ),

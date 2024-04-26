@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/constants/utils.dart';
+import 'package:shoper/features/admin/services/admin_service.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
 import 'package:shoper/features/admin/widgets/product_image_slider.dart';
 import 'package:shoper/widgets/custom_button.dart';
@@ -29,7 +30,7 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController productQuantityController =
       TextEditingController();
 
-  List images = [];
+  List<File> images = [];
 
   void selectImages() async {
     var res = await pickImages();
@@ -51,6 +52,7 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    AdminService adminService = AdminService();
     String selectedValue = "adidas";
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -81,11 +83,15 @@ class _AddProductState extends State<AddProduct> {
                 key: productDetailsForm,
                 child: Column(
                   children: [
-                    images.isEmpty ? ImageSelectorWidget(
-                      onTap: selectImages,
-                      width: width,
-                      height: height,
-                    ) : GestureDetector(onTap: selectImages,child: ProductImageSlider(imageUrls: images)),
+                    images.isEmpty
+                        ? ImageSelectorWidget(
+                            onTap: selectImages,
+                            width: width,
+                            height: height,
+                          )
+                        : GestureDetector(
+                            onTap: selectImages,
+                            child: ProductImageSlider(imageUrls: images)),
                     const SizedBox(
                       height: 20,
                     ),
@@ -155,7 +161,15 @@ class _AddProductState extends State<AddProduct> {
                       text: 'Save',
                       onTap: () {
                         if (productDetailsForm.currentState!.validate()) {
-                          print('sds');
+                          adminService.sellProduct(
+                              context: context,
+                              name: productNameController.text,
+                              description: productDescController.text,
+                              price: double.parse(productPriceController.text),
+                              quantity:
+                                  int.parse(productQuantityController.text),
+                              category: selectedValue,
+                              images: images);
                         }
                       },
                       color: Colors.black,
