@@ -53,7 +53,23 @@ const productSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  reviews: [reviewSchema],
+  reviews: {
+    type: Array,
+    user: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    review: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    time: {
+      type: String,
+      required: true,
+    },
+  },
 });
 
 const Product = mongoose.model("Products", productSchema);

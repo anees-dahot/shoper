@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/admin/screens/home_screen.dart';
+import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/model/reviews.dart';
@@ -33,9 +34,11 @@ class AdminService {
       }
       print(imageUrl);
 
-      ReviewsModel reviewsModel = ReviewsModel(user: 'user', review: 'review', time: '22-23-21');
-      ReviewsModel reviewModel = ReviewsModel(user: 'user1', review: 'Great product!', time: '2024-04-28');
-List<ReviewsModel> reviews = [reviewModel];
+      ReviewsModel reviewsModel =
+          ReviewsModel(user: 'user', review: 'review', time: '22-23-21');
+      ReviewsModel reviewModel = ReviewsModel(
+          user: 'user1', review: 'Great product!', time: '2024-04-28');
+      List<ReviewsModel> reviews = [reviewModel];
 
       ProductModel productModel = ProductModel(
           name: name,
@@ -59,7 +62,7 @@ List<ReviewsModel> reviews = [reviewModel];
       print('api hit');
       if (res.statusCode == 200) {
         successMessage('Product added successfully');
-        Navigator.pushNamed(context, DashboardScreen.routeName);
+        Navigator.pushNamed(context, AdminBottomBar.routeName);
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
         print(jsonDecode(res.body)['msg']);
@@ -104,5 +107,57 @@ List<ReviewsModel> reviews = [reviewModel];
       errorsMessage(e.toString());
     }
     return products;
+  }
+
+  Future<void> postReview(BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/admin/post-review/662ce62070467aa92c84c167'),
+        body: {"user": "anees", "review": "its best", "time": "20-2-24"},
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+
+      if (res.statusCode == 200) {
+        print(res.body);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
+        );
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
+    }
+  }
+
+  void deleteProduct(String productId, BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final res = await http.post(
+      Uri.parse('$baseUrl/admin/delete-product/$productId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': user.token
+      },
+    );
+
+    if (res.statusCode == 200) {
+      successMessage(jsonDecode(res.body)['message']);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
+        );
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
   }
 }
