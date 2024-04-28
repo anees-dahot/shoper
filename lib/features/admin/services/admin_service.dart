@@ -7,10 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/admin/screens/home_screen.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
+import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/model/reviews.dart';
 import 'package:shoper/provider/user_controller.dart';
+import 'package:shoper/splash_screen.dart';
 
 class AdminService {
   final baseUrl = 'http://192.168.8.101:3000';
@@ -150,14 +152,48 @@ class AdminService {
 
     if (res.statusCode == 200) {
       successMessage(jsonDecode(res.body)['message']);
-      } else if (res.statusCode == 400) {
-        errorsMessage(jsonDecode(res.body)['msg']);
-        print("400 ${jsonDecode(res.body)['msg']}");
-      } else {
-        errorsMessage(
-          jsonDecode(res.body)['error'],
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
+    }
+  }
+
+  void becomeBuyer(BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final userId =
+        Provider.of<UserProvider>(context, listen: false).user.id.toString();
+    AuthService authService = AuthService();
+
+    final res = await http.post(Uri.parse('$baseUrl/admin/become-buyer'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+        body: jsonEncode({'id': userId}));
+    if (res.statusCode == 200) {
+      successMessage(jsonDecode(res.body)['message']);
+      authService.getUserData(context).then((value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SplashScreen()),
         );
-        print("500 ${jsonDecode(res.body)['error']}");
-      }
+      }).onError((error, stackTrace) {
+        errorsMessage(error.toString());
+        print('become buyer then error $error');
+      });
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
+    }
   }
 }

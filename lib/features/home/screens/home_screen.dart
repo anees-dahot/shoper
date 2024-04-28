@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(children: [
+        TextButton(onPressed: ()=> print(user.type), child: Text('sasa')),
         SizedBox(
           height: height * 0.05,
         ),

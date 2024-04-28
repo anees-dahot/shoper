@@ -31,17 +31,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         automaticallyImplyLeading: false,
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal:  8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: GestureDetector(
               onTap: () {
-                setState(() {});
+                setState(() {
+                  adminService.becomeBuyer(context);
+                });
               },
               child: Container(
                 alignment: Alignment.center,
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width * 0.30,
                 decoration: BoxDecoration(
-                    color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10)),
                 child: Text('Become buyer!',
                     style: GoogleFonts.lato(
                       textStyle:

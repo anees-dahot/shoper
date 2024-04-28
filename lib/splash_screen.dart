@@ -25,7 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
     authService.getUserData(context);
   }
 
+
   void screenNavigator() {
+    
     authService.getUserData(context).then((value) {
       // Future.delayed(const Duration(seconds: 10), () {
         Provider.of<UserProvider>(context, listen: false).user.token.isNotEmpty
@@ -39,9 +41,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 context, AuthScreen.routeName, (route) => false);
       // });
     }).onError((error, stackTrace) {
-      errorsMessage(error.toString());
+      print('splash error $error');
     });
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

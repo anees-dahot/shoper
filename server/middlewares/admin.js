@@ -13,9 +13,7 @@ const admin = async (req, res, next) => {
         .status(401)
         .json({ msg: "Token verification failed, authorization denied." });
     const user = await User.findById(verified.id);
-    if (user.type == "seller" || user.type == "user") {
-      res.status(401).json({ msg: "You are not an admin" });
-    }
+   
     req.user = verified.id;
     req.token = token;
     next();

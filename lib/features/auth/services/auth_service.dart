@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
+import '../../../constants/flutter_toast.dart';
 import '../../../model/user.dart';
 import '../../../provider/user_controller.dart';
+import '../../../splash_screen.dart';
 
 class AuthService {
-
   final baseUrl = 'http://192.168.8.101:3000';
   // sign up user
   void signUpUser({
@@ -38,7 +39,6 @@ class AuthService {
         },
       );
 
-
       if (res.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -47,8 +47,6 @@ class AuthService {
             ),
           ),
         );
-
-     
       } else if (res.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(jsonDecode(res.body)['msg'])),
@@ -63,13 +61,13 @@ class AuthService {
         );
       }
     } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-             e.toString(),
-            ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
           ),
-        );
+        ),
+      );
     }
   }
 
@@ -163,6 +161,39 @@ class AuthService {
     } catch (e) {
       // showSnackBar(context, e.toString());
       print(e);
+    }
+  }
+
+  void becomeSeller(BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final userId =
+        Provider.of<UserProvider>(context, listen: false).user.id.toString();
+
+    final res = await http.post(Uri.parse('$baseUrl/api/become-seller'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+        body: jsonEncode({'id': userId}));
+    if (res.statusCode == 200) {
+      successMessage(jsonDecode(res.body)['message']);
+      getUserData(context).then((value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SplashScreen()),
+        );
+      }).onError((error, stackTrace) {
+        // errorsMessage(error.toString());
+        print('become seller then error $error');
+      });
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
     }
   }
 }

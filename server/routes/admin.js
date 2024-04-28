@@ -1,6 +1,7 @@
 const express = require("express");
 const adminRouter = express.Router();
 const admin = require("../middlewares/admin");
+const auth = require("../middlewares/auth");
 const Product = require("../model/product");
 const User = require("../model/user");
 const ReviewModel = require("../model/review");
@@ -65,26 +66,47 @@ adminRouter.post("/admin/post-review/:productId", admin, async (req, res) => {
   }
 });
 
-
 //* delete product
-adminRouter.post("/admin/delete-product/:productId", admin, async (req, res) => {
+adminRouter.post(
+  "/admin/delete-product/:productId",
+  admin,
+  async (req, res) => {
+    try {
+      const productId = req.params.productId;
+
+      // // Find the product by ID
+      await Product.findByIdAndDelete(productId);
+
+      // // Save the product with the new review
+
+      res.status(200).json({ message: "Product deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+//* become a user
+adminRouter.post("/admin/become-buyer", auth, async (req, res) => {
   try {
-    const productId = req.params.productId;
-
+    const { id } = req.body;
+    
     // // Find the product by ID
-    await Product.findByIdAndDelete(productId);
+    const user = await User.findByIdAndUpdate(
+      id,
+      { type: "user" },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      return res.status(400).json({ msg: 'no user' });
+    }
 
-    // // Save the product with the new review
-   
-
-    res.status(200).json({ message: "Product deleted successfully" });
+    res.status(200).json({ message: "You are now buyer!" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-
-
 
 module.exports = adminRouter;

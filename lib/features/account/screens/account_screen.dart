@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:shoper/features/account/widgets/profile_buttons.dart';
 import 'package:shoper/features/account/widgets/your_orders.dart';
 import 'package:shoper/features/account/widgets/bottom_appbar.dart';
+import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/provider/user_controller.dart';
+
+import '../../../splash_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -11,13 +14,16 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
+    AuthService authService = AuthService();
     return Scaffold(
       body: Column(
         children: [
           const SizedBox(
             height: 60,
           ),
-          BottomAppbar(user: user,),
+          BottomAppbar(
+            user: user,
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -29,8 +35,15 @@ class AccountScreen extends StatelessWidget {
                 onTap: () {},
               ),
               ProfileButtons(
-                text: 'Turn Seller',
-                onTap: () {},
+                text: 'Become Seller',
+                onTap: () {
+                  authService.becomeSeller(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SplashScreen()),
+                  );
+                },
               )
             ],
           ),
@@ -59,4 +72,3 @@ class AccountScreen extends StatelessWidget {
     );
   }
 }
-
