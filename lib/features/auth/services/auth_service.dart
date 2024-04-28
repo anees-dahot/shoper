@@ -11,7 +11,7 @@ import '../../../provider/user_controller.dart';
 
 class AuthService {
 
-  final baseUrl = 'http://192.168.8.104:3000';
+  final baseUrl = 'http://192.168.8.101:3000';
   // sign up user
   void signUpUser({
     required BuildContext context,
@@ -127,7 +127,7 @@ class AuthService {
   }
 
   // get user data
-  void getUserData(
+  Future<void> getUserData(
     BuildContext context,
   ) async {
     try {

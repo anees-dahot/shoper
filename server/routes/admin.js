@@ -2,6 +2,7 @@ const express = require("express");
 const adminRouter = express.Router();
 const admin = require("../middlewares/admin");
 const Product = require("../model/product");
+const User = require("../model/user");
 
 adminRouter.post("/admin/sell-product", admin, async (req, res) => {
   try {
@@ -18,7 +19,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       senderId,
     });
 
-    product = product.save();
+    product = await product.save();
 
     res.status(200).json({ msg: "product added successfully" });
     console.log(product);
@@ -27,7 +28,19 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
   }
 });
 
+// * get all products
 
-
+adminRouter.get("/admin/get-products", admin, async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      return res.status(500).json({ error: "User not found" });
+    }
+    const products = await Product.find({senderId: user.name});
+    res.json({ products });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = adminRouter;

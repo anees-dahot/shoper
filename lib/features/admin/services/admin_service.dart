@@ -5,12 +5,14 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
+import 'package:shoper/features/admin/screens/home_screen.dart';
 import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:shoper/model/reviews.dart';
 import 'package:shoper/provider/user_controller.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.104:3000';
+  final baseUrl = 'http://192.168.8.101:3000';
 
   void sellProduct(
       {required BuildContext context,
@@ -20,9 +22,8 @@ class AdminService {
       required int quantity,
       required String category,
       required List<File> images}) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
-
     try {
+      final user = Provider.of<UserProvider>(context, listen: false).user;
       final cloudinary = CloudinaryPublic('doaewaso1', 'one9vigp');
       List<String> imageUrl = [];
       for (int i = 0; i < images.length; i++) {
@@ -30,13 +31,22 @@ class AdminService {
             .uploadFile(CloudinaryFile.fromFile(images[i].path, folder: name));
         imageUrl.add(res.secureUrl);
       }
+      print(imageUrl);
+
+      ReviewsModel reviewsModel = ReviewsModel(user: 'user', review: 'review', time: '22-23-21');
+      ReviewsModel reviewModel = ReviewsModel(user: 'user1', review: 'Great product!', time: '2024-04-28');
+List<ReviewsModel> reviews = [reviewModel];
+
       ProductModel productModel = ProductModel(
           name: name,
+          senderId: user.name,
           price: price,
           description: description,
           quantity: quantity,
           category: category,
-          images: imageUrl);
+          images: imageUrl,
+          reviews: reviews);
+      print('model done');
 
       http.Response res = await http.post(
         Uri.parse('$baseUrl/admin/sell-product'),
@@ -46,8 +56,10 @@ class AdminService {
           'x-auth-token': user.token
         },
       );
+      print('api hit');
       if (res.statusCode == 200) {
-        successMessage('Logged in successfully');
+        successMessage('Product added successfully');
+        Navigator.pushNamed(context, DashboardScreen.routeName);
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
         print(jsonDecode(res.body)['msg']);
@@ -60,5 +72,37 @@ class AdminService {
     } catch (e) {
       errorsMessage(e.toString());
     }
+  }
+
+  Future<List<ProductModel>> getProducts(BuildContext context) async {
+    List<ProductModel> products = [];
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      final res = await http.get(
+        Uri.parse('$baseUrl/admin/get-products'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(res.body)['products'];
+        products = jsonData.map((json) => ProductModel.fromMap(json)).toList();
+        print(products);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
+        );
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
+    }
+    return products;
   }
 }

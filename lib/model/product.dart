@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:shoper/model/reviews.dart';
+
 class ProductModel {
   final String? id;
   final String? senderId;
@@ -9,6 +11,7 @@ class ProductModel {
   final int quantity;
   final String category;
   final List<String> images;
+   List<ReviewsModel>? reviews;
 
   ProductModel({
     this.id,
@@ -19,6 +22,7 @@ class ProductModel {
     required this.quantity,
     required this.category,
     required this.images,
+    this.reviews, 
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +35,7 @@ class ProductModel {
       'quantity': quantity,
       'category': category,
       'images': images,
+      'reviews': reviews?.map((review) => review.toMap()).toList(),
     };
   }
 
@@ -44,6 +49,10 @@ class ProductModel {
       quantity: map['quantity'] ?? 0, // Default quantity to 0
       category: map['category'] ?? '',
       images: List<String>.from(map['images'] ?? []), // Convert images to list
+      reviews: map['reviews'] != null
+          ? List<ReviewsModel>.from(
+              map['reviews'].map((review) => ReviewsModel.fromMap(review)))
+          : null, // Convert reviews to list
     );
   }
 
@@ -61,6 +70,7 @@ class ProductModel {
     int? quantity,
     String? category,
     List<String>? images,
+    List<ReviewsModel>? reviews,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -70,6 +80,7 @@ class ProductModel {
       quantity: quantity ?? this.quantity,
       category: category ?? this.category,
       images: images ?? this.images,
+      reviews: reviews ?? this.reviews,
     );
   }
 }

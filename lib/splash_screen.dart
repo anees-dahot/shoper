@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
@@ -25,17 +26,20 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void screenNavigator() {
-    //generate future.delayed and then run any function
-    Future.delayed(const Duration(seconds: 5), () {
-      Provider.of<UserProvider>(context, listen: false).user.token.isNotEmpty
-          ? Provider.of<UserProvider>(context, listen: false).user.type ==
-                  'user'
-              ? Navigator.pushNamedAndRemoveUntil(
-                  context, BottomNavbr.routeName, (route) => false)
-              : Navigator.pushNamedAndRemoveUntil(
-                  context, AdminBottomBar.routeName, (route) => false)
-          : Navigator.pushNamedAndRemoveUntil(
-              context, AuthScreen.routeName, (route) => false);
+    authService.getUserData(context).then((value) {
+      // Future.delayed(const Duration(seconds: 10), () {
+        Provider.of<UserProvider>(context, listen: false).user.token.isNotEmpty
+            ? Provider.of<UserProvider>(context, listen: false).user.type ==
+                    'user'
+                ? Navigator.pushNamedAndRemoveUntil(
+                    context, BottomNavbr.routeName, (route) => false)
+                : Navigator.pushNamedAndRemoveUntil(
+                    context, AdminBottomBar.routeName, (route) => false)
+            : Navigator.pushNamedAndRemoveUntil(
+                context, AuthScreen.routeName, (route) => false);
+      // });
+    }).onError((error, stackTrace) {
+      errorsMessage(error.toString());
     });
   }
 

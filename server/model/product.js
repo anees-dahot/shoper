@@ -1,5 +1,22 @@
 const mongoose = require("mongoose");
 
+const reviewSchema = mongoose.Schema({
+  user: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  review: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+});
+
 const productSchema = mongoose.Schema({
   name: {
     type: String,
@@ -31,11 +48,12 @@ const productSchema = mongoose.Schema({
       trim: true,
     },
   ],
-  userId: {
+  senderId: {
     type: String,
     required: true,
     trim: true,
   },
+  reviews: [reviewSchema],
 });
 
 const Product = mongoose.model("Products", productSchema);
