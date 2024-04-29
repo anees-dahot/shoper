@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoper/features/home/screens/category_products.dart';
 
 class CategoryWidget extends StatelessWidget {
   CategoryWidget({super.key});
@@ -52,16 +53,19 @@ class CategoryWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal:  15.0),
               child: Column(
                 children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70),
-                        color: Colors.grey[200]),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(
-                        category[index]['image'],
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, CategoryProducts.routeName, arguments: category[index]['name']),
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70),
+                          color: Colors.grey[200]),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(
+                          category[index]['image'],
+                        ),
                       ),
                     ),
                   ),

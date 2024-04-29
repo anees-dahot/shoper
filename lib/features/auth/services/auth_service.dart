@@ -12,7 +12,7 @@ import '../../../provider/user_controller.dart';
 import '../../../splash_screen.dart';
 
 class AuthService {
-  final baseUrl = 'http://192.168.8.101:3000';
+  final baseUrl = 'http://192.168.8.105:3000';
   // sign up user
   void signUpUser({
     required BuildContext context,
@@ -176,7 +176,6 @@ class AuthService {
         },
         body: jsonEncode({'id': userId}));
     if (res.statusCode == 200) {
-      successMessage(jsonDecode(res.body)['message']);
       getUserData(context).then((value) {
         Navigator.push(
           context,

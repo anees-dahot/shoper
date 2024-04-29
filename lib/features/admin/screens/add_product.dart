@@ -53,7 +53,7 @@ class _AddProductState extends State<AddProduct> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     AdminService adminService = AdminService();
-    String selectedValue = "adidas";
+    String selectedValue = "Adidas";
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -140,12 +140,12 @@ class _AddProductState extends State<AddProduct> {
                       width: width * 0.95,
                       height: height * 0.08,
                       items: const [
-                        'adidas',
-                        'nike',
-                        'puma',
-                        'converse',
+                        'Adidas',
+                        'Nike',
+                        'Puma',
+                        'Converse',
                       ],
-                      initialValue: "adidas", // Optional
+                      initialValue: "Adidas", // Optional
                       selectedValue: selectedValue,
                       onChanged: (value) {
                         setState(() {

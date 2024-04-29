@@ -2,14 +2,16 @@ const express = require("express");
 const authrouter = require("./routes/auth");
 const mongoose = require("mongoose");
 const adminRouter = require("./routes/admin");
+const productRouter = require("./routes/product");
 const app = express();
 const PORT = 3000;
 
-const db =
-  "mongodb+srv://anees:anees@cluster0.s9pe4rq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// const db =
+//   "mongodb+srv://anees:anees@cluster0.s9pe4rq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 app.use(express.json());
 app.use(authrouter);
 app.use(adminRouter);
+app.use(productRouter);
 
 mongoose
   .connect(

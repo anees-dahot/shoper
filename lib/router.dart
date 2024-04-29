@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
+import 'package:shoper/features/home/screens/category_products.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
 
@@ -14,10 +15,18 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AuthScreen(),
       );
+    case CategoryProducts.routeName:
+    final arguments = routeSettings.arguments;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => CategoryProducts(
+          category: arguments.toString(),
+        ),
+      );
     case DashboardScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  DashboardScreen(),
+        builder: (_) => DashboardScreen(),
       );
     case BottomNavbr.routeName:
       return MaterialPageRoute(
@@ -37,8 +46,8 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case AddProduct.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  const AddProduct(),
-      );  
+        builder: (_) => const AddProduct(),
+      );
     default:
       return MaterialPageRoute(
         settings: routeSettings,
