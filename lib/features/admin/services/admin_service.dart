@@ -14,7 +14,7 @@ import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.105:3000';
+  final baseUrl = 'http://192.168.8.104:3000';
 
   void sellProduct(
       {required BuildContext context,

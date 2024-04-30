@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/home/screens/category_products.dart';
+import 'package:shoper/features/home/screens/search_products.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
 
@@ -15,8 +16,16 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AuthScreen(),
       );
+    case SearchProducts.routeName:
+      final query = routeSettings.arguments as String;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => SearchProducts(
+          query: query,
+        ),
+      );
     case CategoryProducts.routeName:
-    final arguments = routeSettings.arguments;
+      final arguments = routeSettings.arguments;
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => CategoryProducts(

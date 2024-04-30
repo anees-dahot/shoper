@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shoper/features/home/screens/search_products.dart';
 
-class CustomSearchBar extends StatelessWidget {
+class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({
     super.key,
     required this.width,
@@ -12,21 +13,31 @@ class CustomSearchBar extends StatelessWidget {
   final double height;
 
   @override
+  State<CustomSearchBar> createState() => _CustomSearchBarState();
+}
+
+class _CustomSearchBarState extends State<CustomSearchBar> {
+  void navigateToSearchScreen(String query) {
+    Navigator.pushNamed(context, SearchProducts.routeName, arguments: query);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: width * 0.75,
-          height: height * 0.07,
+          width: widget.width * 0.75,
+          height: widget.height * 0.07,
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child:  Padding(
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              onSubmitted: navigateToSearchScreen,
+              decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Search',
                   hintStyle: TextStyle(
@@ -36,15 +47,16 @@ class CustomSearchBar extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: width * 0.03,),
+        SizedBox(
+          width: widget.width * 0.03,
+        ),
         Container(
-          width: width * 0.13,
-          height: height * 0.07,
+          width: widget.width * 0.13,
+          height: widget.height * 0.07,
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(10),
           ),
-    
           child: const Icon(FontAwesomeIcons.microphone),
         )
       ],
