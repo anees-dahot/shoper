@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoper/features/category/services/category_service.dart';
 import 'package:shoper/features/home/services/home_services.dart';
 
 class CategoryProducts extends StatelessWidget {
   CategoryProducts({super.key, required this.category});
 
   static const routeName = '/category-products';
-  HomeServices homeServices = HomeServices();
+  CategoryService categoryService = CategoryService();
   String category;
 
   @override
@@ -26,7 +27,7 @@ class CategoryProducts extends StatelessWidget {
         children: [
           Expanded(
               child: FutureBuilder(
-            future: homeServices.getCategoryPorducts(category, context),
+            future: categoryService.getCategoryPorducts(category, context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());

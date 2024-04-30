@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shoper/features/admin/screens/add_product.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
-import 'package:shoper/features/home/screens/category_products.dart';
-import 'package:shoper/features/home/screens/search_products.dart';
+import 'package:shoper/features/category/screen/category_products.dart';
+import 'package:shoper/features/search/screen/search_products.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
 

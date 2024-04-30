@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoper/features/home/screens/category_products.dart';
+import 'package:shoper/features/category/screen/category_products.dart';
 
 class CategoryWidget extends StatelessWidget {
   CategoryWidget({super.key});

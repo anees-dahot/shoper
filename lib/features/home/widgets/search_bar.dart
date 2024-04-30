@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shoper/features/home/screens/search_products.dart';
+import 'package:shoper/features/search/screen/search_products.dart';
 
 class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({

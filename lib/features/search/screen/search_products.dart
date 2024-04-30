@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoper/features/home/services/home_services.dart';
+import 'package:shoper/features/search/services/search_service.dart';
 
 class SearchProducts extends StatelessWidget {
   static const routeName = '/search-products';
@@ -8,7 +8,7 @@ class SearchProducts extends StatelessWidget {
 
   SearchProducts({super.key, required this.query});
 
-  HomeServices homeServices = HomeServices();
+  SearchService searchService = SearchService();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SearchProducts extends StatelessWidget {
        appBar: AppBar(
         title: Row(
           children: [
-            IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: Icon(Icons.arrow_back_ios_new_outlined)),
+            IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: const Icon(Icons.arrow_back_ios_new_outlined)),
             Text(query)
           ],
           
@@ -24,7 +24,7 @@ class SearchProducts extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
         body: FutureBuilder(
-      future: homeServices.getSearchProducts(query, context),
+      future: searchService.getSearchProducts(query, context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
