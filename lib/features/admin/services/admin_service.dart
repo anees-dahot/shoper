@@ -14,7 +14,7 @@ import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.104:3000';
+  final baseUrl = 'http://192.168.8.103:3000';
 
   void sellProduct(
       {required BuildContext context,
@@ -35,21 +35,15 @@ class AdminService {
       }
       print(imageUrl);
 
-      ReviewsModel reviewsModel =
-          ReviewsModel(user: 'user', review: 'review', time: '22-23-21');
-      ReviewsModel reviewModel = ReviewsModel(
-          user: 'user1', review: 'Great product!', time: '2024-04-28');
-      List<ReviewsModel> reviews = [reviewModel];
-
       ProductModel productModel = ProductModel(
-          name: name,
-          senderId: user.name,
-          price: price,
-          description: description,
-          quantity: quantity,
-          category: category,
-          images: imageUrl,
-          reviews: reviews);
+        name: name,
+        senderId: user.name,
+        price: price,
+        description: description,
+        quantity: quantity,
+        category: category,
+        images: imageUrl,
+      );
       print('model done');
 
       http.Response res = await http.post(
@@ -108,35 +102,6 @@ class AdminService {
       errorsMessage(e.toString());
     }
     return products;
-  }
-
-  Future<void> postReview(BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
-
-    try {
-      final res = await http.post(
-        Uri.parse('$baseUrl/admin/post-review/662ce62070467aa92c84c167'),
-        body: {"user": "anees", "review": "its best", "time": "20-2-24"},
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': user.token
-        },
-      );
-
-      if (res.statusCode == 200) {
-        print(res.body);
-      } else if (res.statusCode == 400) {
-        errorsMessage(jsonDecode(res.body)['msg']);
-        print("400 ${jsonDecode(res.body)['msg']}");
-      } else {
-        errorsMessage(
-          jsonDecode(res.body)['error'],
-        );
-        print("500 ${jsonDecode(res.body)['error']}");
-      }
-    } catch (e) {
-      errorsMessage(e.toString());
-    }
   }
 
   void deleteProduct(String productId, BuildContext context) async {

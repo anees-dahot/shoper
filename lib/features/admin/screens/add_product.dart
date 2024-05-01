@@ -31,7 +31,7 @@ class _AddProductState extends State<AddProduct> {
       TextEditingController();
 
   List<File> images = [];
-
+  String selectedValue = 'Adidas';
   void selectImages() async {
     var res = await pickImages();
     setState(() {
@@ -53,7 +53,7 @@ class _AddProductState extends State<AddProduct> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     AdminService adminService = AdminService();
-    String selectedValue = "Adidas";
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -145,7 +145,6 @@ class _AddProductState extends State<AddProduct> {
                         'Puma',
                         'Converse',
                       ],
-                      initialValue: "Adidas", // Optional
                       selectedValue: selectedValue,
                       onChanged: (value) {
                         setState(() {

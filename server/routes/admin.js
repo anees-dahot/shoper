@@ -48,14 +48,14 @@ adminRouter.get("/admin/get-products", admin, async (req, res) => {
 //* review posting
 adminRouter.post("/admin/post-review/:productId", admin, async (req, res) => {
   try {
-    const { user, review, time } = req.body;
+    const { user, review, time, stars} = req.body;
     const productId = req.params.productId;
 
     // Find the product by ID
     const product = await Product.findById(productId);
 
     // Push the new review to the reviews array
-    product.reviews.push({ user, review, time });
+    product.reviews.push({ user, review, time, stars});
 
     // Save the product with the new review
     await product.save();

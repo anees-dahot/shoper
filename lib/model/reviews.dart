@@ -4,11 +4,12 @@ class ReviewsModel {
   final String user;
   final String review;
   final String time;
+  final double stars;
 
   ReviewsModel({
    required  this.user,
    required this.review,
-    required this.time,
+    required this.time, required this.stars,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +17,7 @@ class ReviewsModel {
       'user': user,
       'review': review,
       'time': time,
+      'stars': stars,
     };
   }
 
@@ -24,6 +26,7 @@ class ReviewsModel {
       user: map['user'] ?? '',
       review: map['review'] ?? '',
       time: map['time'] ?? '',
+      stars: map['stars'] ?? 0.0,
     );
   }
 
@@ -36,11 +39,13 @@ class ReviewsModel {
     String? user,
     String? review,
     String? time,
+    double? stars,
   }) {
     return ReviewsModel(
       user: user ?? this.user,
       review: review ?? this.review,
       time: time ?? this.time,
+      stars: stars ?? this.stars,
     );
   }
 }
