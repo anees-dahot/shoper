@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/features/product%20detail/widgets/images_carousel.dart';
+import 'package:shoper/model/reviews.dart';
 import '../../../model/product.dart';
 import '../widgets/custom_rating_widget.dart';
 
@@ -10,6 +11,8 @@ class ProductDetail extends StatefulWidget {
 
   static const routeName = 'product-detail';
   ProductModel products;
+    int rating = 2;
+ 
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -17,8 +20,16 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   TextEditingController addReview = TextEditingController();
-  double? rating;
+
   ProductSerivce productSerivce = ProductSerivce();
+   Future<Map<String, dynamic>>? _reviewsFuture;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _reviewsFuture = productSerivce.fetchReviews(widget.products.id.toString(), context);
+  }
 
   @override
   void dispose() {
@@ -31,6 +42,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    ProductSerivce productService = ProductSerivce();
 
     return Scaffold(
       appBar: AppBar(
@@ -118,31 +130,44 @@ class _ProductDetailState extends State<ProductDetail> {
               CustomRatingWidget(
                 width: width,
                 height: height,
-                rating: rating!,
+                rating: widget.rating.toInt(),
                 addReview: addReview,
                 ontap: () {
                   productSerivce.postReview(
                       context: context,
                       review: addReview.text,
                       time: '23323',
-                      stars: rating!,
+                      stars: widget.rating,
                       productId: widget.products.id.toString());
-                  addReview.clear();    
+                  addReview.clear();
+                  setState((){});
                 },
               ),
               Visibility(
                   visible: widget.products.reviews!.length != 0,
-                  child: Expanded(
-                    child: ListView.builder(
-                      itemCount: widget.products.reviews!.length,
-                      itemBuilder: (context, index) {
-                        final review = widget.products.reviews![index];
-                        return ListTile(
-                          title: Text(review.user),
-                        );
-                      },
-                    ),
-                  ))
+                  child: FutureBuilder<Map<String, dynamic>>(
+        future: _reviewsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final reviews = snapshot.data!['reviews'] as List;
+
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: reviews.length,
+            itemBuilder: (context, index) {
+              final review = reviews[index];
+              return Text(review['stars'].toString());
+            },
+          );
+        },
+      ), )
             ],
           ),
         ),

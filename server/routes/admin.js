@@ -66,10 +66,39 @@ adminRouter.post("/admin/post-review/:productId", admin, async (req, res) => {
   }
 });
 
+
+//* get reviews
+adminRouter.get("/admin/get-reviews/:productId", admin, async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    // Execute population and retrieve populated product
+    const product = await Product.findById(productId).populate('reviews');
+
+    if (!product || !product.reviews || product.reviews.length === 0) {
+      return res.status(404).json({ message: 'Reviews not found' });
+    }
+
+    // Extract and return only the reviews data
+    const reviews = product.reviews.map(review => ({
+      user: review.user,
+      review: review.review,
+      time: review.time, // Assuming time is a Date object
+      stars: review.stars,
+    }));
+
+    res.status(200).json({ message: 'Reviews retrieved successfully', reviews });
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(500).json({ error: 'An error occurred' }); // Generic error message
+  }
+});
+
+
 //* delete product
 adminRouter.post(
   "/admin/delete-product/:productId",
-  admin,
+  
   async (req, res) => {
     try {
       const productId = req.params.productId;

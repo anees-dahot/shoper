@@ -11,7 +11,7 @@ class CustomRatingWidget extends StatefulWidget {
       required this.height,
       required this.ontap, required this.addReview});
 
-  double rating;
+  int rating;
   final double width;
   final double height;
   final VoidCallback ontap;
@@ -65,7 +65,7 @@ class _CustomRatingWidgetState extends State<CustomRatingWidget> {
             ),
             const SizedBox(height: 10.0),
             RatingBar.builder(
-              initialRating: 0,
+              initialRating: 2,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -81,7 +81,7 @@ class _CustomRatingWidgetState extends State<CustomRatingWidget> {
               ),
               onRatingUpdate: (newRating) {
                 setState(() {
-                  widget.rating = newRating;
+                  widget.rating =newRating.toInt();
                 });
                 print(widget.rating);
               },

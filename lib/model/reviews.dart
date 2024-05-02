@@ -4,7 +4,7 @@ class ReviewsModel {
   final String user;
   final String review;
   final String time;
-  final double stars;
+  final int stars;
 
   ReviewsModel({
    required  this.user,
@@ -26,7 +26,7 @@ class ReviewsModel {
       user: map['user'] ?? '',
       review: map['review'] ?? '',
       time: map['time'] ?? '',
-      stars: map['stars'] ?? 0.0,
+      stars: map['stars'] ?? 0,
     );
   }
 
@@ -39,13 +39,13 @@ class ReviewsModel {
     String? user,
     String? review,
     String? time,
-    double? stars,
+    int? stars,
   }) {
     return ReviewsModel(
       user: user ?? this.user,
       review: review ?? this.review,
       time: time ?? this.time,
-      stars: stars ?? this.stars,
+      stars: stars?.toInt() ?? this.stars,
     );
   }
 }

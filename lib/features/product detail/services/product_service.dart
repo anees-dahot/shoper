@@ -8,13 +8,13 @@ import 'package:shoper/model/reviews.dart';
 import '../../../provider/user_controller.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.103:3000';
+  final baseUrl = 'http://192.168.8.104:3000';
 
   Future<void> postReview(
       {required BuildContext context,
       required String review,
       required String time,
-      required double stars,
+      required int stars,
       required String productId}) async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
 
@@ -45,4 +45,22 @@ class ProductSerivce {
       errorsMessage(e.toString());
     }
   }
+
+
+Future<Map<String, dynamic>> fetchReviews(String productId, BuildContext context) async {
+
+   final user = Provider.of<UserProvider>(context, listen: false).user;
+  final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
+  final response = await http.get(url,  headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },);
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    return jsonDecode(response.body);
+  } else {
+    throw Exception('Failed to fetch reviews: ${response.statusCode}');
+  }
+}
 }
