@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/features/product%20detail/widgets/images_carousel.dart';
+import 'package:shoper/features/product%20detail/widgets/review_card.dart';
 import '../../../model/product.dart';
 import '../widgets/add_review_textfield.dart';
 
@@ -195,14 +196,18 @@ class _ProductDetailState extends State<ProductDetail> {
                               hintText: 'Write Review', controller: addReview),
                           IconButton(
                               onPressed: () {
-                                productSerivce.postReview(
-                                    context: context,
-                                    review: addReview.text,
-                                    time: '23323',
-                                    stars: widget.rating,
-                                    productId: widget.products.id.toString());
-                                addReview.clear();
-                                setState(() {});
+                                productSerivce
+                                    .postReview(
+                                        context: context,
+                                        review: addReview.text,
+                                        time: '23323',
+                                        stars: widget.rating,
+                                        productId:
+                                            widget.products.id.toString())
+                                    .then((val) {
+                                  addReview.clear();
+                                  setState(() {});
+                                });
                               },
                               icon: const Icon(Icons.send))
                         ],
@@ -226,17 +231,18 @@ class _ProductDetailState extends State<ProductDetail> {
 
                     final reviews = snapshot.data!['reviews'] as List;
 
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: reviews.length,
-                      itemBuilder: (context, index) {
-                        final review = reviews[index];
-                        return Text(review['stars'].toString());
-                      },
+                    return Column(
+                      children: [
+                        for (final review in reviews)
+                          ReviewCard(
+                              user: review['user'],
+                              content: review['review'],
+                              stars: review['stars']),
+                      ],
                     );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
