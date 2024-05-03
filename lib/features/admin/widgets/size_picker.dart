@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/custom_textfield.dart';
 
-class ColorPicker extends StatefulWidget {
-  const ColorPicker(
-      {super.key, required this.colorsController, required this.colors});
+class SizePicker extends StatefulWidget {
+  const SizePicker(
+      {super.key, required this.sizesController, required this.sizes});
 
-  final TextEditingController colorsController;
-  final List<String> colors;
+  final TextEditingController sizesController;
+  final List<int> sizes;
 
   @override
-  State<ColorPicker> createState() => _ColorPickerState();
+  State<SizePicker> createState() => _SizePickerState();
 }
 
-class _ColorPickerState extends State<ColorPicker> {
+class _SizePickerState extends State<SizePicker> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,15 +24,16 @@ class _ColorPickerState extends State<ColorPicker> {
               children: [
                 Expanded(
                   child: CustomTextField(
-                    controller: widget.colorsController,
-                    hintText: 'Colors',
+                    controller: widget.sizesController,
+                    hintText: 'Size',
                   ),
                 ),
                 IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.colors.add(widget.colorsController.text);
-                        widget.colorsController.clear();
+                        widget.sizes
+                            .add(int.parse(widget.sizesController.text));
+                        widget.sizesController.clear();
                       });
                     },
                     icon: const Icon(Icons.add))
@@ -41,30 +42,35 @@ class _ColorPickerState extends State<ColorPicker> {
         // const SizedBox(
         //   height: 20,
         // ),
-        widget.colors.isEmpty
+        widget.sizes.isEmpty
             ? const SizedBox()
-            : SizedBox(
+            : Container(
+                margin: EdgeInsets.all(10),
                 height: 50,
                 width: double.maxFinite,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.colors.length,
+                  itemCount: widget.sizes.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        if (widget.colors.isNotEmpty) {
-                          widget.colors.remove(widget.colors[index]);
+                        if (widget.sizes.isNotEmpty) {
+                          widget.sizes.remove(widget.sizes[index]);
                         }
-                        setState(() {});
+                        setState(() {
+                        
+                        });
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                            color:
-                                Color(int.parse('0xff${widget.colors[index]}')),
+                            border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(100)),
+                        child: Text(widget.sizes[index].toString()),
                       ),
                     );
                   },

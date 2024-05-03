@@ -8,6 +8,7 @@ import 'package:shoper/features/admin/services/admin_service.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
 import 'package:shoper/features/admin/widgets/color_picker.dart';
 import 'package:shoper/features/admin/widgets/product_image_slider.dart';
+import 'package:shoper/features/admin/widgets/size_picker.dart';
 import 'package:shoper/widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../widgets/image_selector_widget.dart';
@@ -29,10 +30,12 @@ class _AddProductState extends State<AddProduct> {
 
   final productDetailsForm = GlobalKey<FormState>();
   List<String> colors = [];
+  List<int> sizes = [];
 
   final TextEditingController productQuantityController =
       TextEditingController();
   final TextEditingController colorsController = TextEditingController();
+  final TextEditingController sizesController = TextEditingController();
 
   List<File> images = [];
   String selectedValue = 'Adidas';
@@ -142,6 +145,12 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     ColorPicker(
                         colorsController: colorsController, colors: colors),
+                        SizePicker(sizesController: sizesController, sizes: sizes),
+                  //  sizes.isEmpty ?  const SizedBox(
+                  //     height: 20,
+                  //   ) : Container(
+
+                  //   ) ,    
                     MyDropdown(
                       width: width * 0.95,
                       height: height * 0.08,
