@@ -8,7 +8,7 @@ import 'package:shoper/model/reviews.dart';
 import '../../../provider/user_controller.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.104:3000';
+  final baseUrl = 'http://192.168.8.103:3000';
 
   Future<void> postReview(
       {required BuildContext context,

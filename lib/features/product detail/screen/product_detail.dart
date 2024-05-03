@@ -168,7 +168,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                       const SizedBox(height: 10.0),
                       RatingBar.builder(
-                        initialRating: 2,
+                        initialRating: widget.rating.toDouble(),
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -206,7 +206,13 @@ class _ProductDetailState extends State<ProductDetail> {
                                             widget.products.id.toString())
                                     .then((val) {
                                   addReview.clear();
-                                  setState(() {});
+                                  setState(() {
+                                    _reviewsFuture =
+                                        productSerivce.fetchReviews(
+                                            widget.products.id.toString(),
+                                            context);
+                                            widget.rating = 0;
+                                  });
                                 });
                               },
                               icon: const Icon(Icons.send))

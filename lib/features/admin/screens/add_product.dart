@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/constants/utils.dart';
 import 'package:shoper/features/admin/services/admin_service.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
+import 'package:shoper/features/admin/widgets/color_picker.dart';
 import 'package:shoper/features/admin/widgets/product_image_slider.dart';
 import 'package:shoper/widgets/custom_button.dart';
 import '../../../widgets/custom_textfield.dart';
@@ -26,9 +28,11 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController productPriceController = TextEditingController();
 
   final productDetailsForm = GlobalKey<FormState>();
+  List<String> colors = [];
 
   final TextEditingController productQuantityController =
       TextEditingController();
+  final TextEditingController colorsController = TextEditingController();
 
   List<File> images = [];
   String selectedValue = 'Adidas';
@@ -136,6 +140,8 @@ class _AddProductState extends State<AddProduct> {
                     const SizedBox(
                       height: 20,
                     ),
+                    ColorPicker(
+                        colorsController: colorsController, colors: colors),
                     MyDropdown(
                       width: width * 0.95,
                       height: height * 0.08,

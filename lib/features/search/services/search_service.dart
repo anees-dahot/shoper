@@ -10,7 +10,7 @@ import '../../../constants/flutter_toast.dart';
 
 class SearchService {
   
-final baseUrl = 'http://192.168.8.104:3000';
+final baseUrl = 'http://192.168.8.103:3000';
 
 
   Future<List<ProductModel>> getSearchProducts(
