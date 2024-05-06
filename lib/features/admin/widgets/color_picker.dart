@@ -23,11 +23,25 @@ class _ColorPickerState extends State<ColorPicker> {
             child: Row(
               children: [
                 Expanded(
-                  child: CustomTextField(
-                    controller: widget.colorsController,
+                    child: TextFormField(
+                  controller: widget.colorsController,
+                  decoration: const InputDecoration(
                     hintText: 'Colors',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Color.fromARGB(68, 0, 0, 0), width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
                   ),
-                ),
+                )),
                 IconButton(
                     onPressed: () {
                       setState(() {
@@ -58,7 +72,8 @@ class _ColorPickerState extends State<ColorPicker> {
                         setState(() {});
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(

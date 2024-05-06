@@ -48,6 +48,20 @@ const productSchema = mongoose.Schema({
       trim: true,
     },
   ],
+  colors: [
+    {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  ],
+  sizes: [
+    {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+  ],
   senderId: {
     type: String,
     required: true,

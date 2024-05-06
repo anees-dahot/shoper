@@ -145,12 +145,12 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     ColorPicker(
                         colorsController: colorsController, colors: colors),
-                        SizePicker(sizesController: sizesController, sizes: sizes),
-                  //  sizes.isEmpty ?  const SizedBox(
-                  //     height: 20,
-                  //   ) : Container(
+                    SizePicker(sizesController: sizesController, sizes: sizes),
+                    //  sizes.isEmpty ?  const SizedBox(
+                    //     height: 20,
+                    //   ) : Container(
 
-                  //   ) ,    
+                    //   ) ,
                     MyDropdown(
                       width: width * 0.95,
                       height: height * 0.08,
@@ -183,7 +183,9 @@ class _AddProductState extends State<AddProduct> {
                               quantity:
                                   int.parse(productQuantityController.text),
                               category: selectedValue,
-                              images: images);
+                              images: images,
+                              colors: colors,
+                              sizes: sizes);
                         }
                       },
                       color: Colors.black,

@@ -149,7 +149,7 @@ packages:
     dependency: transitive
     description:
       name: file_selector_platform_interface
-      sha256: a3994c26f10378a039faa11de174d7b78eb8f79e4dd0af2a451410c1a5c3f66b
+      sha256: a3994c26f10578a039faa11de174d7b78eb8f79e4dd0af2a451410c1a5c3f66b
       url: "https://pub.dev"
     source: hosted
     version: "2.6.2"
@@ -593,7 +593,7 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1048e957
+      sha256: b3d56ff4341b8f182b96aceb2fa20e3dcb336b9f867bc0eafc0de10f1058e957
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
@@ -617,7 +617,7 @@ packages:
     dependency: transitive
     description:
       name: xdg_directories
-      sha256: faea9dee56b520b55a566385b84f2e8de55e7496104adada9962e0bd11bcff1d
+      sha256: faea9dee56b520b55a566385b84f2e8de55e7496105adada9962e0bd11bcff1d
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"

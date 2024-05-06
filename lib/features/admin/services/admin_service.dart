@@ -14,7 +14,7 @@ import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.103:3000';
+  final baseUrl = 'http://192.168.8.105:3000';
 
   void sellProduct(
       {required BuildContext context,
@@ -23,7 +23,10 @@ class AdminService {
       required double price,
       required int quantity,
       required String category,
-      required List<File> images}) async {
+      required List<File> images,
+      required List<String> colors,
+      required List<int> sizes
+      }) async {
     try {
       final user = Provider.of<UserProvider>(context, listen: false).user;
       final cloudinary = CloudinaryPublic('doaewaso1', 'one9vigp');
@@ -43,6 +46,8 @@ class AdminService {
         quantity: quantity,
         category: category,
         images: imageUrl,
+        colors: colors,
+        sizes: sizes,
       );
       print('model done');
 

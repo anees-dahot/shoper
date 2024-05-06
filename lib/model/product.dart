@@ -12,6 +12,8 @@ class ProductModel {
   final String category;
   final List<String> images;
    List<ReviewsModel>? reviews;
+  final List<String> colors;
+  final List<int> sizes;
 
   ProductModel({
     this.id,
@@ -23,6 +25,8 @@ class ProductModel {
     required this.category,
     required this.images,
     this.reviews, 
+    required this.colors,
+    required this.sizes
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +40,8 @@ class ProductModel {
       'category': category,
       'images': images,
       'reviews': reviews?.map((review) => review.toMap()).toList(),
+      'colors': colors,
+     'sizes': sizes,
     };
   }
 
@@ -53,6 +59,8 @@ class ProductModel {
           ? List<ReviewsModel>.from(
               map['reviews'].map((review) => ReviewsModel.fromMap(review)))
           : null, // Convert reviews to list
+          colors: List<String>.from(map['colors'] ?? []), // Convert colors to list
+          sizes: List<int>.from(map['sizes'] ?? []), // Convert sizes to list
     );
   }
 
@@ -71,6 +79,8 @@ class ProductModel {
     String? category,
     List<String>? images,
     List<ReviewsModel>? reviews,
+    List<String>? colors,
+    List<int>? sizes,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -81,6 +91,8 @@ class ProductModel {
       category: category ?? this.category,
       images: images ?? this.images,
       reviews: reviews ?? this.reviews,
+      colors: colors ?? this.colors,
+      sizes: sizes ?? this.sizes,
     );
   }
 }

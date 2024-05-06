@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
@@ -13,6 +14,7 @@ class ProductDetail extends StatefulWidget {
   static const routeName = 'product-detail';
   ProductModel products;
   int rating = 0;
+  int quantity = 0;
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -55,6 +57,69 @@ class _ProductDetailState extends State<ProductDetail> {
           ],
         ),
         automaticallyImplyLeading: false,
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          width: width * 0.95,
+          height: height * 0.1,
+          decoration: BoxDecoration(
+              color: Colors.red, borderRadius: BorderRadius.circular(20)),
+          child: Row(
+            
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.058,
+                width: MediaQuery.of(context).size.width * 0.32,
+                child: Row(
+                  children: [
+
+                    IconButton(
+                        onPressed: () {
+                          widget.quantity++;
+                          setState(() {});
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        )),
+                    Text(widget.quantity.toString(), style: const TextStyle(color: Colors.white, fontSize: 20),),
+                    IconButton(
+                        onPressed: () {
+                          if (widget.quantity > 0) {
+                            widget.quantity--;
+                            setState(() {});
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                        ))
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  alignment: Alignment.center,
+                  height: MediaQuery.of(context).size.height * 0.058,
+                  width: MediaQuery.of(context).size.width * 0.32,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text('Add To Cart',
+                      style: GoogleFonts.lato(
+                        textStyle:
+                            const TextStyle(color: Colors.white, fontSize: 14),
+                      )),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -211,7 +276,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         productSerivce.fetchReviews(
                                             widget.products.id.toString(),
                                             context);
-                                            widget.rating = 0;
+                                    widget.rating = 0;
                                   });
                                 });
                               },
@@ -249,6 +314,9 @@ class _ProductDetailState extends State<ProductDetail> {
                   },
                 ),
               ),
+              const SizedBox(
+                height: 180,
+              )
             ],
           ),
         ),

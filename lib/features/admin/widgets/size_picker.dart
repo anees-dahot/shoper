@@ -23,11 +23,25 @@ class _SizePickerState extends State<SizePicker> {
             child: Row(
               children: [
                 Expanded(
-                  child: CustomTextField(
-                    controller: widget.sizesController,
-                    hintText: 'Size',
+                    child: TextFormField(
+                  controller: widget.sizesController,
+                  decoration: const InputDecoration(
+                    hintText: 'Sizes',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Color.fromARGB(68, 0, 0, 0), width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
                   ),
-                ),
+                )),
                 IconButton(
                     onPressed: () {
                       setState(() {
@@ -45,7 +59,7 @@ class _SizePickerState extends State<SizePicker> {
         widget.sizes.isEmpty
             ? const SizedBox()
             : Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 height: 50,
                 width: double.maxFinite,
                 child: ListView.builder(
@@ -57,9 +71,7 @@ class _SizePickerState extends State<SizePicker> {
                         if (widget.sizes.isNotEmpty) {
                           widget.sizes.remove(widget.sizes[index]);
                         }
-                        setState(() {
-                        
-                        });
+                        setState(() {});
                       },
                       child: Container(
                         alignment: Alignment.center,

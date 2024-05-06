@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/search/services/search_service.dart';
 
@@ -39,15 +40,18 @@ class SearchProducts extends StatelessWidget {
               return const Center(child: Text('No products available'));
             } else {
               final products = snapshot.data!;
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
                   itemCount: products.length,
                   itemBuilder: (context, index) {
+                    final colors = products[index].colors;
+                    final sizes = products[index].sizes;
                     return GestureDetector(
-                       onTap: () => Navigator.pushNamed(
-                            context, ProductDetail.routeName,
-                            arguments: products[index]),
+                      onTap: () => Navigator.pushNamed(
+                          context, ProductDetail.routeName,
+                          arguments: products[index]),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -72,7 +76,7 @@ class SearchProducts extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(left: 8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -86,10 +90,9 @@ class SearchProducts extends StatelessWidget {
                                     ),
                                     maxLines: 2,
                                   ),
-                                  
                                   SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.45,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
                                     child: Text(
                                       products[index].description,
                                       style: GoogleFonts.lato(
@@ -98,9 +101,57 @@ class SearchProducts extends StatelessWidget {
                                           // fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      maxLines: 2,
+                                      maxLines: 1,
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 200,
+                                    child: Expanded(
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: colors.length,
+                                        itemBuilder: (context, index) {
+                                          // Check if colors list is empty before accessing elements
+
+                                          return Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10, top: 10),
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: Color(int.parse(
+                                                  '0xff${colors[index]}')),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            // ...
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height: 40,
+                                      width: 200,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: sizes.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                             margin: const EdgeInsets.only(
+                                                right: 10, top: 10),
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child:
+                                                Text(sizes[index].toString()),
+                                          );
+                                        },
+                                      )),
                                   products[index].quantity == 0
                                       ? const Text(
                                           'Out of Stock',

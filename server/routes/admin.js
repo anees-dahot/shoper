@@ -8,7 +8,7 @@ const ReviewModel = require("../model/review");
 
 adminRouter.post("/admin/sell-product", admin, async (req, res) => {
   try {
-    const { name, price, description, quantity, category, images, senderId } =
+    const { name, price, description, quantity, category, colors, sizes , images, senderId } =
       req.body;
 
     let product = new Product({
@@ -17,6 +17,8 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       description,
       quantity,
       category,
+      colors,
+      sizes,
       images,
       senderId,
     });
