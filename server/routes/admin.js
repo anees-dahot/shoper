@@ -139,5 +139,29 @@ adminRouter.post("/admin/become-buyer", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+//* become a user
+adminRouter.post("/admin/update-product/:productId", auth, async (req, res) => {
+
+    const productId = req.params.productId;
+    const updateData = req.body; // Object containing fields to update
+    
+    try {
+      const updatedProduct = await Product.findOneAndUpdate(
+          { _id: productId }, // Filter by product ID
+          { $set: updateData }, // Update specific fields using $set
+          {  new: true, } // Return the updated document
+      );
+
+      if (updatedProduct) {
+          res.json({ message: 'Product updated successfully!', product: updatedProduct.value }); // Send updated product data
+          console.log('Product updated successfully!', updatedProduct)
+      } else {
+          res.status(404).json({ error: 'Product not found.' });
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error updating product.' });
+  }
+});
 
 module.exports = adminRouter;

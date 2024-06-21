@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
@@ -128,13 +127,13 @@ class _ProductDetailState extends State<ProductDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ImageCarousel(
-                imageUrls: widget.products.images,
+                imageUrls: widget.products.images!,
               ),
               SizedBox(
                 height: height * 0.03,
               ),
               Text(
-                widget.products.name,
+                widget.products.name!,
                 style: GoogleFonts.lato(
                     textStyle: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.w700)),
@@ -148,7 +147,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     GoogleFonts.lato(textStyle: const TextStyle(fontSize: 10)),
               ),
               Text(
-                widget.products.description,
+                widget.products.description!,
                 style: GoogleFonts.lato(
                     textStyle: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500)),
@@ -288,7 +287,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               Visibility(
-                visible: widget.products.reviews!.length > 0,
+                visible: widget.products.reviews!.isNotEmpty,
                 child: FutureBuilder<Map<String, dynamic>>(
                   future: _reviewsFuture,
                   builder: (context, snapshot) {

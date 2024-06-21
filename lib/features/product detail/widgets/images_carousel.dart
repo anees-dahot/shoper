@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ImageCarousel extends StatefulWidget {
   final List imageUrls;
 
-  const ImageCarousel({Key? key, required this.imageUrls}) : super(key: key);
+  const ImageCarousel({super.key, required this.imageUrls});
 
   @override
   State<ImageCarousel> createState() => _ProductImageSliderState();

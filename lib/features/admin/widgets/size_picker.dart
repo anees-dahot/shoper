@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/custom_textfield.dart';
 
 class SizePicker extends StatefulWidget {
   const SizePicker(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/constants/utils.dart';
 import 'package:shoper/features/admin/services/admin_service.dart';
@@ -172,10 +171,10 @@ class _AddProductState extends State<AddProduct> {
                       height: 20,
                     ),
                     CustomButton(
-                      text: 'Save',
+                      text:adminService.saved == true ?  'Save' : 'Saving....',
                       onTap: () {
                         if (productDetailsForm.currentState!.validate()) {
-                          adminService.sellProduct(
+                         adminService.sellProduct(
                               context: context,
                               name: productNameController.text,
                               description: productDescController.text,
@@ -185,7 +184,9 @@ class _AddProductState extends State<AddProduct> {
                               category: selectedValue,
                               images: images,
                               colors: colors,
-                              sizes: sizes);
+                              sizes: sizes,
+                              
+                              );
                         }
                       },
                       color: Colors.black,

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoper/features/product%20detail/screen/product_detail.dart';
+import 'package:shoper/model/product.dart';
+
+import '../../product detail/services/product_service.dart';
 
 class DealOfTheDay extends StatelessWidget {
   DealOfTheDay({super.key});
@@ -16,21 +21,24 @@ class DealOfTheDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProductSerivce productSerivce = ProductSerivce();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.43,
       // color: Colors.grey.shade200, // Light grey background
       child: Column(
         children: [
-           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Made just for you',
-                  style: GoogleFonts.lato(textStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800),)
-                ),
+                Text('Made just for you',
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.w800),
+                    )),
                 // Text(
                 //   'See All',
                 //   style:
@@ -39,69 +47,87 @@ class DealOfTheDay extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: imageUrls.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          imageUrls[index],
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Maintain image size
-                          fit: BoxFit.cover, // Fill the container
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'laptop',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '\$200',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
+          FutureBuilder<List<ProductModel>>(
+              future: productSerivce.getTrendingProducts(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final data = snapshot.data!;
+
+                  return Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final products = data[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, ProductDetail.routeName, arguments: products);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.network(
+                                    products.images![0],
+                                    width: double.infinity,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.4, // Maintain image size
+                                    fit: BoxFit.cover, // Fill the container
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              products.name!,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              products.price.toString(),
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+              }),
         ],
       ),
     );

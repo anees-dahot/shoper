@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/search/services/search_service.dart';
 
@@ -66,9 +63,9 @@ class SearchProducts extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image.network(
-                                products[index].images.isEmpty
+                                products[index].images!.isEmpty
                                     ? 'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ'
-                                    : products[index].images[0],
+                                    : products[index].images![0],
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 height: MediaQuery.of(context).size.height *
                                     0.2, // Maintain image size
@@ -81,7 +78,7 @@ class SearchProducts extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    products[index].name,
+                                    products[index].name!,
                                     style: GoogleFonts.lato(
                                       textStyle: const TextStyle(
                                         fontSize: 18.0,
@@ -94,7 +91,7 @@ class SearchProducts extends StatelessWidget {
                                     width: MediaQuery.of(context).size.width *
                                         0.45,
                                     child: Text(
-                                      products[index].description,
+                                      products[index].description!,
                                       style: GoogleFonts.lato(
                                         textStyle: const TextStyle(
                                           fontSize: 14.0,
@@ -110,7 +107,7 @@ class SearchProducts extends StatelessWidget {
                                     child: Expanded(
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: colors.length,
+                                        itemCount: colors!.length,
                                         itemBuilder: (context, index) {
                                           // Check if colors list is empty before accessing elements
 
@@ -136,7 +133,7 @@ class SearchProducts extends StatelessWidget {
                                       width: 200,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: sizes.length,
+                                        itemCount: sizes!.length,
                                         itemBuilder: (context, index) {
                                           return Container(
                                              margin: const EdgeInsets.only(

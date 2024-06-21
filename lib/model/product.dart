@@ -5,28 +5,30 @@ import 'package:shoper/model/reviews.dart';
 class ProductModel {
   final String? id;
   final String? senderId;
-  final String name;
-  final double price;
-  final String description;
-  final int quantity;
-  final String category;
-  final List<String> images;
+  final String? name;
+  final double? price;
+  final double? sale;
+  final String? description;
+  final int? quantity;
+  final String? category;
+  final List<String>? images;
    List<ReviewsModel>? reviews;
-  final List<String> colors;
-  final List<int> sizes;
+  final List<String>? colors;
+  final List<int>? sizes;
 
   ProductModel({
     this.id,
     this.senderId,
-    required this.name,
-    required this.price,
-    required this.description,
-    required this.quantity,
-    required this.category,
-    required this.images,
+     this.name,
+     this.price,
+     this.sale,
+     this.description,
+     this.quantity,
+     this.category,
+     this.images,
     this.reviews, 
-    required this.colors,
-    required this.sizes
+     this.colors,
+     this.sizes
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class ProductModel {
       'senderId': senderId,
       'name': name,
       'price': price,
+      'sale' : sale,
       'description': description,
       'quantity': quantity,
       'category': category,
@@ -51,6 +54,7 @@ class ProductModel {
       senderId: map['senderId'] ?? '',
       name: map['name'] ?? '',
       price: map['price']?.toDouble() ?? 0.0, // Convert price to double
+      sale: map['sale']?.toDouble() ?? 0.0, // Convert price to double
       description: map['description'] ?? '',
       quantity: map['quantity'] ?? 0, // Default quantity to 0
       category: map['category'] ?? '',
@@ -74,6 +78,7 @@ class ProductModel {
     String? senderId,
     String? name,
     double? price,
+    double? sale,
     String? description,
     int? quantity,
     String? category,
@@ -86,6 +91,7 @@ class ProductModel {
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
+      sale: sale ?? this.sale,
       description: description ?? this.description,
       quantity: quantity ?? this.quantity,
       category: category ?? this.category,

@@ -7,11 +7,9 @@ Future<List<File>> pickImages() async {
   List<File> selectedImages = [];
 
   try {
-    final List<XFile>? images = await ImagePicker().pickMultiImage();
-    if (images != null) {
-      selectedImages = images.map((image) => File(image.path)).toList();
-    }
-  } on Exception catch (e) {
+    final List<XFile> images = await ImagePicker().pickMultiImage();
+    selectedImages = images.map((image) => File(image.path)).toList();
+    } on Exception catch (e) {
     errorsMessage(e.toString()); // Assuming this displays an error message
   }
 

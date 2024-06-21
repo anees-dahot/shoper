@@ -45,7 +45,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case DashboardScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => DashboardScreen(),
+        builder: (_) => const DashboardScreen(),
       );
     case BottomNavbr.routeName:
       return MaterialPageRoute(

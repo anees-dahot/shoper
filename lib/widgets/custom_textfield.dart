@@ -1,23 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
   TextEditingController controller;
   int? numberOfLines;
+  String? labelText;
 
   CustomTextField({
-    super.key,
+    Key? key,
     required this.hintText,
     required this.controller,
-      this.numberOfLines,
-  });
+    this.numberOfLines,
+     this.labelText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      
       controller: controller,
         maxLines: numberOfLines,
       decoration: InputDecoration(
+        labelText: labelText,
         hintText: hintText,
         enabledBorder: const OutlineInputBorder(
           borderSide:

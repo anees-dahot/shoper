@@ -18,7 +18,7 @@ class AdminBottomBar extends StatefulWidget {
 class _BottomNavbrState extends State<AdminBottomBar> {
   int _selectedIndex = 0;
   final List<Widget> pages = [
-     DashboardScreen(), // Replace with your home screen
+     const DashboardScreen(), // Replace with your home screen
     const AnalyticsScreen(), // Replace with your home screen
     const OrdersScreen(), // Replace with your account screen
   ];

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/category/services/category_service.dart';
-import 'package:shoper/features/home/services/home_services.dart';
 import 'package:shoper/features/product%20detail/screen/product_detail.dart';
 
 class CategoryProducts extends StatelessWidget {
@@ -19,7 +18,7 @@ class CategoryProducts extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(Icons.arrow_back_ios_new_outlined)),
+                icon: const Icon(Icons.arrow_back_ios_new_outlined)),
             Text(category)
           ],
         ),
@@ -62,9 +61,9 @@ class CategoryProducts extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10.0),
                                 child: Image.network(
-                                  products[index].images.isEmpty
+                                  products[index].images!.isEmpty
                                       ? 'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ'
-                                      : products[index].images[0],
+                                      : products[index].images![0],
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   height: MediaQuery.of(context).size.height *
@@ -78,7 +77,7 @@ class CategoryProducts extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      products[index].name,
+                                      products[index].name!,
                                       style: GoogleFonts.lato(
                                         textStyle: const TextStyle(
                                           fontSize: 18.0,
@@ -91,7 +90,7 @@ class CategoryProducts extends StatelessWidget {
                                       width: MediaQuery.of(context).size.width *
                                           0.45,
                                       child: Text(
-                                        products[index].description,
+                                        products[index].description!,
                                         style: GoogleFonts.lato(
                                           textStyle: const TextStyle(
                                             fontSize: 14.0,

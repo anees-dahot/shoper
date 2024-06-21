@@ -18,12 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -43,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(height: height * 0.04),
         CategoryWidget(),
         NewArrivals(),
-      
+
         OnSale(),
         DealOfTheDay(),
       ]),

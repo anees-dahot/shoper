@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ProductImageSlider extends StatefulWidget {
   final List imageUrls;
 
-  const ProductImageSlider({Key? key, required this.imageUrls}) : super(key: key);
+  const ProductImageSlider({super.key, required this.imageUrls});
 
   @override
   State<ProductImageSlider> createState() => _ProductImageSliderState();
@@ -32,7 +32,7 @@ class _ProductImageSliderState extends State<ProductImageSlider> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.15,
                       errorBuilder: (context, error, stackTrace) {
-                        return Center(child: Text('Error loading image'));
+                        return const Center(child: Text('Error loading image'));
                       },
                     ),
                   );
@@ -68,7 +68,7 @@ class _ProductImageSliderState extends State<ProductImageSlider> {
                       width: 50.0,
                       height: 50.0,
                       errorBuilder: (context, error, stackTrace) {
-                        return Center(child: Text('Error'));
+                        return const Center(child: Text('Error'));
                       },
                     ),
                   ),

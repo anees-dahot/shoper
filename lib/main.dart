@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoper/features/admin/screens/edit_product.dart';
 import 'package:shoper/splash_screen.dart';
 import 'package:provider/provider.dart';
 import './provider/user_controller.dart';

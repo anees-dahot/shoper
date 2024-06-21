@@ -5,16 +5,17 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
+import 'package:shoper/features/admin/screens/home_screen.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
-import 'package:shoper/model/reviews.dart';
 import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.105:3000';
+  final baseUrl = 'http://192.168.8.102:3000';
+     final bool saved = true;
 
   void sellProduct(
       {required BuildContext context,
@@ -28,6 +29,7 @@ class AdminService {
       required List<int> sizes
       }) async {
     try {
+      saved == false;
       final user = Provider.of<UserProvider>(context, listen: false).user;
       final cloudinary = CloudinaryPublic('doaewaso1', 'one9vigp');
       List<String> imageUrl = [];
@@ -48,6 +50,7 @@ class AdminService {
         images: imageUrl,
         colors: colors,
         sizes: sizes,
+        sale: 0.0
       );
       print('model done');
 
@@ -72,8 +75,10 @@ class AdminService {
         );
         print(jsonDecode(res.body)['error']);
       }
+      saved == true;
     } catch (e) {
       errorsMessage(e.toString());
+      saved == true;
     }
   }
 
@@ -164,4 +169,32 @@ class AdminService {
       print("500 ${jsonDecode(res.body)['error']}");
     }
   }
+
+  void updateProduct(BuildContext context, String? productId, ProductModel productModel) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+  
+
+    final res = await http.post(Uri.parse('$baseUrl/admin/update-product/$productId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+        body: productModel.toJson());
+    if (res.statusCode == 200) {
+    Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminBottomBar()),
+        );
+      print('Updated');
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
+    }
+  }
 }
+  
