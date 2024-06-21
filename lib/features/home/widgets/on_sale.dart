@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoper/features/product%20detail/services/product_service.dart';
+
+import '../../../model/product.dart';
+import '../../product detail/screen/product_detail.dart';
 
 class OnSale extends StatelessWidget {
   OnSale({super.key});
@@ -14,11 +18,14 @@ class OnSale extends StatelessWidget {
     'https://i.pcmag.com/imagery/reviews/01DwPnq2ew5930qO5p4LXWH-1.fit_lim.size_120x68.v1677608790.jpg',
   ];
 
+  ProductSerivce productSerivce = ProductSerivce();
+  
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.37,
+      height: MediaQuery.of(context).size.height * 0.5,
       // color: Colors.grey.shade200, // Light grey background
       child: Column(
         children: [
@@ -39,60 +46,170 @@ class OnSale extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: imageUrls.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          imageUrls[index],
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Maintain image size
-                          fit: BoxFit.cover, // Fill the container
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'laptop',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '\$200',
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            // Add other details as needed
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+        FutureBuilder<List<ProductModel>>(
+              future: productSerivce.getSaleProducts(context),
+              builder: (context, snapshot) {
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final data = snapshot.data!;
+                  
+
+                  return Expanded(
+  child: ListView.builder(
+    scrollDirection: Axis.horizontal,
+    itemCount: data.length,
+    itemBuilder: (context, index) {
+      final product = data[index];
+      final hasSale = product.sale! > 0.0;
+
+      String getSalePrice() {
+        if (hasSale) {
+          var salePercent = product.sale! / 100;
+          var salePrice = product.price! * salePercent;
+          var finalPrice = product.price! - salePrice;
+          return finalPrice.toStringAsFixed(2);
+        } else {
+          return product.price!.toStringAsFixed(2);
+        }
+      }
+
+      return GestureDetector(
+        onTap: () => Navigator.pushNamed(context, ProductDetail.routeName, arguments: product),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+          width: MediaQuery.of(context).size.width * 0.6,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Product image with optional sale badge
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+                child: Stack(
+                  children: [
+                    Image.network(
+                      product.images![0],
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.width * 0.3,
+                      fit: BoxFit.cover,
+                    ),
+                    if (hasSale)
+                      Positioned(
+                        top: 10.0,
+                        left: 10.0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            "Sale",
+                            style: const TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              // Product details
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product name
+                    Text(
+                      product.name!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8.0),
+                    // Prices
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (hasSale)
+                          Text(
+                            "\$${product.price!.toStringAsFixed(2)}",
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        Text(
+                          "\$${getSalePrice()}",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: hasSale ? Colors.red : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    // Rating (optional)
+                    Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.yellow[700], size: 20),
+                        Icon(Icons.star, color: Colors.yellow[700], size: 20),
+                        Icon(Icons.star, color: Colors.yellow[700], size: 20),
+                        Icon(Icons.star, color: Colors.yellow[700], size: 20),
+                        Icon(Icons.star_half, color: Colors.yellow[700], size: 20),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          "(4.5)", // Example rating
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    // Call to action button
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, ProductDetail.routeName, arguments: product),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                      child: const Text(
+                        'View Details',
+                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  ),
+);
+
+
+                }
+              }),
         ],
       ),
     );

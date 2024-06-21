@@ -171,26 +171,26 @@ class _AddProductState extends State<AddProduct> {
                       height: 20,
                     ),
                     CustomButton(
-                      text:adminService.saved == true ?  'Save' : 'Saving....',
+                      text: adminService.saved == true ? 'Save' : 'Saving....',
                       onTap: () {
                         if (productDetailsForm.currentState!.validate()) {
-                         adminService.sellProduct(
-                              context: context,
-                              name: productNameController.text,
-                              description: productDescController.text,
-                              price: double.parse(productPriceController.text),
-                              quantity:
-                                  int.parse(productQuantityController.text),
-                              category: selectedValue,
-                              images: images,
-                              colors: colors,
-                              sizes: sizes,
-                              
-                              );
+                          adminService.sellProduct(
+                            context: context,
+                            name: productNameController.text,
+                            description: productDescController.text,
+                            price: double.parse(productPriceController.text),
+                            quantity: int.parse(productQuantityController.text),
+                            category: selectedValue,
+                            images: images,
+                            colors: colors,
+                            sizes: sizes,
+                          );
                         }
                       },
                       color: Colors.black,
                     ),
+                
+
                     const SizedBox(
                       height: 80,
                     ),

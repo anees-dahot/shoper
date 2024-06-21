@@ -5,7 +5,6 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
-import 'package:shoper/features/admin/screens/home_screen.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/model/product.dart';
@@ -15,7 +14,7 @@ import 'package:shoper/splash_screen.dart';
 
 class AdminService {
   final baseUrl = 'http://192.168.8.102:3000';
-     final bool saved = true;
+      bool saved = true;
 
   void sellProduct(
       {required BuildContext context,
