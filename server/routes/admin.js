@@ -45,7 +45,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
 
 // * get all products
 
-adminRouter.get("/admin/get-products",  async (req, res) => {
+adminRouter.get("/admin/get-products", admin, async (req, res) => {
   try {
     const user = await User.findById(req.user);
     if (!user) {
@@ -76,7 +76,7 @@ adminRouter.get("/admin/get-saleproducts",  async (req, res) => {
 });
 
 //* review posting
-adminRouter.post("/admin/post-review/:productId", admin, async (req, res) => {
+adminRouter.post("/admin/post-review/:productId", auth, async (req, res) => {
   try {
     const { user, review, time, stars } = req.body;
     const productId = req.params.productId;
@@ -97,7 +97,7 @@ adminRouter.post("/admin/post-review/:productId", admin, async (req, res) => {
 });
 
 //* get reviews
-adminRouter.get("/admin/get-reviews/:productId", admin, async (req, res) => {
+adminRouter.get("/admin/get-reviews/:productId", auth, async (req, res) => {
   try {
     const productId = req.params.productId;
 
@@ -107,6 +107,7 @@ adminRouter.get("/admin/get-reviews/:productId", admin, async (req, res) => {
     if (!product || !product.reviews || product.reviews.length === 0) {
       return res.status(404).json({ message: "Reviews not found" });
     }
+    else if(!product.reviews) return res.status(404).json({ message: "Reviews not found" });
 
     // Extract and return only the reviews data
     const reviews = product.reviews.map((review) => ({

@@ -138,7 +138,7 @@ class _EditProductState extends State<EditProduct> {
                             price: double.parse(productPriceController.text),
                             description: productDescController.text,
                             quantity: int.parse(productQuantityController.text),
-                            sale: double.parse(productSaleController.text),
+                            sale: int.parse(productSaleController.text),
                             senderId: widget.products.senderId,
                             category: widget.products.category,
                             images: widget.products.images,

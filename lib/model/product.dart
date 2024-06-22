@@ -7,7 +7,7 @@ class ProductModel {
   final String? senderId;
   final String? name;
   final double? price;
-  final double? sale;
+  final int? sale;
   final String? description;
   final int? quantity;
   final String? category;
@@ -54,7 +54,7 @@ class ProductModel {
       senderId: map['senderId'] ?? '',
       name: map['name'] ?? '',
       price: map['price']?.toDouble() ?? 0.0, // Convert price to double
-      sale: map['sale']?.toDouble() ?? 0.0, // Convert price to double
+      sale: map['sale'] ?? 0.0, // Convert price to double
       description: map['description'] ?? '',
       quantity: map['quantity'] ?? 0, // Default quantity to 0
       category: map['category'] ?? '',
@@ -78,7 +78,7 @@ class ProductModel {
     String? senderId,
     String? name,
     double? price,
-    double? sale,
+    int? sale,
     String? description,
     int? quantity,
     String? category,

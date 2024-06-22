@@ -13,7 +13,7 @@ import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.102:3000';
+  final baseUrl = 'http://192.168.8.103:3000';
       bool saved = true;
 
   void sellProduct(
@@ -49,7 +49,7 @@ class AdminService {
         images: imageUrl,
         colors: colors,
         sizes: sizes,
-        sale: 0.0
+        sale: 0
       );
       print('model done');
 

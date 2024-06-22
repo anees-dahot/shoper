@@ -67,7 +67,7 @@ productRouter.get("/api/product/trending-products", auth, async (req, res) => {
 productRouter.get("/api/product/get-products", auth, async (req, res) => {
   try {
     const products = await Product.find({});
-
+    
     res.json({ products });
     console.log(products);
   } catch (err) {
