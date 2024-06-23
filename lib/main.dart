@@ -5,6 +5,7 @@ import 'package:shoper/splash_screen.dart';
 import 'package:provider/provider.dart';
 import './provider/user_controller.dart';
 import './router.dart';
+import 'features/product detail/provider/product_detail_provider.dart';
 
 void main() {
   runApp(
@@ -12,6 +13,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
       ],
       child: MyApp(),
     ),

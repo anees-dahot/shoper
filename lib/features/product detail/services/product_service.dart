@@ -11,7 +11,6 @@ import '../../../provider/user_controller.dart';
 class ProductSerivce {
   final baseUrl = 'http://192.168.8.103:3000';
   List<ProductModel> products = [];
- 
 
   Future<void> postReview(
       {required BuildContext context,
@@ -49,26 +48,36 @@ class ProductSerivce {
     }
   }
 
+  Future<List<ReviewsModel>> fetchReviews(
+      String productId, BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': user.token
+      },
+    );
 
-Future<Map<String, dynamic>> fetchReviews(String productId, BuildContext context) async {
-
-   final user = Provider.of<UserProvider>(context, listen: false).user;
-  final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
-  final response = await http.get(url,  headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': user.token
-        },);
-
-  if (response.statusCode == 200) {
-    print(response.body);
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to fetch reviews: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print(response.body);
+      final json = jsonDecode(response.body) as List;
+      final reviews = json.map((e) {
+        return ReviewsModel(
+          user: e['user'],
+          review: e['review'],
+          time: e['time'],
+          stars: e['stars'],
+        );
+      }).toList();
+      return reviews;
+    } else {
+      throw Exception('Failed to fetch reviews: ${response.statusCode}');
+    }
   }
-}
 
-Future<List<ProductModel>> getTrendingProducts(
-       BuildContext context) async {
+  Future<List<ProductModel>> getTrendingProducts(BuildContext context) async {
     final userToken = Provider.of<UserProvider>(context).user.token;
     List<ProductModel> products = [];
     try {
@@ -98,8 +107,8 @@ Future<List<ProductModel>> getTrendingProducts(
     }
     return products;
   }
-Future<List<ProductModel>> getSaleProducts(
-       BuildContext context) async {
+
+  Future<List<ProductModel>> getSaleProducts(BuildContext context) async {
     final userToken = Provider.of<UserProvider>(context).user.token;
     List<ProductModel> products = [];
     try {
@@ -130,9 +139,7 @@ Future<List<ProductModel>> getSaleProducts(
     return products;
   }
 
-
-  Future<List<ProductModel>> getProducts(
-       BuildContext context) async {
+  Future<List<ProductModel>> getProducts(BuildContext context) async {
     final userToken = Provider.of<UserProvider>(context).user.token;
     // List<ProductModel> products = [];
     try {
@@ -162,6 +169,4 @@ Future<List<ProductModel>> getSaleProducts(
     }
     return products;
   }
-
 }
-

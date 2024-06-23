@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shoper/features/product%20detail/provider/product_detail_provider.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/features/product%20detail/widgets/images_carousel.dart';
 import 'package:shoper/features/product%20detail/widgets/review_card.dart';
@@ -28,8 +30,10 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   void initState() {
     super.initState();
-    _reviewsFuture =
-        productSerivce.fetchReviews(widget.products.id.toString(), context);
+    // _reviewsFuture =
+    //     productSerivce.fetchReviews(widget.products.id.toString(), context);
+
+    // Provider.of<ProductDetailProvider>(context).getReviews(productId, context);
   }
 
   @override
@@ -271,11 +275,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                     .then((val) {
                                   addReview.clear();
                                   setState(() {
-                                    _reviewsFuture =
-                                        productSerivce.fetchReviews(
-                                            widget.products.id.toString(),
-                                            context);
-                                    widget.rating = 0;
+                                    // _reviewsFuture =
+                                    //     productSerivce.fetchReviews(
+                                    //         widget.products.id.toString(),
+                                    //         context);
+                                    // widget.rating = 0;
                                   });
                                 });
                               },
