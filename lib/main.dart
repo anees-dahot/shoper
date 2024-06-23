@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoper/features/admin/screens/edit_product.dart';
+import 'package:shoper/features/home/provider/home_provider.dart';
 import 'package:shoper/splash_screen.dart';
 import 'package:provider/provider.dart';
 import './provider/user_controller.dart';
 import './router.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ],
+      child: MyApp(),
     ),
-  ], child: const MyApp()));
+  );
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 

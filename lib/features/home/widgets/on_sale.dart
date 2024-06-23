@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shoper/features/home/provider/home_provider.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
 
 import '../../../model/product.dart';
@@ -12,6 +15,7 @@ class OnSale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductSerivce productService = ProductSerivce();
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.45,
@@ -31,15 +35,15 @@ class OnSale extends StatelessWidget {
               ],
             ),
           ),
-          FutureBuilder<List<ProductModel>>(
-            future: productService.getSaleProducts(context),
+          FutureBuilder<void>(
+            future: homeProvider.fetchSaleProducts(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
-                final data = snapshot.data!;
+              final data = homeProvider.saleProducts;
 
                 return Expanded(
                   child: ListView.separated(

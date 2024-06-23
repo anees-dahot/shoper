@@ -39,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
         NewArrivals(),
 
         OnSale(),
-        DealOfTheDay(),
-      ]),
+        DealOFDay(),
+ SizedBox(height: height * 0.09),      ]),
     ));
   }
 }
