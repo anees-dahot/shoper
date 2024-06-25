@@ -43,7 +43,7 @@ const productSchema = mongoose.Schema({
   },
   sale: {
     type: Number,
-   
+
     trim: true,
   },
   images: [
@@ -71,6 +71,10 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
   },
   reviews: {
     type: Array,

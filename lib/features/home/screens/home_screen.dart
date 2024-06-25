@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shoper/features/home/provider/home_provider.dart';
 import 'package:shoper/features/home/widgets/category_widget.dart';
 import 'package:shoper/features/home/widgets/deal_of_the_day.dart';
 import 'package:shoper/features/home/widgets/new_arrivals.dart';
@@ -29,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final user = userBox.values.first;
+    final HomeController homeController = Get.put(HomeController());
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(children: [
@@ -46,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
         CategoryWidget(),
         NewArrivals(),
 
-        OnSale(),
-        DealOFDay(),
+       homeController.saleProducts == [] ? OnSale() : Container(),
+       homeController.trendingProducts == [] ?  DealOFDay() : Container(),
  SizedBox(height: height * 0.09),      ]),
     ));
   }

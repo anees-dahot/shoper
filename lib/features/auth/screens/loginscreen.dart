@@ -169,7 +169,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           onTap: () {
                             if (_signInFormKey.currentState!.validate()) {
                               signInUser();
-                               authService.getUserData(context);
+                             
 
                             }
                           },

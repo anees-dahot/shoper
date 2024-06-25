@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 
 import 'features/auth/screens/loginscreen.dart';
+import 'model/user.dart';
 
 class SplashScreen extends StatefulWidget {
+  static const String routeName =  'splash-screen';
   const SplashScreen({super.key});
 
   @override
@@ -20,17 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     screenNavigator();
-    authService.getUserData(context);
     
+  
   }
 
 
   void screenNavigator()async {
-    //  final SharedPreferences ref = await SharedPreferences.getInstance();
-        // String? token = ref.getString('x-auth-token');
+ await Hive.openBox<UserModel>('user');
+     if(userBox.isNotEmpty){
+      final SharedPreferences ref = await SharedPreferences.getInstance();
+        String? token = ref.getString('x-auth-token');
     authService.getUserData(context).then((value) {
-   
-      // Future.delayed(const Duration(seconds: 10), () {
+   print(userBox.values.first.id)
+;      // Future.delayed(const Duration(seconds: 10), () {
        userBox.values.first.token.isNotEmpty
             ? userBox.values.first.type ==
                     'user'
@@ -44,6 +50,9 @@ class _SplashScreenState extends State<SplashScreen> {
     }).onError((error, stackTrace) {
       print('splash error $error');
     });
+     }else{
+      Navigator.pushNamed(context, AuthScreen.routeName);
+     }
   }
 
   

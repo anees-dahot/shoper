@@ -19,6 +19,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       images,
       senderId,
       sale,
+  
     } = req.body;
 
     let product = new Product({
@@ -32,6 +33,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       images,
       senderId,
       sale,
+   
     });
 
     product = await product.save();

@@ -5,6 +5,7 @@ import 'package:shoper/features/category/screen/category_products.dart';
 import 'package:shoper/features/product%20detail/screen/product_detail.dart';
 import 'package:shoper/features/search/screen/search_products.dart';
 import 'package:shoper/model/product.dart';
+import 'package:shoper/splash_screen.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '/features/auth/screens/loginscreen.dart';
 
@@ -40,6 +41,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => CategoryProducts(
           category: arguments.toString(),
+        ),
+      );
+    case SplashScreen.routeName:
+    
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) =>const SplashScreen(
+         
         ),
       );
     case DashboardScreen.routeName:

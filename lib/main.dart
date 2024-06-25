@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shoper/features/auth/screens/loginscreen.dart';
 import 'package:shoper/model/user.dart';
 import 'package:shoper/splash_screen.dart';
-import 'package:shoper/widgets/bottom_navbar.dart';
 import './router.dart';
 
 void main() async{
@@ -14,6 +13,7 @@ WidgetsFlutterBinding.ensureInitialized();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(UserModelAdapter()); // Register adapter
   await Hive.openBox<UserModel>('user');
+  // Hive.deleteFromDisk();
   runApp(
     const MyApp());
 }

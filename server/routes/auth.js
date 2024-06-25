@@ -78,9 +78,9 @@ authRouter.get("/", auth, async (req, res) => {
 });
 
 //* become a user
-authRouter.post("/api/become-seller", auth, async (req, res) => {
+authRouter.post("/api/become-seller/:id", auth, async (req, res) => {
   try {
-    const { id } = req.body;
+    const  id  = req.params.id;
 
     // // Find the product by ID
     const user = await User.findByIdAndUpdate(

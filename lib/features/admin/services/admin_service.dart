@@ -11,6 +11,7 @@ import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
+import 'package:shoper/widgets/bottom_navbar.dart';
 
 import '../../../utils.dart';
 
@@ -151,15 +152,9 @@ class AdminService {
         },
         body: jsonEncode({'id': userId}));
     if (res.statusCode == 200) {
-      authService.getUserData(context).then((value) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SplashScreen()),
-        );
-      }).onError((error, stackTrace) {
-        errorsMessage(error.toString());
-        print('become buyer then error $error');
-      });
+      userBox.values.first.type == 'user';
+      userBox.values.first.save();
+     Navigator.pushNamed(context, BottomNavbr.routeName);
     } else if (res.statusCode == 400) {
       errorsMessage(jsonDecode(res.body)['msg']);
       print("400 ${jsonDecode(res.body)['msg']}");

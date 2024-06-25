@@ -8,6 +8,7 @@ class HomeController extends GetxController {
   final ProductSerivce productService = ProductSerivce();
   var saleProducts = <ProductModel>[].obs;
   var trendingProducts = <ProductModel>[].obs;
+  var newArrivalProducts = <ProductModel>[].obs;
   var isLoading = false.obs;
 
   @override
@@ -15,6 +16,7 @@ class HomeController extends GetxController {
     super.onInit();
     fetchSaleProducts();
     fetchTrendingProducts();
+    fetchNewArrivals();
   }
 
   void fetchSaleProducts() async {
@@ -37,6 +39,20 @@ class HomeController extends GetxController {
       var products = await productService.getTrendingProducts();
       if (products != null) {
         trendingProducts.assignAll(products);
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      errorsMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+  void fetchNewArrivals() async {
+    try {
+      isLoading(true);
+      var products = await productService.getNewArrivalProducts();
+      if (products != null) {
+        newArrivalProducts.assignAll(products);
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());

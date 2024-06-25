@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../constants/flutter_toast.dart';
@@ -105,7 +106,7 @@ class AuthService {
         var userData = jsonDecode(res.body);
 
         UserModel userModel = UserModel(
-            id: userData['id'].toString(),
+            id: userData['_id'],
             name: userData['name'],
             email: userData['email'],
             password: userData['password'],
@@ -113,7 +114,7 @@ class AuthService {
             type: userData['type'],
             token: userData['token']);
 
-         userBox.add(userModel);
+        userBox.add(userModel);
         print(userBox.values.first.name);
         await getUserData(context);
         Navigator.pushNamedAndRemoveUntil(
@@ -134,7 +135,6 @@ class AuthService {
           ),
         );
       }
-       userBox.values.isNotEmpty? userBox.values.toList().clear() : print('NO user');
     } catch (e) {
       print('error $e');
     }
@@ -172,18 +172,22 @@ class AuthService {
         );
 
         var userData = jsonDecode(userRes.body);
+        print('id: ${userBox.values.length}');
 
-        UserModel userModel = UserModel(
-            id: userData['id'].toString(),
-            name: userData['name'],
-            email: userData['email'],
-            password: userData['password'],
-            address: userData['address'],
-            type: userData['type'],
-            token: token);
+        if (userBox.values.first.token.length == 0) {
+          UserModel userModel = UserModel(
+              id: userData['_id'],
+              name: userData['name'],
+              email: userData['email'],
+              password: userData['password'],
+              address: userData['address'],
+              type: userData['type'],
+              token: token);
 
-        await userBox.add(userModel);
-        print(userBox.values.first.name);
+          await userBox.add(userModel);
+        } else {
+          print('user already exists');
+        }
       }
     } catch (e) {
       // showSnackBar(context, e.toString());
@@ -196,20 +200,19 @@ class AuthService {
 
     final user = userBox.values.first;
 
-    final res = await http.post(Uri.parse('$baseUrl/api/become-seller'),
+    final res = await http.post(
+        Uri.parse('$baseUrl/api/become-seller/${user.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          // 'x-auth-token': user.token
-        },
-        body: jsonEncode({
-          'id': user.id,
-        }));
+          'x-auth-token': user.token
+        });
+
     if (res.statusCode == 200) {
+      userBox.values.first.type == 'seller';
+      
+      userBox.values.first.save();
       getUserData(context).then((value) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SplashScreen()),
-        );
+        Navigator.pushNamed(context, AdminBottomBar.routeName);
       }).onError((error, stackTrace) {
         // errorsMessage(error.toString());
         print('become seller then error $error');

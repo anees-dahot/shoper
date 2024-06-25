@@ -108,6 +108,36 @@ class ProductSerivce {
     }
     return products;
   }
+  Future<List<ProductModel>> getNewArrivalProducts() async {
+    final userToken = userBox.values.first.token;
+    List<ProductModel> products = [];
+    try {
+      final res = await http.get(
+        Uri.parse('$baseUrl/api/product/new-arrivals'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userToken
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(res.body);
+        products = jsonData.map((json) => ProductModel.fromMap(json)).toList();
+        print(products);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
+        );
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      print('cathc error $e');
+    }
+    return products;
+  }
 
   Future<List<ProductModel>> getSaleProducts() async {
     final userToken = userBox.values.first.token;

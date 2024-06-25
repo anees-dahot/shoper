@@ -20,6 +20,26 @@ productRouter.get("/api/product/", auth, async (req, res) => {
   }
 });
 
+//* get new arrival products
+productRouter.get("/api/product/new-arrivals", auth, async (req, res) => {
+  const { startDate, endDate } = req.query;
+  const query = {};
+
+  if (startDate && endDate) {
+    query.createdAt = {
+      $gte: new Date(startDate),
+      $lte: new Date(endDate),
+    };
+  }
+
+  try {
+    const products = await Product.find(query);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 //* search products
 productRouter.get("/api/product/search/:name", auth, async (req, res) => {
   try {
