@@ -1,66 +1,48 @@
-import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
-import 'package:shoper/model/product.dart';
+import '../../../model/product.dart';
 
-class HomeProvider extends ChangeNotifier{
+class HomeController extends GetxController {
+  final ProductSerivce productService = ProductSerivce();
+  var saleProducts = <ProductModel>[].obs;
+  var trendingProducts = <ProductModel>[].obs;
+  var isLoading = false.obs;
 
- List<ProductModel> _saleProducts = [];
- List<ProductModel> _trendingroducts = [];
-  bool _isLoading = false;
-  String _errorMessage = '';
-
-  List<ProductModel> get saleProducts => _saleProducts;
-  List<ProductModel> get trendingProducts => _trendingroducts;
-  bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage;
-
-  final ProductSerivce _productService = ProductSerivce();
-
-
-
-  Future<void> fetchSaleProducts(BuildContext context) async {
-    _isLoading = true;
-    notifyListeners();
-     List<ProductModel> products = [];
-
-    try {
-       print('data fecthed');
-      await _productService.getSaleProducts(context).then((value) {
-         _saleProducts = value;
-         print('data fecthed');
-      });
-      _errorMessage = '';
-      
-    } catch (e) {
-      _errorMessage = e.toString();
-      print(e.toString());
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-  Future<void> fetchDealOfDayProducts(BuildContext context) async {
-    _isLoading = true;
-    notifyListeners();
-     List<ProductModel> products = [];
-
-    try {
-       print('data fecthed');
-      await _productService.getTrendingProducts(context).then((value) {
-         _trendingroducts = value;
-         print('data fecthed');
-      });
-      _errorMessage = '';
-      
-    } catch (e) {
-      _errorMessage = e.toString();
-      print(e.toString());
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  @override
+  void onInit() {
+    super.onInit();
+    fetchSaleProducts();
+    fetchTrendingProducts();
   }
 
-
-
+  void fetchSaleProducts() async {
+    try {
+      isLoading(true);
+      var products = await productService.getSaleProducts();
+      if (products != null) {
+        saleProducts.assignAll(products);
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      errorsMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+  void fetchTrendingProducts() async {
+    try {
+      isLoading(true);
+      var products = await productService.getTrendingProducts();
+      if (products != null) {
+        trendingProducts.assignAll(products);
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      errorsMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
 }

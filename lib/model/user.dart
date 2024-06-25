@@ -1,12 +1,22 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
+part 'user.g.dart';
 
-class UserModel {
+@HiveType(typeId: 0)
+class UserModel extends HiveObject{
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String email;
+  @HiveField(3)
   final String password;
+  @HiveField(4)
   final String address;
+  @HiveField(5)
   final String type;
+  @HiveField(6)
   final String token;
 
   UserModel({
@@ -46,25 +56,5 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
-
-  UserModel copyWith({
-    String? id,
-    String? name,
-    String? email,
-    String? password,
-    String? address,
-    String? type,
-    String? token,
-  }) {
-    return UserModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
-      address: address ?? this.address,
-      type: type ?? this.type,
-      token: token ?? this.token,
-    );
-  }
+  
 }

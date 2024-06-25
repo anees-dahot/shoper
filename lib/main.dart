@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoper/features/home/provider/home_provider.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shoper/features/auth/screens/loginscreen.dart';
+import 'package:shoper/model/user.dart';
 import 'package:shoper/splash_screen.dart';
-import 'package:provider/provider.dart';
-import './provider/user_controller.dart';
+import 'package:shoper/widgets/bottom_navbar.dart';
 import './router.dart';
-import 'features/product detail/provider/product_detail_provider.dart';
 
-void main() {
+void main() async{
+WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(UserModelAdapter()); // Register adapter
+  await Hive.openBox<UserModel>('user');
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => ProductDetailProvider()),
-      ],
-      child: MyApp(),
-    ),
-  );
+    const MyApp());
 }
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

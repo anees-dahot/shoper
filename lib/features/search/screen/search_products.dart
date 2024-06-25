@@ -46,9 +46,9 @@ class SearchProducts extends StatelessWidget {
                     final colors = products[index].colors;
                     final sizes = products[index].sizes;
                     return GestureDetector(
-                      onTap: () => Navigator.pushNamed(
-                          context, ProductDetail.routeName,
-                          arguments: products[index]),
+                      // onTap: () => Navigator.pushNamed(
+                      //     context, ProductDetail.routeName,
+                      //     arguments: products[index]),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         margin: const EdgeInsets.symmetric(horizontal: 10.0),

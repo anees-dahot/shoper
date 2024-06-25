@@ -44,9 +44,9 @@ class CategoryProducts extends StatelessWidget {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () => Navigator.pushNamed(
-                            context, ProductDetail.routeName,
-                            arguments: products[index]),
+                        // onTap: () => Navigator.pushNamed(
+                        //     context, ProductDetail.routeName,
+                        //     arguments: products[index]),
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 6),
                           margin: const EdgeInsets.symmetric(horizontal: 10.0),

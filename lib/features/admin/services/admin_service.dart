@@ -12,8 +12,10 @@ import 'package:http/http.dart' as http;
 import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/splash_screen.dart';
 
+import '../../../utils.dart';
+
 class AdminService {
-  final baseUrl = 'http://192.168.8.103:3000';
+  final baseUrl = 'http://192.168.8.107:3000';
       bool saved = true;
 
   void sellProduct(
@@ -29,7 +31,7 @@ class AdminService {
       }) async {
     try {
       saved == false;
-      final user = Provider.of<UserProvider>(context, listen: false).user;
+      final user = userBox.values.first;
       final cloudinary = CloudinaryPublic('doaewaso1', 'one9vigp');
       List<String> imageUrl = [];
       for (int i = 0; i < images.length; i++) {
@@ -83,7 +85,7 @@ class AdminService {
 
   Future<List<ProductModel>> getProducts(BuildContext context) async {
     List<ProductModel> products = [];
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
 
     try {
       final res = await http.get(
@@ -114,7 +116,7 @@ class AdminService {
   }
 
   void deleteProduct(String productId, BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
     final res = await http.post(
       Uri.parse('$baseUrl/admin/delete-product/$productId'),
       headers: <String, String>{
@@ -137,9 +139,9 @@ class AdminService {
   }
 
   void becomeBuyer(BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
     final userId =
-        Provider.of<UserProvider>(context, listen: false).user.id.toString();
+        userBox.values.first.id.toString();
     AuthService authService = AuthService();
 
     final res = await http.post(Uri.parse('$baseUrl/admin/become-buyer'),
@@ -170,7 +172,7 @@ class AdminService {
   }
 
   void updateProduct(BuildContext context, String? productId, ProductModel productModel) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
   
 
     final res = await http.post(Uri.parse('$baseUrl/admin/update-product/$productId'),

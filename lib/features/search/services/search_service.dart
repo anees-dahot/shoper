@@ -5,17 +5,18 @@ import 'package:provider/provider.dart';
 import 'package:shoper/model/product.dart';
 import 'package:shoper/provider/user_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:shoper/utils.dart';
 
 import '../../../constants/flutter_toast.dart';
 
 class SearchService {
   
-final baseUrl = 'http://192.168.8.103:3000';
+final baseUrl = 'http://192.168.8.107:3000';
 
 
   Future<List<ProductModel>> getSearchProducts(
       String query, BuildContext context) async {
-    final userToken = Provider.of<UserProvider>(context).user.token;
+    final userToken = userBox.values.first.token;
     List<ProductModel> products = [];
     try {
       final res = await http.get(

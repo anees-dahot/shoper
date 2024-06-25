@@ -21,7 +21,7 @@ class _BottomNavbrState extends State<BottomNavbr> {
   final List<Widget> pages = [
     const HomeScreen(), // Replace with your home screen
     const WishlistScreen(), // Replace with your home screen
-    const AccountScreen(), // Replace with your account screen
+    // const AccountScreen(), // Replace with your account screen
     const CartScreen(), // Replace with your cart screen
   ];
 

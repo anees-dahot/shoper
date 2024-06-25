@@ -2,9 +2,12 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../constants/flutter_toast.dart';
 import '../../../model/user.dart';
@@ -12,7 +15,7 @@ import '../../../provider/user_controller.dart';
 import '../../../splash_screen.dart';
 
 class AuthService {
-  final baseUrl = 'http://192.168.8.103:3000';
+  final baseUrl = 'http://192.168.8.107:3000';
   // sign up user
   void signUpUser({
     required BuildContext context,
@@ -98,9 +101,21 @@ class AuthService {
         );
 
         final SharedPreferences ref = await SharedPreferences.getInstance();
-
-        Provider.of<UserProvider>(context, listen: false).setUser(res.body);
         ref.setString('x-auth-token', jsonDecode(res.body)['token']);
+        var userData = jsonDecode(res.body);
+
+        UserModel userModel = UserModel(
+            id: userData['id'].toString(),
+            name: userData['name'],
+            email: userData['email'],
+            password: userData['password'],
+            address: userData['address'],
+            type: userData['type'],
+            token: userData['token']);
+
+         userBox.add(userModel);
+        print(userBox.values.first.name);
+        await getUserData(context);
         Navigator.pushNamedAndRemoveUntil(
           context,
           BottomNavbr.routeName,
@@ -119,8 +134,9 @@ class AuthService {
           ),
         );
       }
+       userBox.values.isNotEmpty? userBox.values.toList().clear() : print('NO user');
     } catch (e) {
-      print(e);
+      print('error $e');
     }
   }
 
@@ -155,26 +171,39 @@ class AuthService {
           },
         );
 
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        var userData = jsonDecode(userRes.body);
+
+        UserModel userModel = UserModel(
+            id: userData['id'].toString(),
+            name: userData['name'],
+            email: userData['email'],
+            password: userData['password'],
+            address: userData['address'],
+            type: userData['type'],
+            token: token);
+
+        await userBox.add(userModel);
+        print(userBox.values.first.name);
       }
     } catch (e) {
       // showSnackBar(context, e.toString());
-      print(e);
+      print('error 2nd $e');
     }
   }
 
   void becomeSeller(BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
-    final userId =
-        Provider.of<UserProvider>(context, listen: false).user.id.toString();
+    // UserController userController = Get.put(UserController());
+
+    final user = userBox.values.first;
 
     final res = await http.post(Uri.parse('$baseUrl/api/become-seller'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': user.token
+          // 'x-auth-token': user.token
         },
-        body: jsonEncode({'id': userId}));
+        body: jsonEncode({
+          'id': user.id,
+        }));
     if (res.statusCode == 200) {
       getUserData(context).then((value) {
         Navigator.push(

@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:shoper/model/reviews.dart';
-
+import 'package:get/get.dart';
 import '../services/product_service.dart';
 
-class ProductDetailProvider extends ChangeNotifier{
-
-List<ReviewsModel> _reviews = [];
-  bool _isLoading = false;
-
-  List<ReviewsModel> get revoews => _reviews;
-  bool get isLoading => _isLoading;
+class ProductDetailProvider extends GetxController {
+  List<ReviewsModel> _reviews = [];
+  RxBool _isLoading = false.obs;
 
   final ProductSerivce _productService = ProductSerivce();
 
+  Future<void> getReviews(String productId, BuildContext context) async {
+    _isLoading.value = true;
 
-  Future<void> getReviews(String productId, BuildContext context) async{
+    final response = await _productService.fetchReviews(productId, context);
+    _reviews = response;
 
-
-_isLoading =true;
-notifyListeners();
-
-final response = await _productService.fetchReviews(productId, context);
-_reviews = response;
-
-_isLoading =false;
-notifyListeners();
-
-
+    _isLoading.value = false;
   }
-
-
-
 }

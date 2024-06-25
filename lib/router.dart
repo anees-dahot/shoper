@@ -18,14 +18,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AuthScreen(),
       );
-    case ProductDetail.routeName:
-      final product = routeSettings.arguments as ProductModel;
-      return MaterialPageRoute(
-        settings: routeSettings,
-        builder: (_) => ProductDetail(
-          products: product,
-        ),
-      );
+    // case ProductDetail.routeName:
+    //   final product = routeSettings.arguments as ProductModel;
+    //   return MaterialPageRoute(
+    //     settings: routeSettings,
+    //     builder: (_) => ProductDetail(
+    //       products: product,
+    //     ),
+    //   );
     case SearchProducts.routeName:
       final query = routeSettings.arguments as String;
       return MaterialPageRoute(

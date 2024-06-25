@@ -7,9 +7,10 @@ import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/model/reviews.dart';
 import '../../../model/product.dart';
 import '../../../provider/user_controller.dart';
+import '../../../utils.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.103:3000';
+  final baseUrl = 'http://192.168.8.107:3000';
   List<ProductModel> products = [];
 
   Future<void> postReview(
@@ -18,7 +19,7 @@ class ProductSerivce {
       required String time,
       required int stars,
       required String productId}) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
 
     try {
       ReviewsModel reviewsModel = ReviewsModel(
@@ -50,7 +51,7 @@ class ProductSerivce {
 
   Future<List<ReviewsModel>> fetchReviews(
       String productId, BuildContext context) async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = userBox.values.first;
     final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
     final response = await http.get(
       url,
@@ -77,8 +78,8 @@ class ProductSerivce {
     }
   }
 
-  Future<List<ProductModel>> getTrendingProducts(BuildContext context) async {
-    final userToken = Provider.of<UserProvider>(context).user.token;
+  Future<List<ProductModel>> getTrendingProducts() async {
+    final userToken = userBox.values.first.token;
     List<ProductModel> products = [];
     try {
       final res = await http.get(
@@ -108,8 +109,8 @@ class ProductSerivce {
     return products;
   }
 
-  Future<List<ProductModel>> getSaleProducts(BuildContext context) async {
-    final userToken = Provider.of<UserProvider>(context).user.token;
+  Future<List<ProductModel>> getSaleProducts() async {
+    final userToken = userBox.values.first.token;
     List<ProductModel> products = [];
     try {
       final res = await http.get(
@@ -140,7 +141,7 @@ class ProductSerivce {
   }
 
   Future<List<ProductModel>> getProducts(BuildContext context) async {
-    final userToken = Provider.of<UserProvider>(context).user.token;
+    final userToken = userBox.values.first.token;
     // List<ProductModel> products = [];
     try {
       final res = await http.get(

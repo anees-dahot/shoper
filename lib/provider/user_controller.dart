@@ -1,23 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../model/user.dart';
-class UserProvider extends ChangeNotifier {
-  UserModel _user = UserModel(
-    id: '',
-    name: '',
-    email: '',
-    password: '',
-    address: '',
-    type: '',
-    token: '',
-   
-  );
 
-  UserModel get user => _user;
+class UserController extends GetxController {
+  UserModel? users;
 
-  void setUser(String user) {
-    _user = UserModel.fromJson(user);
-    notifyListeners();
-  }
+  // void setUser(String user) {
+  //   UserModel.fromJson(user).save();
 
-  
+    
+  // }
 }

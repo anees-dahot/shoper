@@ -8,6 +8,8 @@ import 'package:shoper/features/admin/services/admin_service.dart';
 import 'package:shoper/model/product.dart';
 import 'package:shoper/provider/user_controller.dart';
 
+import '../../../utils.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -22,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = Provider.of<UserProvider>(context).user.name.toString();
+    final userName = userBox.values.first.name.toString();
 
     return Scaffold(
       appBar: AppBar(

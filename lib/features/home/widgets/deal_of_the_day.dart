@@ -15,7 +15,7 @@ class DealOFDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProductSerivce productService = ProductSerivce();
-    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+HomeController homeController = Get.put(HomeController());
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.45,
@@ -37,24 +37,16 @@ class DealOFDay extends StatelessWidget {
               ],
             ),
           ),
-          FutureBuilder<void>(
-            future: homeProvider.fetchDealOfDayProducts(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final data = homeProvider.trendingProducts;
-
-                return Expanded(
+        
+                Obx(() => homeController.isLoading.value ?  const Center(child: CircularProgressIndicator()) :
+                Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: data.length,
+                    itemCount: homeController.trendingProducts.length,
                     separatorBuilder: (context, index) =>
                         const SizedBox(width: 10.0),
                     itemBuilder: (context, index) {
-                      final product = data[index];
+                      final product = homeController.trendingProducts[index];
                       final hasSale = product.sale! > 0.0;
 
                       return GestureDetector(
@@ -153,11 +145,9 @@ class DealOFDay extends StatelessWidget {
                       );
                     },
                   ),
-                );
-              }
-            },
-          ),
-        ],
+                ))
+            
+        ]
       ),
     );
   }

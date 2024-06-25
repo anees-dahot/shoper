@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
-import 'package:shoper/provider/user_controller.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
+import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 
 import 'features/auth/screens/loginscreen.dart';
@@ -22,15 +21,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     screenNavigator();
     authService.getUserData(context);
+    
   }
 
 
-  void screenNavigator() {
-    
+  void screenNavigator()async {
+    //  final SharedPreferences ref = await SharedPreferences.getInstance();
+        // String? token = ref.getString('x-auth-token');
     authService.getUserData(context).then((value) {
+   
       // Future.delayed(const Duration(seconds: 10), () {
-        Provider.of<UserProvider>(context, listen: false).user.token.isNotEmpty
-            ? Provider.of<UserProvider>(context, listen: false).user.type ==
+       userBox.values.first.token.isNotEmpty
+            ? userBox.values.first.type ==
                     'user'
                 ? Navigator.pushNamedAndRemoveUntil(
                     context, BottomNavbr.routeName, (route) => false)
