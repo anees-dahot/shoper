@@ -1,16 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/model/reviews.dart';
 import '../../../model/product.dart';
-import '../../../provider/user_controller.dart';
 import '../../../utils.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.107:3000';
+  final baseUrl = 'http://192.168.8.105:3000';
   List<ProductModel> products = [];
 
   Future<void> postReview(
@@ -49,33 +47,36 @@ class ProductSerivce {
     }
   }
 
-  Future<List<ReviewsModel>> fetchReviews(
-      String productId, BuildContext context) async {
-    final user = userBox.values.first;
-    final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': user.token
-      },
-    );
+  Future<List<ReviewsModel>> fetchReviews(String productId) async {
+    List<ReviewsModel> reviews = [];
+    try {
+      final user = userBox.values.first;
+      final url = Uri.parse('$baseUrl/admin/get-reviews/$productId');
+      final res = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
 
-    if (response.statusCode == 200) {
-      print(response.body);
-      final json = jsonDecode(response.body) as List;
-      final reviews = json.map((e) {
-        return ReviewsModel(
-          user: e['user'],
-          review: e['review'],
-          time: e['time'],
-          stars: e['stars'],
+      if (res.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(res.body)['reviews'];
+        reviews = jsonData.map((json) => ReviewsModel.fromMap(json)).toList();
+        print(reviews);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
         );
-      }).toList();
-      return reviews;
-    } else {
-      throw Exception('Failed to fetch reviews: ${response.statusCode}');
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
     }
+    return reviews;
   }
 
   Future<List<ProductModel>> getTrendingProducts() async {
@@ -108,6 +109,7 @@ class ProductSerivce {
     }
     return products;
   }
+
   Future<List<ProductModel>> getNewArrivalProducts() async {
     final userToken = userBox.values.first.token;
     List<ProductModel> products = [];

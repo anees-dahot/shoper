@@ -121,7 +121,7 @@ adminRouter.get("/admin/get-reviews/:productId", auth, async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Reviews retrieved successfully", reviews });
+      .json({ reviews });
   } catch (err) {
     console.error(err); // Log the error for debugging
     res.status(500).json({ error: "An error occurred" }); // Generic error message

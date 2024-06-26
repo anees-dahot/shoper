@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 class CategoryService{
 
-final baseUrl = 'http://192.168.8.107:3000';
+final baseUrl = 'http://192.168.8.105:3000';
 
   Future<List<ProductModel>> getCategoryPorducts(
       String category, BuildContext context) async {

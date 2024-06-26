@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:shoper/features/product%20detail/provider/product_detail_provider.dart';
+import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
 import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/features/product%20detail/widgets/images_carousel.dart';
 import 'package:shoper/features/product%20detail/widgets/review_card.dart';
@@ -25,29 +25,27 @@ class _ProductDetailState extends State<ProductDetail> {
   TextEditingController addReview = TextEditingController();
 
   ProductSerivce productSerivce = ProductSerivce();
-  Future<Map<String, dynamic>>? _reviewsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    // _reviewsFuture =
-    //     productSerivce.fetchReviews(widget.products.id.toString(), context);
-
-    // Provider.of<ProductDetailProvider>(context).getReviews(productId, context);
-  }
+  ProductDetailController productDetailController =
+        Get.put(ProductDetailController());
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     addReview.dispose();
+   
+  }
+  @override
+  void initState() {
+    super.initState();
+     productDetailController.getReviews(widget.products.id!);
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    ProductSerivce productService = ProductSerivce();
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -70,16 +68,13 @@ class _ProductDetailState extends State<ProductDetail> {
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(20)),
           child: Row(
-            
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.058,
                 width: MediaQuery.of(context).size.width * 0.32,
                 child: Row(
                   children: [
-
                     IconButton(
                         onPressed: () {
                           widget.quantity++;
@@ -89,7 +84,10 @@ class _ProductDetailState extends State<ProductDetail> {
                           Icons.add,
                           color: Colors.white,
                         )),
-                    Text(widget.quantity.toString(), style: const TextStyle(color: Colors.white, fontSize: 20),),
+                    Text(
+                      widget.quantity.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                    ),
                     IconButton(
                         onPressed: () {
                           if (widget.quantity > 0) {
@@ -275,11 +273,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                     .then((val) {
                                   addReview.clear();
                                   setState(() {
-                                    // _reviewsFuture =
-                                    //     productSerivce.fetchReviews(
-                                    //         widget.products.id.toString(),
-                                    //         context);
-                                    // widget.rating = 0;
+                                  productDetailController.getReviews(widget.products.id!);
+                                    widget.rating = 0;
                                   });
                                 });
                               },
@@ -290,33 +285,25 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
-              Visibility(
-                visible: widget.products.reviews!.isNotEmpty,
-                child: FutureBuilder<Map<String, dynamic>>(
-                  future: _reviewsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    }
+              Obx(
+  () => productDetailController.isLoading.value
+      ? const Center(
+          child: CircularProgressIndicator(),
+        )
+      : Visibility(
+          visible: productDetailController.reviews.isNotEmpty,
+          child: Column(
+                        children: [
+                          for (final review in productDetailController.reviews)
+                            ReviewCard(
+                                user: review.user,
+                                content: review.review,
+                                stars: review.stars),
+                        ],
+                      )
+        ),
+),
 
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    final reviews = snapshot.data!['reviews'] as List;
-
-                    return Column(
-                      children: [
-                        for (final review in reviews)
-                          ReviewCard(
-                              user: review['user'],
-                              content: review['review'],
-                              stars: review['stars']),
-                      ],
-                    );
-                  },
-                ),
-              ),
               const SizedBox(
                 height: 180,
               )

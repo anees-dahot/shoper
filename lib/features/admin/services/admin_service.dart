@@ -3,20 +3,17 @@ import 'dart:io';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
-import 'package:shoper/provider/user_controller.dart';
-import 'package:shoper/splash_screen.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 
 import '../../../utils.dart';
 
 class AdminService {
-  final baseUrl = 'http://192.168.8.107:3000';
+  final baseUrl = 'http://192.168.8.105:3000';
       bool saved = true;
 
   void sellProduct(
@@ -40,7 +37,6 @@ class AdminService {
             .uploadFile(CloudinaryFile.fromFile(images[i].path, folder: name));
         imageUrl.add(res.secureUrl);
       }
-      print(imageUrl);
 
       ProductModel productModel = ProductModel(
         name: name,
@@ -153,7 +149,7 @@ class AdminService {
         body: jsonEncode({'id': userId}));
     if (res.statusCode == 200) {
       userBox.values.first.type == 'user';
-      userBox.values.first.save();
+     await userBox.values.first.save();
      Navigator.pushNamed(context, BottomNavbr.routeName);
     } else if (res.statusCode == 400) {
       errorsMessage(jsonDecode(res.body)['msg']);

@@ -38,8 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
    print(userBox.values.first.id)
 ;      // Future.delayed(const Duration(seconds: 10), () {
        userBox.values.first.token.isNotEmpty
-            ? userBox.values.first.type ==
-                    'user'
+          ? userBox.values.first.type ==
+                    'seller'
                 ? Navigator.pushNamedAndRemoveUntil(
                     context, BottomNavbr.routeName, (route) => false)
                 : Navigator.pushNamedAndRemoveUntil(

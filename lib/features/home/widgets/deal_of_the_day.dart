@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:shoper/features/home/provider/home_provider.dart';
-import 'package:shoper/features/product%20detail/services/product_service.dart';
+import 'package:shoper/features/home/provider/home_controller.dart';
 
 import '../../../model/product.dart';
 import '../../product detail/screen/product_detail.dart';
@@ -14,13 +12,13 @@ class DealOFDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductSerivce productService = ProductSerivce();
-HomeController homeController = Get.put(HomeController());
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.45,
-      child: Column(
-        children: [
+    HomeController homeController = Get.put(HomeController());
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.45,
+        child: Column(children: [
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
@@ -37,9 +35,9 @@ HomeController homeController = Get.put(HomeController());
               ],
             ),
           ),
-        
-                Obx(() => homeController.isLoading.value ?  const Center(child: CircularProgressIndicator()) :
-                Expanded(
+          Obx(() => homeController.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: homeController.trendingProducts.length,
@@ -114,9 +112,9 @@ HomeController homeController = Get.put(HomeController());
                                             "\$${product.price!.toStringAsFixed(2)}",
                                             style: const TextStyle(
                                               fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color:   const Color.fromARGB(255, 94, 93, 93),
-                                             
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color.fromARGB(
+                                                  255, 94, 93, 93),
                                             ),
                                           ),
                                         ],
@@ -146,8 +144,7 @@ HomeController homeController = Get.put(HomeController());
                     },
                   ),
                 ))
-            
-        ]
+        ]),
       ),
     );
   }

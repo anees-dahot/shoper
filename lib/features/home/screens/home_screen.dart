@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:shoper/features/home/provider/home_provider.dart';
+import 'package:shoper/features/home/provider/home_controller.dart';
 import 'package:shoper/features/home/widgets/category_widget.dart';
 import 'package:shoper/features/home/widgets/deal_of_the_day.dart';
 import 'package:shoper/features/home/widgets/new_arrivals.dart';
@@ -47,9 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(height: height * 0.04),
         CategoryWidget(),
         NewArrivals(),
-
-       homeController.saleProducts == [] ? OnSale() : Container(),
-       homeController.trendingProducts == [] ?  DealOFDay() : Container(),
+Obx(() => homeController.saleProducts.isNotEmpty ? OnSale() : Container()),
+       Obx(() => homeController.trendingProducts.isNotEmpty ?  DealOFDay() : Container()),
  SizedBox(height: height * 0.09),      ]),
     ));
   }
