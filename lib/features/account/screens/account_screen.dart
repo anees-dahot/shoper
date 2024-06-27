@@ -3,9 +3,9 @@ import 'package:shoper/features/account/widgets/profile_buttons.dart';
 import 'package:shoper/features/account/widgets/your_orders.dart';
 import 'package:shoper/features/account/widgets/bottom_appbar.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
-
 import '../../../splash_screen.dart';
 import '../../../utils.dart';
+import '../../wishlist/screens/wishlist_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -54,7 +54,9 @@ class AccountScreen extends StatelessWidget {
             children: [
               ProfileButtons(
                 text: 'Your Wishlist',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, WishlistScreen.routeName);
+                },
               ),
               ProfileButtons(
                 text: 'Log Out',

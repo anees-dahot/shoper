@@ -36,7 +36,8 @@ productRouter.get("/api/product/new-arrivals", auth, async (req, res) => {
     const products = await Product.find(query);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: err.message });
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 });
 

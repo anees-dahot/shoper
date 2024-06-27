@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
-
 import '../../../model/product.dart';
 import '../../product detail/screen/product_detail.dart';
 
-class DealOFDay extends StatelessWidget {
+class DealOFDay extends StatefulWidget {
   DealOFDay({super.key});
 
   @override
+  State<DealOFDay> createState() => _DealOFDayState();
+}
+
+class _DealOFDayState extends State<DealOFDay> {
+  @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SizedBox(
@@ -46,7 +51,8 @@ class DealOFDay extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final product = homeController.trendingProducts[index];
                       final hasSale = product.sale! > 0.0;
-
+                      bool inWishlist =
+                          homeController.isProductInWishlist(product);
                       return GestureDetector(
                         onTap: () => Navigator.pushNamed(
                           context,
@@ -128,8 +134,24 @@ class DealOFDay extends StatelessWidget {
                                       children: [
                                         ReviewWidget(product: product),
                                         IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(CupertinoIcons.heart)),
+                                          onPressed: ()  {inWishlist
+                                              ? homeController
+                                                  .removeFromWishlist(
+                                                      product.id!)
+                                              : homeController
+                                                  .addToWishlist(product); setState(() {
+                                                    
+                                                  });},
+                                          icon: inWishlist
+                                              ? const Icon(
+                                                  CupertinoIcons.heart_solid,
+                                                  color: Colors.red,
+                                                )
+                                              : const Icon(
+                                                  CupertinoIcons.heart,
+                                                  color: Colors.red,
+                                                ),
+                                        )
                                       ],
                                     )
 
@@ -148,8 +170,6 @@ class DealOFDay extends StatelessWidget {
       ),
     );
   }
-
-  // Extracted function for price formatting
 }
 
 class ReviewWidget extends StatelessWidget {

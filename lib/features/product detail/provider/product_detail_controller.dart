@@ -9,20 +9,21 @@ import '../services/product_service.dart';
 class ProductDetailController extends GetxController {
   var reviews = <ReviewsModel>[].obs;
   RxBool isLoading = false.obs;
-  
-
+ 
   final ProductSerivce _productService = ProductSerivce();
 
   void getReviews(String productId) async {
-    try{
+    try {
       isLoading(true);
 
-    final response = await _productService.fetchReviews(productId);
-    reviews.assignAll(response);
+      final response = await _productService.fetchReviews(productId);
+      reviews.assignAll(response);
 
-    isLoading(false);
-    }catch(e){
+      isLoading(false);
+    } catch (e) {
       errorsMessage(e.toString());
     }
   }
+
+  
 }

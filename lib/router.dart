@@ -4,6 +4,7 @@ import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/category/screen/category_products.dart';
 import 'package:shoper/features/product%20detail/screen/product_detail.dart';
 import 'package:shoper/features/search/screen/search_products.dart';
+import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
 import 'package:shoper/model/product.dart';
 import 'package:shoper/splash_screen.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
@@ -27,6 +28,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           products: product,
         ),
       );
+    case WishlistScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) =>  WishlistScreen(),
+      );
     case SearchProducts.routeName:
       final query = routeSettings.arguments as String;
       return MaterialPageRoute(
@@ -44,12 +50,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         ),
       );
     case SplashScreen.routeName:
-    
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>const SplashScreen(
-         
-        ),
+        builder: (_) => const SplashScreen(),
       );
     case DashboardScreen.routeName:
       return MaterialPageRoute(

@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     print(userBox.values.first.name);
     print('token: ${userBox.values.first.token}');
-
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -46,10 +46,30 @@ class _HomeScreenState extends State<HomeScreen> {
         CustomBanner(width: width, height: height),
         SizedBox(height: height * 0.04),
         CategoryWidget(),
-        NewArrivals(),
-Obx(() => homeController.saleProducts.isNotEmpty ? OnSale() : Container()),
-       Obx(() => homeController.trendingProducts.isNotEmpty ?  DealOFDay() : Container()),
- SizedBox(height: height * 0.09),      ]),
+        Obx(
+          () => homeController.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : (homeController.newArrivalProducts.isNotEmpty
+                  ? NewArrivals()
+                  : const SizedBox()), // Empty container while loading or no products
+        ),
+        Obx(
+          () => homeController.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : (homeController.saleProducts.isNotEmpty
+                  ? OnSale()
+                  : const SizedBox()), // Empty container while loading or no products
+        ),
+        Obx(
+          () => homeController.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : (homeController.trendingProducts.isNotEmpty
+                  ? DealOFDay()
+                  : const SizedBox()), // Empty container while loading or no products
+        ),
+
+        SizedBox(height: height * 0.09),
+      ]),
     ));
   }
 }

@@ -8,7 +8,7 @@ import '../../../model/product.dart';
 import '../../../utils.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.105:3000';
+  final baseUrl = 'http://192.168.8.103:3000';
   List<ProductModel> products = [];
 
   Future<void> postReview(
@@ -114,8 +114,14 @@ class ProductSerivce {
     final userToken = userBox.values.first.token;
     List<ProductModel> products = [];
     try {
+      DateTime sdate = DateTime.now().subtract( const Duration(days: 5));
+      DateTime edate = DateTime.now().add(Duration(days: 50));
+      String startDate = '${sdate.year}-${sdate.month}-${sdate.day}'; // Replace with your desired start date
+      String endDate = '${edate.year}-${edate.month}-${edate.day}'; // Replace with your desired end date
       final res = await http.get(
-        Uri.parse('$baseUrl/api/product/new-arrivals'),
+        Uri.parse(
+          '$baseUrl/api/product/new-arrivals?startDate=$startDate&endDate=$endDate',
+        ),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userToken

@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shoper/features/auth/screens/loginscreen.dart';
+import 'package:shoper/model/product.dart';
+import 'package:shoper/model/reviews.dart';
 import 'package:shoper/model/user.dart';
 import 'package:shoper/splash_screen.dart';
+import 'package:shoper/utils.dart';
 import './router.dart';
 
 void main() async{
@@ -12,8 +15,12 @@ WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(UserModelAdapter()); // Register adapter
+  Hive.registerAdapter(ProductModelAdapter()); // Register adapter
+  Hive.registerAdapter(ReviewsModelAdapter()); // Register adapter
   await Hive.openBox<UserModel>('user');
-  // Hive.deleteFromDisk();
+  // wishlistBox.deleteFromDisk();
+  await Hive.openBox<ProductModel>('wishlistBox');
+ 
   runApp(
     const MyApp());
 }
