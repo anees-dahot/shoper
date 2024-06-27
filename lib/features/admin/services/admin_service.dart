@@ -13,7 +13,7 @@ import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../utils.dart';
 
 class AdminService {
-  final baseUrl = 'http:// 192.168.8.103:3000';
+ 
       bool saved = true;
 
   void sellProduct(

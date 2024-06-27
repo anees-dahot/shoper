@@ -197,4 +197,7 @@ adminRouter.post("/admin/update-product/:productId", auth, async (req, res) => {
   }
 });
 
+
+
+
 module.exports = adminRouter;

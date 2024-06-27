@@ -8,7 +8,6 @@ import '../../../model/product.dart';
 import '../../../utils.dart';
 
 class ProductSerivce {
-  final baseUrl = 'http://192.168.8.103:3000';
   List<ProductModel> products = [];
 
   Future<void> postReview(

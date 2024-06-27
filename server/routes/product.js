@@ -96,4 +96,32 @@ productRouter.get("/api/product/get-products", auth, async (req, res) => {
   }
 });
 
+
+//* Add to wishlist
+productRouter.post('/api/product/add-to-wishlist', auth, async (req, res) => {
+
+  try {
+    const {userId, productId} = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+       res.status(400).json({msg: 'User not found'})
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      res.status(400).json({msg: 'Product not found'})
+    }
+
+    user.wishlist.push(product._id);
+    await user.save();
+
+    console.log('Product added to wishlist');
+    res.json({ products });
+    console.log(products);
+ } catch (error) {
+    console.error(error);
+ }
+
+});
+
 module.exports = productRouter;

@@ -5,7 +5,7 @@ const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const auth = require("../middlewares/auth");
 
-// SIGN UP
+//* SIGN UP
 authRouter.post("/api/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -32,7 +32,7 @@ authRouter.post("/api/signup", async (req, res) => {
   }
 });
 
-// Sign In Route
+//* Sign In Route
 authRouter.post("/api/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -71,7 +71,7 @@ authRouter.post("/tokenIsValid", async (req, res) => {
   }
 });
 
-// get user data
+//* get user data
 authRouter.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({ ...user._doc, token: req.token });
@@ -99,6 +99,7 @@ authRouter.post("/api/become-seller/:id", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 module.exports = authRouter;
 
