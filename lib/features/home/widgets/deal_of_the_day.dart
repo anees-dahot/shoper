@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
+import 'package:shoper/features/wishlist/controller/wishlist_controller.dart';
+import 'package:shoper/features/wishlist/services/wishlist_service.dart';
+import 'package:shoper/utils.dart';
 import '../../../model/product.dart';
 import '../../product detail/screen/product_detail.dart';
 
@@ -17,6 +20,7 @@ class _DealOFDayState extends State<DealOFDay> {
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.put(HomeController());
+    WishListController wishListController = Get.put(WishListController());
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -134,15 +138,11 @@ class _DealOFDayState extends State<DealOFDay> {
                                       children: [
                                         ReviewWidget(product: product),
                                         IconButton(
-                                          onPressed: ()  {inWishlist
-                                              ? homeController
-                                                  .removeFromWishlist(
-                                                      product.id!)
-                                              : homeController
-                                                  .addToWishlist(product); setState(() {
-                                                    
-                                                  });},
-                                          icon: inWishlist
+                                          onPressed: () {
+                                          wishListController.isInWishlist.value ? wishListController.removedFromWishlist(product.id!, userBox.values.first.id) : wishListController.addToWishList(product.id!, userBox.values.first.id);
+                                            setState(() {});
+                                          },
+                                          icon: wishListController.isInWishlist.value
                                               ? const Icon(
                                                   CupertinoIcons.heart_solid,
                                                   color: Colors.red,

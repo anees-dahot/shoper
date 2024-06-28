@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoper/features/wishlist/controller/wishlist_controller.dart';
+import 'package:shoper/features/wishlist/services/wishlist_service.dart';
+
+import '../../../utils.dart';
 
 class WishlistScreen extends StatefulWidget {
   static const String routeName = 'wishlist';
@@ -13,12 +16,13 @@ class WishlistScreen extends StatefulWidget {
 
 class _WishlistScreenState extends State<WishlistScreen> {
   final WishListController wishListController = Get.put(WishListController());
+  WishListService wishListService = WishListService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    wishListController.getWishListItems();
+    wishListController.getWIshListProduct(userBox.values.first.id);
   }
 
   @override

@@ -129,10 +129,7 @@ adminRouter.get("/admin/get-reviews/:productId", auth, async (req, res) => {
 });
 
 //* delete product
-adminRouter.post(
-  "/admin/delete-product/:productId",
-
-  async (req, res) => {
+adminRouter.post("/admin/delete-product/:productId", async (req, res) => {
     try {
       const productId = req.params.productId;
 

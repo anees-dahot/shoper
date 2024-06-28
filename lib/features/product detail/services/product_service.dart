@@ -161,7 +161,7 @@ class ProductSerivce {
       if (res.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(res.body)['products'];
         products = jsonData.map((json) => ProductModel.fromMap(json)).toList();
-        print(products);
+     
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
         print("400 ${jsonDecode(res.body)['msg']}");
