@@ -15,7 +15,7 @@ class ProductDetail extends StatefulWidget {
   static const routeName = 'product-detail';
   ProductModel products;
   int rating = 0;
-  int quantity = 0;
+  int quantity = 1;
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -30,7 +30,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     addReview.dispose();
    
@@ -102,8 +101,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
+              Obx(() =>productDetailController.isLoading.value ? const Center(child: CircularProgressIndicator(),) : GestureDetector(
+                onTap: () {
+                  var image = widget.products.images!.first;
+                  productDetailController.addToCart(productName: widget.products.name!, imageUrl: image, quantity: widget.quantity, price: widget.products.price!, description: widget.products.description!);
+                },
                 child: Container(
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height * 0.058,
@@ -117,7 +119,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             const TextStyle(color: Colors.white, fontSize: 14),
                       )),
                 ),
-              )
+              ))
             ],
           ),
         ),

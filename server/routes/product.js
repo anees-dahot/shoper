@@ -4,6 +4,7 @@ const admin = require("../middlewares/admin");
 const auth = require("../middlewares/auth");
 const Product = require("../model/product");
 const User = require("../model/user");
+const Cart = require("../model/cart");
 
 //* get products by category
 productRouter.get("/api/product/", auth, async (req, res) => {
@@ -199,5 +200,54 @@ productRouter.get(
     }
   }
 );
+
+//* Add product to cart
+productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
+  try {
+    const { user, productId, productName, description, imageUrl, price, quantity } = req.body;
+
+    // Find an existing cart item for this user and product
+    let cartItem = await Cart.findOne({ user, productId });
+
+    if (cartItem) {
+      // If the item exists, increment the quantity
+      cartItem.quantity += 1;
+      await cartItem.save();
+    } else {
+      // If the item doesn't exist, create a new cart item
+     let cartItem = new Cart({
+        user,
+        productName,
+        description,
+        imageUrl,
+        price,
+        quantity,
+      });
+      await cartItem.save();
+    }
+
+    res.status(200).json({ msg: "Added to cart successfully", cartItem });
+    console.log(cartItem);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+productRouter.get("/api/product/get-addtocart-products",  async (req, res) => {
+  try {
+
+    let user = '667a83982e0b1ac82f98387a';
+  
+    let cartItem = await Cart.find({user});
+
+    if (!cartItem) {
+      // If the item exists, increment the quantity
+      return res.status(400).json({msg : 'Cart is empty'})
+    } 
+
+    res.status(200).json({ cartItem });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 module.exports = productRouter;

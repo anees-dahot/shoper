@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/constants/flutter_toast.dart';
+import 'package:shoper/model/cart.dart';
 import 'package:shoper/model/reviews.dart';
 import '../../../model/product.dart';
 import '../../../utils.dart';
 
 class ProductSerivce {
   List<ProductModel> products = [];
+  
 
   Future<void> postReview(
       {required BuildContext context,
@@ -46,6 +48,43 @@ class ProductSerivce {
     }
   }
 
+  Future<void> addToCart(
+      {
+      required String productName,
+      required String imageUrl,
+      required int quantity,
+      required double price,
+      required String description}) async {
+    final user = userBox.values.first;
+
+    try {
+      double totalPrice = price * quantity;
+      CartModel cartModel  = CartModel(user: userBox.values.first.id, productName: productName, imageUrl: imageUrl, quantity: quantity, price: totalPrice, description: description);
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/product/add-to-cart'),
+        body: cartModel.toJson(),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+
+      if (res.statusCode == 200) {
+       successMessage(jsonDecode(res.body)['msg']);
+       
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(
+          jsonDecode(res.body)['error'],
+        );
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
+    }
+  }
   Future<List<ReviewsModel>> fetchReviews(String productId) async {
     List<ReviewsModel> reviews = [];
     try {
@@ -207,4 +246,7 @@ class ProductSerivce {
     }
     return products;
   }
+
+
+
 }

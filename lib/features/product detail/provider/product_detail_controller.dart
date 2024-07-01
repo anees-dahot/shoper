@@ -9,7 +9,7 @@ import '../services/product_service.dart';
 class ProductDetailController extends GetxController {
   var reviews = <ReviewsModel>[].obs;
   RxBool isLoading = false.obs;
- 
+
   final ProductSerivce _productService = ProductSerivce();
 
   void getReviews(String productId) async {
@@ -25,5 +25,24 @@ class ProductDetailController extends GetxController {
     }
   }
 
-  
+  void addToCart(
+      {required String productName,
+      required String imageUrl,
+      required int quantity,
+      required double price,
+      required String description}) async {
+    try {
+      isLoading(true);
+      await _productService.addToCart(
+          productName: productName,
+          imageUrl: imageUrl,
+          quantity: quantity,
+          price: price,
+          description: description);
+    } catch (e) {
+      errorsMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
 }
