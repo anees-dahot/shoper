@@ -179,24 +179,23 @@ productRouter.get("/api/product/is-in-wishlist", auth, async (req, res) => {
 
 productRouter.get(
   "/api/product/get-wishlist-products/:userId",
- auth,
+  auth,
   async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await User.findById(userId).populate("wishlist").exec();
 
-      try {
-        const userId = req.params.userId;
-        const user = await User.findById(userId).populate('wishlist').exec();
+      if (!user) {
+        return res.status(404).send({ msg: "User not found" });
+      }
 
-        if (!user) {
-            return res.status(404).send({ msg: 'User not found' });
-        }
+      const wishlistProducts = user.wishlist;
 
-        const wishlistProducts = user.wishlist;
-
-        res.status(200).json({wishlistProducts});
-        console.log(wishlistProducts);
+      res.status(200).json({ wishlistProducts });
+      console.log(wishlistProducts);
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
-        console.error('Error fetching wishlist:', error);
+      res.status(500).json({ message: "Server error", error });
+      console.error("Error fetching wishlist:", error);
     }
   }
 );

@@ -5,15 +5,36 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
 
 import '../../../model/product.dart';
+import '../../../utils.dart';
 import '../../product detail/screen/product_detail.dart';
+import '../../wishlist/controller/wishlist_controller.dart';
 
-class NewArrivals extends StatelessWidget {
-  NewArrivals({super.key});
+class NewArrivals extends StatefulWidget {
+  const NewArrivals({super.key});
+
+  @override
+  State<NewArrivals> createState() => _NewArrivalsState();
+}
+
+class _NewArrivalsState extends State<NewArrivals> {
+  HomeController homeController = Get.put(HomeController());
+
+  WishListController wishListController = Get.put(WishListController());
+
+  Future<void> fetchWishlistStatus() async {
+    final userId = userBox.values.first.id; // Your user ID
+    await wishListController.fetchWishlistStatus(
+        homeController.trendingProducts, userId);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWishlistStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //   final ProductSerivce productService = ProductSerivce();
-    HomeController homeController = Get.put(HomeController());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SizedBox(
@@ -49,6 +70,8 @@ class NewArrivals extends StatelessWidget {
                         final product =
                             homeController.newArrivalProducts[index];
                         final hasSale = product.sale! > 0.0;
+                        final isInWishlist =
+                           wishListController.wishlistStatus[product.id] ?? false;
 
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
@@ -146,32 +169,26 @@ class NewArrivals extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 8.0),
                                       // Rating section
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           ReviewWidget(product: product),
-                                          // Obx(
-                                          //   () => IconButton(
-                                          //       onPressed: () {
-                                          //         homeController
-                                          //             .addToWishlist(product);
-                                          //       },
-                                          //       icon: homeController
-                                          //               .wishlistItems
-                                          //               .contains(product.id)
-                                          //           ? const Icon(
-                                          //               CupertinoIcons
-                                          //                   .heart_solid,
-                                          //               color: Colors.red,
-                                          //             )
-                                          //           : const Icon(
-                                          //               CupertinoIcons
-                                          //                   .heart,
-                                          //               color: Colors.red,
-                                          //             )),
-                                     
-                                          // )
+                                          Obx(() {
+                                            final isInWishlist = wishListController.wishlistStatus[product.id] ?? false;
+                                            return IconButton(
+                                              onPressed: () async {
+                                                final userId = userBox.values.first.id;
+                                                if (isInWishlist) {
+                                                  wishListController.removedFromWishlist(product.id!, userId);
+                                                } else {
+                                                  wishListController.addToWishList(product.id!, userId);
+                                                }
+                                              },
+                                              icon: isInWishlist
+                                                  ? Icon(CupertinoIcons.heart_solid, color: Colors.red)
+                                                  : Icon(CupertinoIcons.heart, color: Colors.red),
+                                            );
+                                          }),
                                         ],
                                       )
 

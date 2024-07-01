@@ -102,7 +102,7 @@ class WishListService {
 
   Future<bool> isProductIsInWishlist(String userId, String productId) async {
     final userToken = userBox.values.first.token;
-    bool isInWishlist = false;
+
     try {
       final res = await http.get(
         Uri.parse("$baseUrl/api/product/is-in-wishlist?userId=$userId&productId=$productId"),
@@ -115,8 +115,8 @@ class WishListService {
       );
 
       if (res.statusCode == 200) {
-        isInWishlist = jsonDecode(res.body)['isInWishlist'];
-        print(isInWishlist);
+        var data = jsonDecode(res.body);
+        return data['isInWishlist'];
        
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
@@ -130,6 +130,6 @@ class WishListService {
     } catch (e) {
       print(e);
     }
-    return isInWishlist;
+    return false;
   }
 }

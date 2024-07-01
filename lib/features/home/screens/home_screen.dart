@@ -9,6 +9,7 @@ import 'package:shoper/features/home/widgets/on_sale.dart';
 import 'package:shoper/features/home/widgets/search_bar.dart';
 import 'package:shoper/utils.dart';
 import '../../../provider/user_controller.dart';
+import '../../wishlist/services/wishlist_service.dart';
 import '../widgets/custom_banner.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,18 +21,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    print(userBox.values.first.name);
-    print('token: ${userBox.values.first.token}');
-  }
+
+  
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final HomeController homeController = Get.put(HomeController());
+   HomeController homeController = Get.put(HomeController());
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(children: [
