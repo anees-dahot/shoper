@@ -24,13 +24,14 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       address: fields[4] as String,
       type: fields[5] as String,
       token: fields[6] as String,
+      cartItems: (fields[7] as List?)?.cast<CartModel?>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(5)
       ..write(obj.type)
       ..writeByte(6)
-      ..write(obj.token);
+      ..write(obj.token)
+      ..writeByte(7)
+      ..write(obj.cartItems);
   }
 
   @override

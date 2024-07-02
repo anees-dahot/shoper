@@ -10,7 +10,6 @@ import '../../../utils.dart';
 
 class ProductSerivce {
   List<ProductModel> products = [];
-  
 
   Future<void> postReview(
       {required BuildContext context,
@@ -49,8 +48,8 @@ class ProductSerivce {
   }
 
   Future<void> addToCart(
-      {
-      required String productName,
+      {required String productName,
+      required String productId,
       required String imageUrl,
       required int quantity,
       required double price,
@@ -59,7 +58,15 @@ class ProductSerivce {
 
     try {
       double totalPrice = price * quantity;
-      CartModel cartModel  = CartModel(user: userBox.values.first.id, productName: productName, imageUrl: imageUrl, quantity: quantity, price: totalPrice, description: description);
+      CartModel cartModel = CartModel(
+          user: user.id,
+          productName: productName,
+          imageUrl: imageUrl,
+          quantity: quantity,
+          price: totalPrice,
+          description: description,
+          productId: productId);
+
       final res = await http.post(
         Uri.parse('$baseUrl/api/product/add-to-cart'),
         body: cartModel.toJson(),
@@ -70,21 +77,76 @@ class ProductSerivce {
       );
 
       if (res.statusCode == 200) {
-       successMessage(jsonDecode(res.body)['msg']);
-       
+        successMessage(jsonDecode(res.body)['msg']);
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
         print("400 ${jsonDecode(res.body)['msg']}");
       } else {
-        errorsMessage(
-          jsonDecode(res.body)['error'],
-        );
+        errorsMessage(jsonDecode(res.body)['error']);
         print("500 ${jsonDecode(res.body)['error']}");
       }
     } catch (e) {
       errorsMessage(e.toString());
+      print(e.toString());
     }
   }
+
+  Future<void> deleteFromCart(String productId) async {
+    final user = userBox.values.first;
+
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/product/delete-cart-item/$productId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+
+      if (res.statusCode == 200) {
+        successMessage(jsonDecode(res.body)['msg']);
+      } else if (res.statusCode == 400) {
+        errorsMessage(jsonDecode(res.body)['msg']);
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        errorsMessage(jsonDecode(res.body)['error']);
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
+      print(e.toString());
+    }
+  }
+
+  Future<List<CartModel>> getCartItem() async {
+    List<CartModel> cartItems = [];
+    try {
+      final user = userBox.values.first;
+      final url =
+          Uri.parse('$baseUrl/api/product/get-addtocart-products/${user.id}');
+      final res = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(res.body)['cartItem'];
+        cartItems = jsonData.map((json) => CartModel.fromMap(json)).toList();
+      } else if (res.statusCode == 400) {
+        print("400 ${jsonDecode(res.body)['msg']}");
+      } else {
+        print("500 ${jsonDecode(res.body)['error']}");
+      }
+    } catch (e) {
+      errorsMessage(e.toString());
+      print(e.toString());
+    }
+    return cartItems;
+  }
+
   Future<List<ReviewsModel>> fetchReviews(String productId) async {
     List<ReviewsModel> reviews = [];
     try {
@@ -152,10 +214,12 @@ class ProductSerivce {
     final userToken = userBox.values.first.token;
     List<ProductModel> products = [];
     try {
-      DateTime sdate = DateTime.now().subtract( const Duration(days: 5));
+      DateTime sdate = DateTime.now().subtract(const Duration(days: 5));
       DateTime edate = DateTime.now().add(Duration(days: 50));
-      String startDate = '${sdate.year}-${sdate.month}-${sdate.day}'; // Replace with your desired start date
-      String endDate = '${edate.year}-${edate.month}-${edate.day}'; // Replace with your desired end date
+      String startDate =
+          '${sdate.year}-${sdate.month}-${sdate.day}'; // Replace with your desired start date
+      String endDate =
+          '${edate.year}-${edate.month}-${edate.day}'; // Replace with your desired end date
       final res = await http.get(
         Uri.parse(
           '$baseUrl/api/product/new-arrivals?startDate=$startDate&endDate=$endDate',
@@ -200,7 +264,6 @@ class ProductSerivce {
       if (res.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(res.body)['products'];
         products = jsonData.map((json) => ProductModel.fromMap(json)).toList();
-     
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
         print("400 ${jsonDecode(res.body)['msg']}");
@@ -246,7 +309,4 @@ class ProductSerivce {
     }
     return products;
   }
-
-
-
 }

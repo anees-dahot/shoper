@@ -101,10 +101,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
-              Obx(() =>productDetailController.isLoading.value ? const Center(child: CircularProgressIndicator(),) : GestureDetector(
+              Obx(() =>productDetailController.isAddingToCart.value ? const Center(child: CircularProgressIndicator(color: Colors.black,),) : GestureDetector(
                 onTap: () {
                   var image = widget.products.images!.first;
-                  productDetailController.addToCart(productName: widget.products.name!, imageUrl: image, quantity: widget.quantity, price: widget.products.price!, description: widget.products.description!);
+                  productDetailController.addToCart(productName: widget.products.name!, productId: widget.products.id!,imageUrl: image, quantity: widget.quantity, price: widget.products.price!, description: widget.products.description!);
+                  
                 },
                 child: Container(
                   alignment: Alignment.center,

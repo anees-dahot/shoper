@@ -5,14 +5,16 @@ import 'package:hive/hive.dart';
 class CartModel extends HiveObject {
   final String user;
   final String productName;
+  final String productId;
   final String imageUrl;
   final int quantity;
-  final double price;
+   double price;
   final String description;
 
   CartModel({
     required this.user,
     required this.productName,
+    required this.productId,
     required this.imageUrl,
     required this.quantity,
     required this.price,
@@ -23,6 +25,7 @@ class CartModel extends HiveObject {
     return {
       'user': user,
       'productName': productName,
+      'productId': productId,
       'imageUrl': imageUrl,
       'quantity': quantity,
       'price': price,
@@ -35,9 +38,10 @@ class CartModel extends HiveObject {
 
       user: map['user'] ?? '',
       productName: map['productName'] ?? '',
+      productId: map['productId'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       quantity: map['quantity'] ?? 0,
-      price: map['price'] ?? 0.0,
+      price: (map['price'] as num?)?.toDouble() ?? 0.0,
       description: map['description'] ?? '',
     );
   }
@@ -50,16 +54,18 @@ class CartModel extends HiveObject {
   CartModel copyWith({
     String? user,
     String? productName,
+    String? productId,
     String? imageUrl,
-    String? quantity,
-    int? price,
+    int? quantity,
+    double? price,
     String? description
   }) {
     return CartModel(
       user: user ?? this.user,
       productName: productName ?? this.productName,
+      productId: productId ?? this.productId,
       imageUrl: imageUrl ?? this.imageUrl,
-      quantity: int.parse(quantity!) ?? this.quantity,
+      quantity: quantity ?? this.quantity,
       price: price!.toDouble() ?? this.price,
       description: description ?? this.description
     );

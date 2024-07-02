@@ -11,6 +11,11 @@ const cartSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
+  productId: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   description: {
     type: String,
     required: true,

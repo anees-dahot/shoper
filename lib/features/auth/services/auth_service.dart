@@ -3,17 +3,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
+import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
+import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../constants/flutter_toast.dart';
 import '../../../model/user.dart';
-import '../../../provider/user_controller.dart';
-import '../../../splash_screen.dart';
 
 class AuthService {
   // sign up user
@@ -32,6 +30,7 @@ class AuthService {
         address: '',
         type: '',
         token: '',
+        cartItems: []
       );
 
       http.Response res = await http.post(
@@ -81,6 +80,8 @@ class AuthService {
     required String password,
   }) async {
     try {
+    //  ProductDetailController productDetailController = Get.put(ProductDetailController());
+    //  productDetailController.getCartItems();
       http.Response res = await http.post(
         Uri.parse('$baseUrl/api/signin'),
         body: jsonEncode({
@@ -111,7 +112,9 @@ class AuthService {
             password: userData['password'],
             address: userData['address'],
             type: userData['type'],
-            token: userData['token']);
+            token: userData['token'],
+            // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
+            );
 
         userBox.add(userModel);
         print(userBox.values.first.name);
@@ -144,6 +147,8 @@ class AuthService {
     BuildContext context,
   ) async {
     try {
+    //    ProductDetailController productDetailController = Get.put(ProductDetailController());
+    //  productDetailController.getCartItems();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
@@ -181,7 +186,9 @@ class AuthService {
               password: userData['password'],
               address: userData['address'],
               type: userData['type'],
-              token: token);
+              token: token,
+              // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
+              );
 
           await userBox.add(userModel);
         } else {

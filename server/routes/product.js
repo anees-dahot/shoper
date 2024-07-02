@@ -201,23 +201,27 @@ productRouter.get(
   }
 );
 
+
 //* Add product to cart
 productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
   try {
-    const { user, productId, productName, description, imageUrl, price, quantity } = req.body;
+    const { user, productId, productName, description, imageUrl, price, quantity} = req.body;
 
-    // Find an existing cart item for this user and product
     let cartItem = await Cart.findOne({ user, productId });
 
+    console.log("Existing cart item:", cartItem);
+
     if (cartItem) {
-      // If the item exists, increment the quantity
-      cartItem.quantity += 1;
+      // If the item exists, increment the quantity by the amount in the request
+      cartItem.quantity += quantity;
       await cartItem.save();
+      console.log("Updated cart item:", cartItem);
     } else {
       // If the item doesn't exist, create a new cart item
      let cartItem = new Cart({
         user,
         productName,
+        productId,
         description,
         imageUrl,
         price,
@@ -232,22 +236,46 @@ productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-productRouter.get("/api/product/get-addtocart-products",  async (req, res) => {
-  try {
 
-    let user = '667a83982e0b1ac82f98387a';
-  
-    let cartItem = await Cart.find({user});
+//* Delete product from cart
+productRouter.post(
+  "/api/product/delete-cart-item/:productId", auth,
+  async (req, res) => {
+    try {
+      const productId = req.params.productId;
 
-    if (!cartItem) {
-      // If the item exists, increment the quantity
-      return res.status(400).json({msg : 'Cart is empty'})
-    } 
+      let cartItems = await Cart.findByIdAndDelete(productId);
 
-    res.status(200).json({ cartItem });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+      if (cartItems.length == 0) {
+        return res.status(400).json({ msg: "Cart is empty" });
+      }
+
+      res.status(200).json({ message: "Removed from cart successfully" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
+
+//* Get add to cart  items
+productRouter.get(
+  "/api/product/get-addtocart-products/:userId", 
+  async (req, res) => {
+    try {
+      let user = req.params.userId;
+
+      let cartItem = await Cart.find({ user });
+
+      if (cartItem.length == 0) {
+        // If the item exists, increment the quantity
+        return res.status(400).json({ msg: "Cart is empty" });
+      }
+
+      res.status(200).json({ cartItem });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
 
 module.exports = productRouter;

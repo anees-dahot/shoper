@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
+import 'package:shoper/model/cart.dart';
 part 'user.g.dart';
 
 @HiveType(typeId: 0)
@@ -18,6 +19,8 @@ class UserModel extends HiveObject{
   final String type;
   @HiveField(6)
   final String token;
+  @HiveField(7)
+   List<CartModel?>? cartItems;
 
   UserModel({
     required this.id,
@@ -27,6 +30,7 @@ class UserModel extends HiveObject{
     required this.address,
     required this.type,
     required this.token,
+     this.cartItems
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +42,7 @@ class UserModel extends HiveObject{
       'address': address,
       'type': type,
       'token': token,
+      'cartItems': cartItems,
     };
   }
 
@@ -50,6 +55,7 @@ class UserModel extends HiveObject{
       address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
+      cartItems: map['cartItems'] ?? [],
       
     );
   }

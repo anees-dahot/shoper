@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:shoper/features/account/screens/account_screen.dart';
 import 'package:shoper/features/cart/screen/cart_screen.dart';
 import 'package:shoper/features/home/screens/home_screen.dart';
-import 'package:shoper/features/wishlist/screens/wishlist_screen.dart'; // For cart badge
+import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
+import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
+import 'package:shoper/utils.dart'; // For cart badge
 
 class BottomNavbr extends StatefulWidget {
   const BottomNavbr({super.key});
@@ -18,11 +21,13 @@ class BottomNavbr extends StatefulWidget {
 
 class _BottomNavbrState extends State<BottomNavbr> {
   int _selectedIndex = 0;
+  ProductDetailController productDetailController =
+      Get.put(ProductDetailController());
   final List<Widget> pages = [
     const HomeScreen(), // Replace with your home screen
-     WishlistScreen(), // Replace with your home screen
+    WishlistScreen(), // Replace with your home screen
     const AccountScreen(), // Replace with your account screen
-    const CartScreen(), // Replace with your cart screen
+     CartScreen(), // Replace with your cart screen
   ];
 
   void updatePage(int page) {
@@ -32,7 +37,15 @@ class _BottomNavbrState extends State<BottomNavbr> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    productDetailController.getCartItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //  ProductDetailController productDetailController = Get.put(ProductDetailController());
     return Scaffold(
       body: pages[_selectedIndex],
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -82,7 +95,9 @@ class _BottomNavbrState extends State<BottomNavbr> {
                   ),
                   child: Center(
                     child: FaIcon(
-                      _selectedIndex == 1 ? CupertinoIcons.heart_fill :CupertinoIcons.heart,
+                      _selectedIndex == 1
+                          ? CupertinoIcons.heart_fill
+                          : CupertinoIcons.heart,
                       color: Colors.white,
                       size: 30,
                     ),
@@ -126,8 +141,9 @@ class _BottomNavbrState extends State<BottomNavbr> {
                     child: badges.Badge(
                       position: badges.BadgePosition.topEnd(top: -8, end: -8),
                       showBadge: true,
-                      badgeContent: const Icon(Icons.check,
-                          color: Colors.white, size: 10),
+                      badgeContent:Obx(() =>  Text(
+                          productDetailController.cartItemsLength.toString(),
+                          style: const TextStyle(color: Colors.white)),),
                       badgeAnimation: const badges.BadgeAnimation.rotation(
                         animationDuration: Duration(milliseconds: 300),
                         colorChangeAnimationDuration: Duration(seconds: 1),
