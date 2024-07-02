@@ -5,20 +5,41 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
 
 import '../../../model/product.dart';
+import '../../../utils.dart';
 import '../../product detail/screen/product_detail.dart';
+import '../../wishlist/controller/wishlist_controller.dart';
 
-class OnSale extends StatelessWidget {
-  OnSale({super.key});
+class OnSale extends StatefulWidget {
+  const OnSale({super.key});
+
+  @override
+  State<OnSale> createState() => _OnSaleState();
+}
+
+class _OnSaleState extends State<OnSale> {
+  HomeController homeController = Get.put(HomeController());
+
+  WishListController wishListController = Get.put(WishListController());
+
+  Future<void> fetchWishlistStatus() async {
+    final userId = userBox.values.first.id; // Your user ID
+    await wishListController.fetchWishlistStatus(
+        homeController.saleProducts, userId);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWishlistStatus();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //   final ProductSerivce productService = ProductSerivce();
-    HomeController homeController = Get.put(HomeController());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.47,
         child: Column(
           children: [
             Padding(
@@ -28,7 +49,7 @@ class OnSale extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'On Sale',
+                    'New Arrivals',
                     style: GoogleFonts.lato(
                       textStyle: const TextStyle(
                           fontSize: 22.0, fontWeight: FontWeight.bold),
@@ -37,7 +58,6 @@ class OnSale extends StatelessWidget {
                 ],
               ),
             ),
-
             Obx(() => homeController.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
@@ -49,6 +69,9 @@ class OnSale extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final product = homeController.saleProducts[index];
                         final hasSale = product.sale! > 0.0;
+                        final isInWishlist =
+                            wishListController.wishlistStatus[product.id] ??
+                                false;
 
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
@@ -60,7 +83,7 @@ class OnSale extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.6,
                             margin: const EdgeInsets.symmetric(vertical: 10.0),
                             decoration: BoxDecoration(
-                              color: Color(0xffFFF5E1),
+                              color: const Color(0xffFFF5E1),
                               borderRadius: BorderRadius.circular(15.0),
                               boxShadow: [
                                 BoxShadow(
@@ -133,7 +156,7 @@ class OnSale extends StatelessWidget {
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.lato(
-                                                  textStyle: TextStyle(
+                                                  textStyle: const TextStyle(
                                                     fontSize: 22.0,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -144,16 +167,43 @@ class OnSale extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      // const SizedBox(height: 8.0),
+                                      const SizedBox(height: 8.0),
                                       // Rating section
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           ReviewWidget(product: product),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(CupertinoIcons.heart)),
+                                          Obx(() {
+                                            final isInWishlist =
+                                                wishListController
+                                                            .wishlistStatus[
+                                                        product.id] ??
+                                                    false;
+                                            return IconButton(
+                                              onPressed: () async {
+                                                final userId =
+                                                    userBox.values.first.id;
+                                                if (isInWishlist) {
+                                                  wishListController
+                                                      .removedFromWishlist(
+                                                          product.id!, userId);
+                                                } else {
+                                                  wishListController
+                                                      .addToWishList(
+                                                          product.id!, userId);
+                                                }
+                                              },
+                                              icon: isInWishlist
+                                                  ? const Icon(
+                                                      CupertinoIcons
+                                                          .heart_solid,
+                                                      color: Colors.red)
+                                                  : const Icon(
+                                                      CupertinoIcons.heart,
+                                                      color: Colors.red),
+                                            );
+                                          }),
                                         ],
                                       )
 
@@ -204,10 +254,10 @@ class OnSale extends StatelessWidget {
           ),
         Text(
           "\$${calculateSalePrice(product.price!, product.sale!)}",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 94, 93, 93),
+            color: Color.fromARGB(255, 94, 93, 93),
           ),
         ),
       ],
@@ -236,9 +286,9 @@ class ReviewWidget extends StatelessWidget {
               Icon(Icons.star_border, color: Colors.yellow[700], size: 20),
               Icon(Icons.star_border, color: Colors.yellow[700], size: 20),
               const SizedBox(width: 8.0),
-              Text(
+              const Text(
                 "(0.0)",
-                style: const TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           )

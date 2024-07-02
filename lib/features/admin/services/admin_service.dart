@@ -10,6 +10,7 @@ import 'package:shoper/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/widgets/bottom_navbar.dart';
 
+import '../../../model/user.dart';
 import '../../../utils.dart';
 
 class AdminService {
@@ -137,9 +138,10 @@ class AdminService {
 
   void becomeBuyer(BuildContext context) async {
     final user = userBox.values.first;
+    AuthService authService = AuthService();
     final userId =
         userBox.values.first.id.toString();
-    AuthService authService = AuthService();
+   
 
     final res = await http.post(Uri.parse('$baseUrl/admin/become-buyer'),
         headers: <String, String>{
@@ -148,9 +150,22 @@ class AdminService {
         },
         body: jsonEncode({'id': userId}));
     if (res.statusCode == 200) {
-      userBox.values.first.type == 'user';
-     await userBox.values.first.save();
-     Navigator.pushNamed(context, BottomNavbr.routeName);
+     final updatedUser = UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      address: user.address,
+      type: 'user',  // Update the type to 'seller'
+      token: user.token,
+      
+    );
+
+    // Update the user in the Hive box
+    await userBox.putAt(0, updatedUser);
+
+    await authService.getUserData();
+    Navigator.pushNamed(context, BottomNavbr.routeName);
     } else if (res.statusCode == 400) {
       errorsMessage(jsonDecode(res.body)['msg']);
       print("400 ${jsonDecode(res.body)['msg']}");

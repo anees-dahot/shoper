@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shoper/model/product.dart';
-import 'package:shoper/model/reviews.dart';
 import 'package:shoper/model/user.dart';
 import 'package:shoper/splash_screen.dart';
 import './router.dart';
@@ -14,11 +12,7 @@ WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(UserModelAdapter()); // Register adapter
-  Hive.registerAdapter(ProductModelAdapter()); // Register adapter
-  Hive.registerAdapter(ReviewsModelAdapter()); // Register adapter
   await Hive.openBox<UserModel>('user');
-  // wishlistBox.deleteFromDisk();
-  await Hive.openBox<ProductModel>('wishlistBox');
   print(userBox.values.first.id);
  
   runApp(

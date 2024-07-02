@@ -77,7 +77,7 @@ authRouter.get("/", auth, async (req, res) => {
   res.json({ ...user._doc, token: req.token });
 });
 
-//* become a user
+//* become a seller
 authRouter.post("/api/become-seller/:id", auth, async (req, res) => {
   try {
     const  id  = req.params.id;

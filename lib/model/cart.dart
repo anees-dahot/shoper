@@ -8,8 +8,10 @@ class CartModel extends HiveObject {
   final String productId;
   final String imageUrl;
   final int quantity;
-   double price;
+  double price;
   final String description;
+  final List<String>? colors;
+  final List<int>? sizes;
 
   CartModel({
     required this.user,
@@ -19,6 +21,8 @@ class CartModel extends HiveObject {
     required this.quantity,
     required this.price,
     required this.description,
+    required this.colors,
+    required this.sizes,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,12 +34,13 @@ class CartModel extends HiveObject {
       'quantity': quantity,
       'price': price,
       'description': description,
+      'colors': colors,
+      'sizes': sizes,
     };
   }
 
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
-
       user: map['user'] ?? '',
       productName: map['productName'] ?? '',
       productId: map['productId'] ?? '',
@@ -43,6 +48,8 @@ class CartModel extends HiveObject {
       quantity: map['quantity'] ?? 0,
       price: (map['price'] as num?)?.toDouble() ?? 0.0,
       description: map['description'] ?? '',
+      colors: List<String>.from(map['colors'] ?? []), // Convert colors to list
+      sizes: List<int>.from(map['sizes'] ?? []), // Convert sizes to list
     );
   }
 
@@ -58,7 +65,9 @@ class CartModel extends HiveObject {
     String? imageUrl,
     int? quantity,
     double? price,
-    String? description
+    String? description,
+    List<String>? colors,
+    List<int>? sizes,
   }) {
     return CartModel(
       user: user ?? this.user,
@@ -67,7 +76,9 @@ class CartModel extends HiveObject {
       imageUrl: imageUrl ?? this.imageUrl,
       quantity: quantity ?? this.quantity,
       price: price!.toDouble() ?? this.price,
-      description: description ?? this.description
+      description: description ?? this.description,
+      colors: colors ?? this.colors,
+      sizes: sizes ?? this.sizes,
     );
   }
 }

@@ -3,31 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
-import 'package:shoper/features/wishlist/controller/wishlist_controller.dart';
-import 'package:shoper/model/product.dart';
+
+import '../../../model/product.dart';
 import '../../../utils.dart';
 import '../../product detail/screen/product_detail.dart';
+import '../../wishlist/controller/wishlist_controller.dart';
 
 class DealOFDay extends StatefulWidget {
-  DealOFDay({super.key});
+  const DealOFDay({super.key});
 
   @override
   State<DealOFDay> createState() => _DealOFDayState();
 }
 
 class _DealOFDayState extends State<DealOFDay> {
-  final HomeController homeController = Get.put(HomeController());
-  final WishListController wishListController = Get.put(WishListController());
+  HomeController homeController = Get.put(HomeController());
+
+  WishListController wishListController = Get.put(WishListController());
+
+  Future<void> fetchWishlistStatus() async {
+    final userId = userBox.values.first.id; // Your user ID
+    await wishListController.fetchWishlistStatus(
+        homeController.trendingProducts, userId);
+  }
 
   @override
   void initState() {
     super.initState();
     fetchWishlistStatus();
-  }
-
-  Future<void> fetchWishlistStatus() async {
-    final userId = userBox.values.first.id; // Your user ID
-    await wishListController.fetchWishlistStatus(homeController.trendingProducts, userId);
   }
 
   @override
@@ -36,18 +39,20 @@ class _DealOFDayState extends State<DealOFDay> {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.47,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Deals of the day',
+                    'New Arrivals',
                     style: GoogleFonts.lato(
-                      textStyle: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+                      textStyle: const TextStyle(
+                          fontSize: 22.0, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -59,9 +64,15 @@ class _DealOFDayState extends State<DealOFDay> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: homeController.trendingProducts.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 10.0),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 10.0),
                       itemBuilder: (context, index) {
-                        final product = homeController.trendingProducts[index];
+                        final product =
+                            homeController.trendingProducts[index];
+                        final hasSale = product.sale! > 0.0;
+                        final isInWishlist =
+                           wishListController.wishlistStatus[product.id] ?? false;
+
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
                             context,
@@ -72,7 +83,7 @@ class _DealOFDayState extends State<DealOFDay> {
                             width: MediaQuery.of(context).size.width * 0.6,
                             margin: const EdgeInsets.symmetric(vertical: 10.0),
                             decoration: BoxDecoration(
-                              color: Color(0xffFFF5E1),
+                              color: const Color(0xffFFF5E1),
                               borderRadius: BorderRadius.circular(15.0),
                               boxShadow: [
                                 BoxShadow(
@@ -88,49 +99,77 @@ class _DealOFDayState extends State<DealOFDay> {
                               children: [
                                 // Product image with sale badge
                                 ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
-                                  child: Image.network(
-                                    product.images![0],
-                                    width: double.infinity,
-                                    height: MediaQuery.of(context).size.width * 0.4,
-                                    fit: BoxFit.cover,
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(15.0)),
+                                  child: Stack(
+                                    children: [
+                                      Image.network(
+                                        product.images![0],
+                                        width: double.infinity,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      if (hasSale)
+                                        Positioned(
+                                          top: 10.0,
+                                          left: 10.0,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                                vertical: 5.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.redAccent,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            child: Text(
+                                              "${product.sale!}%",
+                                              style: const TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
                                 // Product details
                                 Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Product name
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              product.name!,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.lato(
-                                                textStyle: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
-                                              ),
-                                            ),
+                                            Text(product.name!,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.lato(
+                                                  textStyle: const TextStyle(
+                                                    fontSize: 22.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )),
                                             const SizedBox(height: 8.0),
                                             // Prices
-                                            Text(
-                                              "\$${product.price!.toStringAsFixed(2)}",
-                                              style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color.fromARGB(255, 94, 93, 93),
-                                              ),
-                                            ),
+                                            priceRow(product, hasSale),
                                           ],
                                         ),
                                       ),
+                                      const SizedBox(height: 8.0),
                                       // Rating section
-                                      Row(
+                                        Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           ReviewWidget(product: product),
@@ -146,12 +185,14 @@ class _DealOFDayState extends State<DealOFDay> {
                                                 }
                                               },
                                               icon: isInWishlist
-                                                  ? Icon(CupertinoIcons.heart_solid, color: Colors.red)
-                                                  : Icon(CupertinoIcons.heart, color: Colors.red),
+                                                  ? const Icon(CupertinoIcons.heart_solid, color: Colors.red)
+                                                  : const Icon(CupertinoIcons.heart, color: Colors.red),
                                             );
                                           }),
                                         ],
                                       )
+
+                                      //* WishList button
                                     ],
                                   ),
                                 ),
@@ -161,10 +202,50 @@ class _DealOFDayState extends State<DealOFDay> {
                         );
                       },
                     ),
-                  )),
+                  ))
+            //     }
+            //   },
+            // ),
           ],
         ),
       ),
+    );
+  }
+
+  // Extracted function for price formatting
+  Widget priceRow(ProductModel product, bool hasSale) {
+    String calculateSalePrice(double price, int salePercentage) {
+      if (hasSale) {
+        var salePercent = salePercentage / 100;
+        var salePrice = price * salePercent;
+        var finalPrice = price - salePrice;
+        return finalPrice.toStringAsFixed(2);
+      } else {
+        return price.toStringAsFixed(2);
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (hasSale)
+          Text(
+            "\$${product.price!.toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontSize: 12.0,
+              color: Colors.red,
+              decoration: TextDecoration.lineThrough,
+            ),
+          ),
+        Text(
+          "\$${calculateSalePrice(product.price!, product.sale!)}",
+          style: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 94, 93, 93),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -190,9 +271,9 @@ class ReviewWidget extends StatelessWidget {
               Icon(Icons.star_border, color: Colors.yellow[700], size: 20),
               Icon(Icons.star_border, color: Colors.yellow[700], size: 20),
               const SizedBox(width: 8.0),
-              Text(
+              const Text(
                 "(0.0)",
-                style: const TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           )

@@ -2,12 +2,9 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
-import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
-import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/utils.dart';
 import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../constants/flutter_toast.dart';
@@ -23,15 +20,14 @@ class AuthService {
   }) async {
     try {
       UserModel user = UserModel(
-        id: '',
-        name: name,
-        password: password,
-        email: email,
-        address: '',
-        type: '',
-        token: '',
-        cartItems: []
-      );
+          id: '',
+          name: name,
+          password: password,
+          email: email,
+          address: '',
+          type: '',
+          token: '',
+          cartItems: []);
 
       http.Response res = await http.post(
         Uri.parse('$baseUrl/api/signup'),
@@ -80,8 +76,8 @@ class AuthService {
     required String password,
   }) async {
     try {
-    //  ProductDetailController productDetailController = Get.put(ProductDetailController());
-    //  productDetailController.getCartItems();
+      //  ProductDetailController productDetailController = Get.put(ProductDetailController());
+      //  productDetailController.getCartItems();
       http.Response res = await http.post(
         Uri.parse('$baseUrl/api/signin'),
         body: jsonEncode({
@@ -106,19 +102,19 @@ class AuthService {
         var userData = jsonDecode(res.body);
 
         UserModel userModel = UserModel(
-            id: userData['_id'],
-            name: userData['name'],
-            email: userData['email'],
-            password: userData['password'],
-            address: userData['address'],
-            type: userData['type'],
-            token: userData['token'],
-            // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
-            );
+          id: userData['_id'],
+          name: userData['name'],
+          email: userData['email'],
+          password: userData['password'],
+          address: userData['address'],
+          type: userData['type'],
+          token: userData['token'],
+          // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
+        );
 
         userBox.add(userModel);
         print(userBox.values.first.name);
-        await getUserData(context);
+        await getUserData();
         Navigator.pushNamedAndRemoveUntil(
           context,
           BottomNavbr.routeName,
@@ -143,12 +139,10 @@ class AuthService {
   }
 
   // get user data
-  Future<void> getUserData(
-    BuildContext context,
-  ) async {
+  Future<void> getUserData() async {
     try {
-    //    ProductDetailController productDetailController = Get.put(ProductDetailController());
-    //  productDetailController.getCartItems();
+      //    ProductDetailController productDetailController = Get.put(ProductDetailController());
+      //  productDetailController.getCartItems();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
@@ -180,15 +174,15 @@ class AuthService {
 
         if (userBox.values.first.token.length == 0) {
           UserModel userModel = UserModel(
-              id: userData['_id'],
-              name: userData['name'],
-              email: userData['email'],
-              password: userData['password'],
-              address: userData['address'],
-              type: userData['type'],
-              token: token,
-              // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
-              );
+            id: userData['_id'],
+            name: userData['name'],
+            email: userData['email'],
+            password: userData['password'],
+            address: userData['address'],
+            type: userData['type'],
+            token: token,
+            // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
+          );
 
           await userBox.add(userModel);
         } else {
@@ -202,8 +196,6 @@ class AuthService {
   }
 
   void becomeSeller(BuildContext context) async {
-    // UserController userController = Get.put(UserController());
-
     final user = userBox.values.first;
 
     final res = await http.post(
@@ -214,22 +206,27 @@ class AuthService {
         });
 
     if (res.statusCode == 200) {
-      userBox.values.first.type == 'seller';
-      
-      userBox.values.first.save();
-      getUserData(context).then((value) {
-        Navigator.pushNamed(context, AdminBottomBar.routeName);
-      }).onError((error, stackTrace) {
-        // errorsMessage(error.toString());
-        print('become seller then error $error');
-      });
+      // Create a new user object with the updated type
+      final updatedUser = UserModel(
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        address: user.address,
+        type: 'seller', // Update the type to 'seller'
+        token: user.token,
+      );
+
+      // Update the user in the Hive box
+      await userBox.putAt(0, updatedUser);
+
+      await getUserData();
+      Navigator.pushNamed(context, AdminBottomBar.routeName);
     } else if (res.statusCode == 400) {
       errorsMessage(jsonDecode(res.body)['msg']);
       print("400 ${jsonDecode(res.body)['msg']}");
     } else {
-      errorsMessage(
-        jsonDecode(res.body)['error'],
-      );
+      errorsMessage(jsonDecode(res.body)['error']);
       print("500 ${jsonDecode(res.body)['error']}");
     }
   }

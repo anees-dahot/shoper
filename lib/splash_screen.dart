@@ -34,12 +34,12 @@ class _SplashScreenState extends State<SplashScreen> {
      if(userBox.isNotEmpty){
       final SharedPreferences ref = await SharedPreferences.getInstance();
         String? token = ref.getString('x-auth-token');
-    authService.getUserData(context).then((value) {
+    authService.getUserData().then((value) {
    print(userBox.values.first.id)
 ;      // Future.delayed(const Duration(seconds: 10), () {
        userBox.values.first.token.isNotEmpty
           ? userBox.values.first.type ==
-                    'seller'
+                    'user'
                 ? Navigator.pushNamedAndRemoveUntil(
                     context, BottomNavbr.routeName, (route) => false)
                 : Navigator.pushNamedAndRemoveUntil(

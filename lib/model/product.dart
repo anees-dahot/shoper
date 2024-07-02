@@ -3,33 +3,19 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:shoper/model/reviews.dart';
 
-part 'product.g.dart';
 
-@HiveType(typeId: 1)
 class ProductModel  extends HiveObject {
-  @HiveField(0)
   final String? id;
-  @HiveField(1)
   final String? senderId;
-  @HiveField(2)
   final String? name;
-  @HiveField(3)
   final double? price;
-  @HiveField(4)
   final int? sale;
-  @HiveField(5)
   final String? description;
-  @HiveField(6)
   final int? quantity;
-  @HiveField(7)
   final String? category;
-  @HiveField(8)
   final List<String>? images;
-  @HiveField(9)
    List<ReviewsModel>? reviews;
-  @HiveField(10)
   final List<String>? colors;
-  @HiveField(11)
   final List<int>? sizes;
 
   ProductModel({

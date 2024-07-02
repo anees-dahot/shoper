@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
 import 'package:shoper/features/home/widgets/category_widget.dart';
 import 'package:shoper/features/home/widgets/deal_of_the_day.dart';
@@ -8,8 +7,6 @@ import 'package:shoper/features/home/widgets/new_arrivals.dart';
 import 'package:shoper/features/home/widgets/on_sale.dart';
 import 'package:shoper/features/home/widgets/search_bar.dart';
 import 'package:shoper/utils.dart';
-import '../../../provider/user_controller.dart';
-import '../../wishlist/services/wishlist_service.dart';
 import '../widgets/custom_banner.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +19,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(userBox.values.first.type);
+  }
 
   @override
   Widget build(BuildContext context) {

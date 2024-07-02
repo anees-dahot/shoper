@@ -201,11 +201,18 @@ productRouter.get(
   }
 );
 
-
 //* Add product to cart
 productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
   try {
-    const { user, productId, productName, description, imageUrl, price, quantity} = req.body;
+    const {
+      user,
+      productId,
+      productName,
+      description,
+      imageUrl,
+      price,
+      quantity,
+    } = req.body;
 
     let cartItem = await Cart.findOne({ user, productId });
 
@@ -218,7 +225,7 @@ productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
       console.log("Updated cart item:", cartItem);
     } else {
       // If the item doesn't exist, create a new cart item
-     let cartItem = new Cart({
+      let cartItem = new Cart({
         user,
         productName,
         productId,
@@ -239,18 +246,21 @@ productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
 
 //* Delete product from cart
 productRouter.post(
-  "/api/product/delete-cart-item/:productId", auth,
+  "/api/product/delete-cart-item/:productId",
   async (req, res) => {
     try {
       const productId = req.params.productId;
 
-      let cartItems = await Cart.findByIdAndDelete(productId);
+      const deletedItem = await Cart.findOneAndDelete({
+        productId: productId,
+      });
 
-      if (cartItems.length == 0) {
+      if (deletedItem.length == 0) {
         return res.status(400).json({ msg: "Cart is empty" });
       }
 
       res.status(200).json({ message: "Removed from cart successfully" });
+      console.log("Removed from cart successfully");
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -259,7 +269,7 @@ productRouter.post(
 
 //* Get add to cart  items
 productRouter.get(
-  "/api/product/get-addtocart-products/:userId", 
+  "/api/product/get-addtocart-products/:userId",
   async (req, res) => {
     try {
       let user = req.params.userId;

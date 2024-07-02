@@ -33,6 +33,20 @@ const cartSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  colors: [
+    {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  ],
+  sizes: [
+    {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+  ],
 });
 
 const Cart = mongoose.model("cart", cartSchema);

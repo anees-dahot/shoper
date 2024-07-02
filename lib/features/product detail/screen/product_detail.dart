@@ -26,25 +26,24 @@ class _ProductDetailState extends State<ProductDetail> {
 
   ProductSerivce productSerivce = ProductSerivce();
   ProductDetailController productDetailController =
-        Get.put(ProductDetailController());
+      Get.put(ProductDetailController());
 
   @override
   void dispose() {
     super.dispose();
     addReview.dispose();
-   
   }
+
   @override
   void initState() {
     super.initState();
-     productDetailController.getReviews(widget.products.id!);
+    productDetailController.getReviews(widget.products.id!);
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    
 
     return Scaffold(
       appBar: AppBar(
@@ -101,26 +100,40 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
               ),
-              Obx(() =>productDetailController.isAddingToCart.value ? const Center(child: CircularProgressIndicator(color: Colors.black,),) : GestureDetector(
-                onTap: () {
-                  var image = widget.products.images!.first;
-                  productDetailController.addToCart(productName: widget.products.name!, productId: widget.products.id!,imageUrl: image, quantity: widget.quantity, price: widget.products.price!, description: widget.products.description!);
-                  
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height * 0.058,
-                  width: MediaQuery.of(context).size.width * 0.32,
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text('Add To Cart',
-                      style: GoogleFonts.lato(
-                        textStyle:
-                            const TextStyle(color: Colors.white, fontSize: 14),
-                      )),
-                ),
-              ))
+              Obx(() => productDetailController.isAddingToCart.value
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        var image = widget.products.images!.first;
+                        productDetailController.addToCart(
+                            productName: widget.products.name!,
+                            productId: widget.products.id!,
+                            imageUrl: image,
+                            quantity: widget.quantity,
+                            price: widget.products.price!,
+                            description: widget.products.description!,
+                            colors: [],
+                            sizes: [],
+                            sale: widget.products.sale!);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height * 0.058,
+                        width: MediaQuery.of(context).size.width * 0.32,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text('Add To Cart',
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
+                            )),
+                      ),
+                    ))
             ],
           ),
         ),
@@ -276,7 +289,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                     .then((val) {
                                   addReview.clear();
                                   setState(() {
-                                  productDetailController.getReviews(widget.products.id!);
+                                    productDetailController
+                                        .getReviews(widget.products.id!);
                                     widget.rating = 0;
                                   });
                                 });
@@ -289,24 +303,23 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               Obx(
-  () => productDetailController.isLoading.value
-      ? const Center(
-          child: CircularProgressIndicator(),
-        )
-      : Visibility(
-          visible: productDetailController.reviews.isNotEmpty,
-          child: Column(
-                        children: [
-                          for (final review in productDetailController.reviews)
-                            ReviewCard(
-                                user: review.user,
-                                content: review.review,
-                                stars: review.stars),
-                        ],
+                () => productDetailController.isLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-        ),
-),
-
+                    : Visibility(
+                        visible: productDetailController.reviews.isNotEmpty,
+                        child: Column(
+                          children: [
+                            for (final review
+                                in productDetailController.reviews)
+                              ReviewCard(
+                                  user: review.user,
+                                  content: review.review,
+                                  stars: review.stars),
+                          ],
+                        )),
+              ),
               const SizedBox(
                 height: 180,
               )

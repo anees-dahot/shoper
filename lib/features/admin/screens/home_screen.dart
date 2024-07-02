@@ -177,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             color: Colors.black,
                                             borderRadius:
                                                 BorderRadius.circular(10)),
-                                        child: Text('Delete',
+                                        child: Text('Edit',
                                             style: GoogleFonts.lato(
                                               textStyle: const TextStyle(
                                                   color: Colors.white,
@@ -204,7 +204,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             color: Colors.black,
                                             borderRadius:
                                                 BorderRadius.circular(10)),
-                                        child: Text('Edit',
+                                        child: Text('Delete',
                                             style: GoogleFonts.lato(
                                               textStyle: const TextStyle(
                                                   color: Colors.white,

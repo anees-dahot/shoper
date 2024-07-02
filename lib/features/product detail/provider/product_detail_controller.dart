@@ -63,17 +63,22 @@ class ProductDetailController extends GetxController {
       required String imageUrl,
       required int quantity,
       required double price,
+      required List<String> colors,
+      required List<int> sizes,
+      required int sale,
       required String description}) async {
     try {
       isAddingToCart(true);
       await _productService.addToCart(
-        productName: productName,
-        productId: productId,
-        imageUrl: imageUrl,
-        quantity: quantity,
-        price: price,
-        description: description,
-      );
+          productName: productName,
+          productId: productId,
+          imageUrl: imageUrl,
+          quantity: quantity,
+          originalPrice: price,
+          salePercentage: sale,
+          description: description,
+          colors: colors,
+          sizes: sizes);
     } catch (e) {
       print(e.toString());
     } finally {
@@ -82,7 +87,10 @@ class ProductDetailController extends GetxController {
     }
   }
 
-  void deleteFromCart(String productId) async {
-    await _productService.deleteFromCart(productId);
+  void deleteFromCart(String id) async {
+    await _productService.deleteFromCart(id);
+    cartItemsLength.value - 1;
+    cartItems.removeWhere((item) => item.productId == id);
+    successMessage("Removed from wishlist");
   }
 }

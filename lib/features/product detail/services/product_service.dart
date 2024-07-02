@@ -47,25 +47,34 @@ class ProductSerivce {
     }
   }
 
-  Future<void> addToCart(
-      {required String productName,
-      required String productId,
-      required String imageUrl,
-      required int quantity,
-      required double price,
-      required String description}) async {
+  Future<void> addToCart({
+    required String productName,
+    required String productId,
+    required String imageUrl,
+    required int quantity,
+    required double originalPrice,
+    required String description,
+   required List<String> colors,
+   required List<int> sizes,
+    int? salePercentage, // New parameter for sale percentage
+  }) async {
     final user = userBox.values.first;
 
     try {
-      double totalPrice = price * quantity;
+      // Calculate the final price based on sale percentage
+      double finalPrice = calculateFinalPrice(originalPrice, salePercentage);
+
       CartModel cartModel = CartModel(
-          user: user.id,
-          productName: productName,
-          imageUrl: imageUrl,
-          quantity: quantity,
-          price: totalPrice,
-          description: description,
-          productId: productId);
+        user: user.id,
+        productName: productName,
+        imageUrl: imageUrl,
+        quantity: quantity,
+        price: finalPrice, // Use the calculated final price
+        description: description,
+        productId: productId,
+        colors: colors,
+        sizes: sizes
+      );
 
       final res = await http.post(
         Uri.parse('$baseUrl/api/product/add-to-cart'),
@@ -91,12 +100,21 @@ class ProductSerivce {
     }
   }
 
-  Future<void> deleteFromCart(String productId) async {
+// Helper function to calculate the final price
+  double calculateFinalPrice(double originalPrice, int? salePercentage) {
+    if (salePercentage == null || salePercentage <= 0) {
+      return originalPrice;
+    }
+    double discountAmount = originalPrice * (salePercentage / 100);
+    return originalPrice - discountAmount;
+  }
+
+  Future<void> deleteFromCart(String id) async {
     final user = userBox.values.first;
 
     try {
       final res = await http.post(
-        Uri.parse('$baseUrl/api/product/delete-cart-item/$productId'),
+        Uri.parse('$baseUrl/api/product/delete-cart-item/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': user.token
@@ -215,7 +233,7 @@ class ProductSerivce {
     List<ProductModel> products = [];
     try {
       DateTime sdate = DateTime.now().subtract(const Duration(days: 5));
-      DateTime edate = DateTime.now().add(Duration(days: 50));
+      DateTime edate = DateTime.now().add(Duration(days: 1));
       String startDate =
           '${sdate.year}-${sdate.month}-${sdate.day}'; // Replace with your desired start date
       String endDate =

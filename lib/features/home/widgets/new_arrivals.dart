@@ -39,7 +39,7 @@ class _NewArrivalsState extends State<NewArrivals> {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.47,
         child: Column(
           children: [
             Padding(
@@ -185,8 +185,8 @@ class _NewArrivalsState extends State<NewArrivals> {
                                                 }
                                               },
                                               icon: isInWishlist
-                                                  ? Icon(CupertinoIcons.heart_solid, color: Colors.red)
-                                                  : Icon(CupertinoIcons.heart, color: Colors.red),
+                                                  ? const Icon(CupertinoIcons.heart_solid, color: Colors.red)
+                                                  : const Icon(CupertinoIcons.heart, color: Colors.red),
                                             );
                                           }),
                                         ],
