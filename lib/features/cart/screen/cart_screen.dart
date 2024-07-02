@@ -35,7 +35,8 @@ class CartScreen extends StatelessWidget {
             }),
           ),
           Container(
-            height: Get.height * 0.25,
+            height: Get.height * 0.35,
+            padding: const EdgeInsets.only(bottom: 100.0, top: 20, left: 20, right: 20),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -47,7 +48,6 @@ class CartScreen extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
