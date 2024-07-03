@@ -205,13 +205,16 @@ productRouter.get(
 productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
   try {
     const {
-      user,
+      sellerId,
+      buyerId,
       productId,
       productName,
       description,
       imageUrl,
       price,
       quantity,
+      color,
+      size,
     } = req.body;
 
     let cartItem = await Cart.findOne({ user, productId });
@@ -226,13 +229,16 @@ productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
     } else {
       // If the item doesn't exist, create a new cart item
       let cartItem = new Cart({
-        user,
+        sellerId,
+        buyerId,
         productName,
         productId,
         description,
         imageUrl,
         price,
         quantity,
+        color,
+        size,
       });
       await cartItem.save();
     }

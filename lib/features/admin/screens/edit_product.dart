@@ -139,7 +139,7 @@ class _EditProductState extends State<EditProduct> {
                             description: productDescController.text,
                             quantity: int.parse(productQuantityController.text),
                             sale: int.parse(productSaleController.text),
-                            senderId: widget.products.senderId,
+                            seller: widget.products.seller,
                             category: widget.products.category,
                             images: widget.products.images,
                             reviews: widget.products.reviews,

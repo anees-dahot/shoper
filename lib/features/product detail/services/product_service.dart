@@ -48,6 +48,7 @@ class ProductSerivce {
   }
 
   Future<void> addToCart({
+    required String sellerId,
     required String productName,
     required String productId,
     required String imageUrl,
@@ -65,15 +66,16 @@ class ProductSerivce {
       double finalPrice = calculateFinalPrice(originalPrice, salePercentage);
 
       CartModel cartModel = CartModel(
-        user: user.id,
+        buyerId: user.id,
+        sellerId: sellerId,
         productName: productName,
         imageUrl: imageUrl,
         quantity: quantity,
         price: finalPrice, // Use the calculated final price
         description: description,
         productId: productId,
-        colors: colors,
-        sizes: sizes
+        color: colors,
+        size: sizes
       );
 
       final res = await http.post(
@@ -192,7 +194,8 @@ class ProductSerivce {
         print("500 ${jsonDecode(res.body)['error']}");
       }
     } catch (e) {
-      errorsMessage(e.toString());
+      // errorsMessage(e.toString());
+      print(e.toString());
     }
     return reviews;
   }

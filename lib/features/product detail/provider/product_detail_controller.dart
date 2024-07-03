@@ -27,11 +27,14 @@ class ProductDetailController extends GetxController {
       isLoading(true);
 
       final response = await _productService.fetchReviews(productId);
+    if(response.isNotEmpty){
       reviews.assignAll(response);
+    }
 
       isLoading(false);
     } catch (e) {
       errorsMessage(e.toString());
+      print(e.toString());
     }
   }
 
@@ -58,7 +61,9 @@ class ProductDetailController extends GetxController {
   }
 
   void addToCart(
-      {required String productName,
+      {
+        required String sellerId,
+        required String productName,
       required String productId,
       required String imageUrl,
       required int quantity,
@@ -70,6 +75,7 @@ class ProductDetailController extends GetxController {
     try {
       isAddingToCart(true);
       await _productService.addToCart(
+        sellerId: sellerId,
           productName: productName,
           productId: productId,
           imageUrl: imageUrl,
@@ -89,8 +95,10 @@ class ProductDetailController extends GetxController {
 
   void deleteFromCart(String id) async {
     await _productService.deleteFromCart(id);
-    cartItemsLength.value - 1;
+    getCartItems();
     cartItems.removeWhere((item) => item.productId == id);
     successMessage("Removed from wishlist");
   }
+
+
 }

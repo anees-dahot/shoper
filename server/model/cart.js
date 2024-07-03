@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
 const cartSchema = mongoose.Schema({
-  user: {
+  sellerId: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  buyerId: {
     type: String,
     required: true,
     trim: true,
@@ -33,20 +38,17 @@ const cartSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  colors: [
-    {
-      type: String,
-      required: true,
-      trim: true,
-    },
-  ],
-  sizes: [
-    {
-      type: Number,
-      required: true,
-      trim: true,
-    },
-  ],
+  color: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+
+  size: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
 });
 
 const Cart = mongoose.model("cart", cartSchema);

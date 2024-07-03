@@ -138,12 +138,12 @@ class _BottomNavbrState extends State<BottomNavbr> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(
-                    child: badges.Badge(
+                    child: Obx(() => badges.Badge(
                       position: badges.BadgePosition.topEnd(top: -8, end: -8),
                       showBadge: true,
-                      badgeContent:Obx(() =>  Text(
+                      badgeContent: Text(
                           productDetailController.cartItemsLength.toString(),
-                          style: const TextStyle(color: Colors.white)),),
+                          style: const TextStyle(color: Colors.white)),
                       badgeAnimation: const badges.BadgeAnimation.rotation(
                         animationDuration: Duration(milliseconds: 300),
                         colorChangeAnimationDuration: Duration(seconds: 1),
@@ -161,7 +161,7 @@ class _BottomNavbrState extends State<BottomNavbr> {
                         color: Colors.white,
                         size: 30,
                       ),
-                    ),
+                    ),)
                   ),
                 ),
               )

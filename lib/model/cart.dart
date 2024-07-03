@@ -3,53 +3,57 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 
 class CartModel extends HiveObject {
-  final String user;
+  final String sellerId;
+  final String buyerId;
   final String productName;
   final String productId;
   final String imageUrl;
   final int quantity;
   double price;
   final String description;
-  final String? colors;
-  final int? sizes;
+  final String? color;
+  final int? size;
 
   CartModel({
-    required this.user,
+    required this.sellerId,
+    required this.buyerId,
     required this.productName,
     required this.productId,
     required this.imageUrl,
     required this.quantity,
     required this.price,
     required this.description,
-    required this.colors,
-    required this.sizes,
+    required this.color,
+    required this.size,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'user': user,
+      'sellerId': sellerId,
+      'buyerId': buyerId,
       'productName': productName,
       'productId': productId,
       'imageUrl': imageUrl,
       'quantity': quantity,
       'price': price,
       'description': description,
-      'colors': colors,
-      'sizes': sizes,
+      'color': color,
+      'size': size,
     };
   }
 
   factory CartModel.fromMap(Map<String, dynamic> map) {
     return CartModel(
-      user: map['user'] ?? '',
+      sellerId: map['sellerId'] ?? '',
+      buyerId: map['buyerId'] ?? '',
       productName: map['productName'] ?? '',
       productId: map['productId'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       quantity: map['quantity'] ?? 0,
       price: (map['price'] as num?)?.toDouble() ?? 0.0,
       description: map['description'] ?? '',
-      colors: map['colors'] ?? [], // Convert colors to list
-      sizes: map['sizes'] ?? [], // Convert sizes to list
+      color: map['color'] ?? '', // Convert color to list
+      size: map['size'] ?? 0, // Convert size to list
     );
   }
 
@@ -59,26 +63,28 @@ class CartModel extends HiveObject {
       CartModel.fromMap(json.decode(source));
 
   CartModel copyWith({
-    String? user,
+    String? sellerId,
+    String? buyerId,
     String? productName,
     String? productId,
     String? imageUrl,
     int? quantity,
     double? price,
     String? description,
-    String? colors,
-    int? sizes,
+    String? color,
+    int? size,
   }) {
     return CartModel(
-      user: user ?? this.user,
+      sellerId: sellerId ?? this.sellerId,
+      buyerId: buyerId ?? this.buyerId,
       productName: productName ?? this.productName,
       productId: productId ?? this.productId,
       imageUrl: imageUrl ?? this.imageUrl,
       quantity: quantity ?? this.quantity,
       price: price!.toDouble() ?? this.price,
       description: description ?? this.description,
-      colors: colors ?? this.colors,
-      sizes: sizes ?? this.sizes,
+      color: color ?? this.color,
+      size: size ?? this.size,
     );
   }
 }

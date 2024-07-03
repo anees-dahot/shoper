@@ -41,7 +41,7 @@ class AdminService {
 
       ProductModel productModel = ProductModel(
         name: name,
-        senderId: user.name,
+        seller: user.id,
         price: price,
         description: description,
         quantity: quantity,
@@ -81,7 +81,7 @@ class AdminService {
     }
   }
 
-  Future<List<ProductModel>> getProducts(BuildContext context) async {
+  Future<List<ProductModel>> getProducts() async {
     List<ProductModel> products = [];
     final user = userBox.values.first;
 

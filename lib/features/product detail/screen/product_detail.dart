@@ -118,7 +118,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: Color(int.parse('0xff${color}')),
+                              color: Color(int.parse('0xff$color')),
                               shape: BoxShape.circle,
                               border: selectedColor == color
                                   ? Border.all(color: Colors.black, width: 2)
@@ -241,13 +241,13 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget _buildReviewList() {
     return Obx(
       () => productDetailController.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
+          ? const Center(child: CircularProgressIndicator()) 
+          : productDetailController.reviews.isEmpty ?  Container() :  Column(
               children: productDetailController.reviews
                   .map((review) => ReviewCard(
-                        user: review.user,
-                        content: review.review,
-                        stars: review.stars,
+                        user: review.user!,
+                        content: review.review!,
+                        stars: review.stars!,
                       ))
                   .toList(),
             ),
@@ -344,6 +344,7 @@ class _ProductDetailState extends State<ProductDetail> {
     }
 
     productDetailController.addToCart(
+      sellerId: widget.products.seller!,
       productName: widget.products.name!,
       productId: widget.products.id!,
       imageUrl: widget.products.images!.first,

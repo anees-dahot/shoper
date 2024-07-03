@@ -17,7 +17,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       colors,
       sizes,
       images,
-      senderId,
+      seller,
       sale,
   
     } = req.body;
@@ -31,7 +31,7 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
       colors,
       sizes,
       images,
-      senderId,
+      seller,
       sale,
    
     });
@@ -53,7 +53,7 @@ adminRouter.get("/admin/get-products", admin, async (req, res) => {
     if (!user) {
       return res.status(500).json({ error: "User not found" });
     }
-    const products = await Product.find({ senderId: user.name });
+    const products = await Product.find({ seller: user._id });
     res.json({ products });
   } catch (err) {
     res.status(500).json({ error: err.message });

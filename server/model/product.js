@@ -52,7 +52,7 @@ const productSchema = mongoose.Schema({
       trim: true,
     },
   ],
-  senderId: {
+  seller: {
     type: String,
     required: true,
     trim: true,

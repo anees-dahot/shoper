@@ -6,7 +6,7 @@ import 'package:shoper/model/reviews.dart';
 
 class ProductModel  extends HiveObject {
   final String? id;
-  final String? senderId;
+  final String? seller;
   final String? name;
   final double? price;
   final int? sale;
@@ -20,7 +20,7 @@ class ProductModel  extends HiveObject {
 
   ProductModel({
     this.id,
-    this.senderId,
+    this.seller,
      this.name,
      this.price,
      this.sale,
@@ -36,7 +36,7 @@ class ProductModel  extends HiveObject {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'senderId': senderId,
+      'seller': seller,
       'name': name,
       'price': price,
       'sale' : sale,
@@ -53,7 +53,7 @@ class ProductModel  extends HiveObject {
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['_id'] ?? '',
-      senderId: map['senderId'] ?? '',
+      seller: map['seller'] ?? '',
       name: map['name'] ?? '',
       price: map['price']?.toDouble() ?? 0.0, // Convert price to double
       sale: map['sale'] ?? 0.0, // Convert price to double
@@ -77,7 +77,7 @@ class ProductModel  extends HiveObject {
 
   ProductModel copyWith({
     String? id,
-    String? senderId,
+    String? seller,
     String? name,
     double? price,
     int? sale,

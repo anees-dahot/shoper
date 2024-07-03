@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Expanded(
               child: FutureBuilder<List<ProductModel>>(
-                future: adminService.getProducts(context),
+                future: adminService.getProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());

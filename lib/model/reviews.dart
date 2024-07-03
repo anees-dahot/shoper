@@ -5,13 +5,9 @@ part 'reviews.g.dart';
 
 @HiveType(typeId: 2)
 class ReviewsModel  extends HiveObject {
-  @HiveField(0)
   final String user;
-  @HiveField(1)
   final String review;
-  @HiveField(2)
   final String time;
-  @HiveField(3)
   final int stars;
 
   ReviewsModel({

@@ -3,10 +3,16 @@ import 'package:get/get.dart';
 import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
 import '../../../model/cart.dart';
 
-class CartScreen extends StatelessWidget {
-  final ProductDetailController cartController = Get.put(ProductDetailController());
+class CartScreen extends StatefulWidget {
+  CartScreen({super.key});
 
-   CartScreen({super.key});
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final ProductDetailController cartController =
+      Get.put(ProductDetailController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,9 @@ class CartScreen extends StatelessWidget {
                 if (cartController.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (cartController.cartItems.isEmpty) {
-                  return const Center(child: Text('Your cart is empty', style: TextStyle(fontSize: 18)));
+                  return const Center(
+                      child: Text('Your cart is empty',
+                          style: TextStyle(fontSize: 18)));
                 } else {
                   return ListView.builder(
                     itemCount: cartController.cartItems.length,
@@ -35,16 +43,20 @@ class CartScreen extends StatelessWidget {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: const Text("Remove Item"),
-                                content: const Text("Are you sure you want to remove this item?"),
+                                content: const Text(
+                                    "Are you sure you want to remove this item?"),
                                 actions: <Widget>[
                                   TextButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
                                     child: const Text("CANCEL"),
                                   ),
                                   TextButton(
-                                    onPressed: ()  {
-                                      cartController.deleteFromCart(item.productId);
+                                    onPressed: () {
+                                      cartController
+                                          .deleteFromCart(item.productId);
                                       Navigator.of(context).pop(true);
+                                      setState(() {cartController.getCartItems();});
                                     },
                                     child: const Text("REMOVE"),
                                   ),
@@ -55,6 +67,7 @@ class CartScreen extends StatelessWidget {
                         },
                         onDismissed: (direction) {
                           cartController.deleteFromCart(item.productId);
+                          setState(() {});
                         },
                         background: Container(
                           color: Colors.red,
@@ -147,7 +160,8 @@ class StickyHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child:  const Text('Proceed to Checkout', style: TextStyle(fontSize: 16)),
+            child: const Text('Proceed to Checkout',
+                style: TextStyle(fontSize: 16)),
           ),
         ],
       ),
@@ -212,7 +226,8 @@ class CartItemTile extends StatelessWidget {
               children: [
                 Text(
                   item.productName,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -227,11 +242,15 @@ class CartItemTile extends StatelessWidget {
                   children: [
                     Text(
                       '\$${item.price.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                     Text(
                       'Quantity: ${item.quantity}',
-                      style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                      style:
+                          TextStyle(fontSize: 14, color: Colors.grey.shade600),
                     ),
                   ],
                 ),
