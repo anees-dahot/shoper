@@ -63,8 +63,8 @@ class ProductDetailController extends GetxController {
       required String imageUrl,
       required int quantity,
       required double price,
-      required List<String> colors,
-      required List<int> sizes,
+      required String colors,
+      required int sizes,
       required int sale,
       required String description}) async {
     try {

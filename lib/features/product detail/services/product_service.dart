@@ -54,8 +54,8 @@ class ProductSerivce {
     required int quantity,
     required double originalPrice,
     required String description,
-   required List<String> colors,
-   required List<int> sizes,
+   required String colors,
+   required int sizes,
     int? salePercentage, // New parameter for sale percentage
   }) async {
     final user = userBox.values.first;

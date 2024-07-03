@@ -10,8 +10,8 @@ class CartModel extends HiveObject {
   final int quantity;
   double price;
   final String description;
-  final List<String>? colors;
-  final List<int>? sizes;
+  final String? colors;
+  final int? sizes;
 
   CartModel({
     required this.user,
@@ -48,8 +48,8 @@ class CartModel extends HiveObject {
       quantity: map['quantity'] ?? 0,
       price: (map['price'] as num?)?.toDouble() ?? 0.0,
       description: map['description'] ?? '',
-      colors: List<String>.from(map['colors'] ?? []), // Convert colors to list
-      sizes: List<int>.from(map['sizes'] ?? []), // Convert sizes to list
+      colors: map['colors'] ?? [], // Convert colors to list
+      sizes: map['sizes'] ?? [], // Convert sizes to list
     );
   }
 
@@ -66,8 +66,8 @@ class CartModel extends HiveObject {
     int? quantity,
     double? price,
     String? description,
-    List<String>? colors,
-    List<int>? sizes,
+    String? colors,
+    int? sizes,
   }) {
     return CartModel(
       user: user ?? this.user,
