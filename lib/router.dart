@@ -12,6 +12,7 @@ import '/features/auth/screens/loginscreen.dart';
 
 import 'features/admin/screens/home_screen.dart';
 import 'features/home/screens/home_screen.dart';
+import 'features/checkout/screens/checkout_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -31,7 +32,17 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case WishlistScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  WishlistScreen(),
+        builder: (_) =>  const WishlistScreen(),
+      );
+    case CheckoutScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) =>  const CheckoutScreen(),
+      );
+    case WishlistScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) =>  const WishlistScreen(),
       );
     case SearchProducts.routeName:
       final query = routeSettings.arguments as String;

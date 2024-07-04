@@ -51,8 +51,9 @@ class ProductDetailController extends GetxController {
           }
           return item;
         }));
-        cartItemsLength.value = response.length;
+       
       }
+      cartItemsLength.value = cartItems.length;
     } catch (e) {
       errorsMessage(e.toString());
     } finally {
@@ -85,11 +86,14 @@ class ProductDetailController extends GetxController {
           description: description,
           colors: colors,
           sizes: sizes);
+            getCartItems();
+             cartItemsLength.value++;
+       
     } catch (e) {
       print(e.toString());
     } finally {
       isAddingToCart(false);
-      getCartItems();
+    
     }
   }
 
@@ -97,6 +101,7 @@ class ProductDetailController extends GetxController {
     await _productService.deleteFromCart(id);
     getCartItems();
     cartItems.removeWhere((item) => item.productId == id);
+  
     successMessage("Removed from wishlist");
   }
 

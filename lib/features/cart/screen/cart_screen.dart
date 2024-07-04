@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
 import '../../../model/cart.dart';
+import '../../checkout/screens/checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen({super.key});
@@ -56,7 +58,7 @@ class _CartScreenState extends State<CartScreen> {
                                       cartController
                                           .deleteFromCart(item.productId);
                                       Navigator.of(context).pop(true);
-                                      setState(() {cartController.getCartItems();});
+                                      cartController.cartItemsLength.value--;
                                     },
                                     child: const Text("REMOVE"),
                                   ),
@@ -67,7 +69,7 @@ class _CartScreenState extends State<CartScreen> {
                         },
                         onDismissed: (direction) {
                           cartController.deleteFromCart(item.productId);
-                          setState(() {});
+                        
                         },
                         background: Container(
                           color: Colors.red,
@@ -150,7 +152,11 @@ class StickyHeader extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // Implement checkout functionality
+             if(cartController.cartItems.isNotEmpty){
+               Navigator.of(context).pushNamed(CheckoutScreen.routeName);
+             }else{
+              errorsMessage('Cart is empty');
+             }
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
@@ -168,31 +174,68 @@ class StickyHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceLine(String label, double amount, {bool isTotal = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: isTotal ? 18 : 16,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          Text(
-            '\$${amount.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: isTotal ? 18 : 16,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? Colors.red : Colors.black,
-            ),
-          ),
-        ],
-      ),
-    );
+  Widget _buildPriceLine(String label, double amount, {bool isTotal = false, double? salePercent}) {
+  double finalAmount = amount;
+  String priceDisplay = '\$${amount.toStringAsFixed(2)}';
+
+  if (salePercent != null && salePercent > 0) {
+    finalAmount = amount * (1 - salePercent / 100);
+    priceDisplay = '\$${finalAmount.toStringAsFixed(2)}';
+    
+    // Add strikethrough price if there's a sale
+    if (!isTotal) {
+      priceDisplay = '\$${amount.toStringAsFixed(2)} $priceDisplay';
+    }
   }
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: isTotal ? 18 : 16,
+            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        if (!isTotal && salePercent != null && salePercent > 0)
+          Text(
+            '${salePercent.toStringAsFixed(0)}% OFF',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        RichText(
+          text: TextSpan(
+            children: [
+              if (!isTotal && salePercent != null && salePercent > 0)
+                TextSpan(
+                  text: '\$${amount.toStringAsFixed(2)} ',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              TextSpan(
+                text: '\$${finalAmount.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: isTotal ? 18 : 16,
+                  fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+                  color: isTotal ? Colors.red : Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
 
 class CartItemTile extends StatelessWidget {

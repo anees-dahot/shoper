@@ -217,7 +217,7 @@ productRouter.post("/api/product/add-to-cart", auth, async (req, res) => {
       size,
     } = req.body;
 
-    let cartItem = await Cart.findOne({ user, productId });
+    let cartItem = await Cart.findOne({ buyerId, productId });
 
     console.log("Existing cart item:", cartItem);
 
@@ -280,7 +280,8 @@ productRouter.get(
     try {
       let user = req.params.userId;
 
-      let cartItem = await Cart.find({ user });
+      let cartItem = await Cart.find({ sellerId: user
+       });
 
       if (cartItem.length == 0) {
         // If the item exists, increment the quantity

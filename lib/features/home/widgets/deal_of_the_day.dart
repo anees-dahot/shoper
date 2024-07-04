@@ -49,7 +49,7 @@ class _DealOFDayState extends State<DealOFDay> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'New Arrivals',
+                    'Deals of the day',
                     style: GoogleFonts.lato(
                       textStyle: const TextStyle(
                           fontSize: 22.0, fontWeight: FontWeight.bold),

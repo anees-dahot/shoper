@@ -224,13 +224,13 @@ class _ProductDetailState extends State<ProductDetail> {
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: _submitReview,
-              child: Text('Submit Review', style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white))),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+              child: Text('Submit Review', style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.white))),
             ),
           ],
         ),
@@ -245,9 +245,9 @@ class _ProductDetailState extends State<ProductDetail> {
           : productDetailController.reviews.isEmpty ?  Container() :  Column(
               children: productDetailController.reviews
                   .map((review) => ReviewCard(
-                        user: review.user!,
-                        content: review.review!,
-                        stars: review.stars!,
+                        user: review.user,
+                        content: review.review,
+                        stars: review.stars,
                       ))
                   .toList(),
             ),
@@ -298,20 +298,37 @@ class _ProductDetailState extends State<ProductDetail> {
               ],
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: ElevatedButton(
-              onPressed: _addToCart,
-              child: Text('Add to Cart', style: GoogleFonts.lato(fontSize: 16,textStyle: TextStyle(color: Colors.white))),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+       Expanded(
+  flex: 2,
+  child: Obx(
+    () => ElevatedButton(
+      onPressed: productDetailController.isAddingToCart.value ? null : _addToCart,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      child: productDetailController.isAddingToCart.value
+          ? const SizedBox(
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
+            )
+          : Text(
+              'Add to Cart',
+              style: GoogleFonts.lato(
+                fontSize: 16,
+                color: Colors.white,
               ),
             ),
-          ),
+    ),
+  ),
+)
         ],
       ),
     );
