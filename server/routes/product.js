@@ -281,7 +281,7 @@ productRouter.get(
     try {
       let user = req.params.userId;
 
-      let cartItem = await Cart.find({ sellerId: user });
+      let cartItem = await Cart.find({ buyerId: user });
 
       if (cartItem.length == 0) {
         // If the item exists, increment the quantity
@@ -295,7 +295,7 @@ productRouter.get(
   }
 );
 
-// Create a new order
+//* Create a new order
 productRouter.post("/api/orders", auth, async (req, res) => {
   try {
     const {
@@ -317,27 +317,51 @@ productRouter.post("/api/orders", auth, async (req, res) => {
       status: "Pending",
     });
 
-  const order =  await newOrder.save();
+    const order = await newOrder.save();
 
     // Clear the user's cart after placing the order
-    await Cart.deleteMany({ sellerId: sellerId });
+    await Cart.deleteMany({ buyerId: buyerId });
 
-    res
-      .status(200)
-      .json({ message: "Order placed successfully", order });
-      console.log(order);
+    res.status(200).json({ message: "Order placed successfully", order });
+    console.log(order);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get user's orders
-productRouter.get("/api/orders/:userId", auth, async (req, res) => {
+// *Get user's orders for buyer
+productRouter.get("/api/orders/buyer/:userId", auth, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+    const orders = await Order.find({ buyerId: userId }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// *Get user's orders for seller
+productRouter.get("/api/orders/seller/:sellerId", auth, async (req, res) => {
+  try {
+    const sellerId = req.params.sellerId;
+    const orders = await Order.find({ sellerId }).sort({ createdAt: -1 });
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//* delete orders
+productRouter.post("/api/orders/delete/:id", auth, async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Order.findOneAndDelete({ _id: id });
+
+    res.status(200).json({ msg: "deleted succesfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

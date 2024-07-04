@@ -1,17 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shoper/utils.dart';
 
 import '../../../constants/flutter_toast.dart';
 import '../../../model/product.dart';
-import '../../../provider/user_controller.dart';
 import 'package:http/http.dart' as http;
 
-class CategoryService{
-
-
+class CategoryService {
   Future<List<ProductModel>> getCategoryPorducts(
       String category, BuildContext context) async {
     final userToken = userBox.values.first.token;
@@ -43,6 +39,4 @@ class CategoryService{
     }
     return products;
   }
-
-
 }
