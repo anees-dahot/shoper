@@ -4,11 +4,10 @@ import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:shoper/features/account/screens/account_screen.dart';
+import 'package:shoper/features/cart/controller/cart_controller.dart';
 import 'package:shoper/features/cart/screen/cart_screen.dart';
 import 'package:shoper/features/home/screens/home_screen.dart';
-import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
 import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
-import 'package:shoper/utils.dart'; // For cart badge
 
 class BottomNavbr extends StatefulWidget {
   const BottomNavbr({super.key});
@@ -21,8 +20,8 @@ class BottomNavbr extends StatefulWidget {
 
 class _BottomNavbrState extends State<BottomNavbr> {
   int _selectedIndex = 0;
-  ProductDetailController productDetailController =
-      Get.put(ProductDetailController());
+  CartController cartController =
+      Get.put(CartController());
   final List<Widget> pages = [
     const HomeScreen(), // Replace with your home screen
     const WishlistScreen(), // Replace with your home screen
@@ -40,12 +39,12 @@ class _BottomNavbrState extends State<BottomNavbr> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    productDetailController.getCartItems();
+    cartController.getCartItems();
   }
 
   @override
   Widget build(BuildContext context) {
-    //  ProductDetailController productDetailController = Get.put(ProductDetailController());
+    //  cartController cartController = Get.put(cartController());
     return Scaffold(
       body: pages[_selectedIndex],
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -142,7 +141,7 @@ class _BottomNavbrState extends State<BottomNavbr> {
                       position: badges.BadgePosition.topEnd(top: -8, end: -8),
                       showBadge: true,
                       badgeContent: Text(
-                          productDetailController.cartItemsLength.toString(),
+                          cartController.cartItemsLength.toString(),
                           style: const TextStyle(color: Colors.white)),
                       badgeAnimation: const badges.BadgeAnimation.rotation(
                         animationDuration: Duration(milliseconds: 300),

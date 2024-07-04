@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoper/constants/flutter_toast.dart';
-import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
+import 'package:shoper/features/cart/controller/cart_controller.dart';
 import '../../../model/cart.dart';
 import '../../checkout/screens/checkout_screen.dart';
 
@@ -13,8 +13,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final ProductDetailController cartController =
-      Get.put(ProductDetailController());
+  final CartController cartController =
+      Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _CartScreenState extends State<CartScreen> {
             StickyHeader(cartController: cartController),
             Expanded(
               child: Obx(() {
-                if (cartController.isLoading.value) {
+                if (cartController.isAddingToCart.value) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (cartController.cartItems.isEmpty) {
                   return const Center(
@@ -92,7 +92,7 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class StickyHeader extends StatelessWidget {
-  final ProductDetailController cartController;
+  final CartController cartController;
 
   const StickyHeader({super.key, required this.cartController});
 

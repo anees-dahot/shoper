@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoper/features/product%20detail/provider/product_detail_controller.dart';
-import '../../../model/cart.dart';
+import 'package:shoper/features/cart/controller/cart_controller.dart';
+
+import '../../../model/order.dart';
+import '../controller/checkout_controller.dart';
 
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = 'checkout-screen';
@@ -12,12 +14,18 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final ProductDetailController cartController = Get.find();
+  final CartController cartController = Get.put(CartController());
+  final CheckoutController checkoutController = Get.put(CheckoutController());
+
   final TextEditingController addressController = TextEditingController();
   String paymentMethod = 'Credit Card';
 
   @override
   Widget build(BuildContext context) {
+    final total = cartController.cartItems.fold<double>(
+      0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -43,7 +51,47 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 24),
               _buildTotalAmount(),
               const SizedBox(height: 24),
-              _buildPlaceOrderButton(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    List<OrderItem> orderItems = cartController.cartItems
+                        .map((item) => OrderItem(
+                            productId: item.productId,
+                            productName: item.productName,
+                            quantity: item.quantity,
+                            price: item.price,
+                            imageUrl: item.imageUrl,
+                            color: item.color!,
+                            size: item.size!))
+                        .toList();
+
+                    checkoutController.placeOrder(
+                        items: orderItems,
+                        sellerId: cartController.cartItems.first.sellerId,
+                        buyerId: cartController.cartItems.first.buyerId,
+                        shippingAddress: addressController.text,
+                        paymentMethod: paymentMethod,
+                        totalAmount: total);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: checkoutController.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : const Text('Place Order',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -106,7 +154,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               paymentMethod = newValue!;
             });
           },
-          items: paymentMethods.map<DropdownMenuItem<String>>((Map<String, dynamic> method) {
+          items: paymentMethods
+              .map<DropdownMenuItem<String>>((Map<String, dynamic> method) {
             return DropdownMenuItem<String>(
               value: method['name'],
               child: Row(
@@ -149,9 +198,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.productName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(item.productName,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
-                    Text('${item.quantity} x \$${item.price.toStringAsFixed(2)}'),
+                    Text(
+                        '${item.quantity} x \$${item.price.toStringAsFixed(2)}'),
                   ],
                 ),
               ),
@@ -175,7 +226,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Total', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text('Total',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           Text(
             '\$${total.toStringAsFixed(2)}',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -183,28 +235,5 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ],
       );
     });
-  }
-
-  Widget _buildPlaceOrderButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _placeOrder,
-        child: const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Place Order', style: TextStyle(fontSize: 16, color: Colors.white)),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _placeOrder() {
-    // Implement order placement logic here
   }
 }

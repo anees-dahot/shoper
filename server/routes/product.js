@@ -5,6 +5,7 @@ const auth = require("../middlewares/auth");
 const Product = require("../model/product");
 const User = require("../model/user");
 const Cart = require("../model/cart");
+const Order = require("../model/order");
 
 //* get products by category
 productRouter.get("/api/product/", auth, async (req, res) => {
@@ -280,8 +281,7 @@ productRouter.get(
     try {
       let user = req.params.userId;
 
-      let cartItem = await Cart.find({ sellerId: user
-       });
+      let cartItem = await Cart.find({ sellerId: user });
 
       if (cartItem.length == 0) {
         // If the item exists, increment the quantity
@@ -294,5 +294,53 @@ productRouter.get(
     }
   }
 );
+
+// Create a new order
+productRouter.post("/api/orders", auth, async (req, res) => {
+  try {
+    const {
+      sellerId,
+      buyerId,
+      items,
+      shippingAddress,
+      paymentMethod,
+      totalAmount,
+    } = req.body;
+
+    const newOrder = new Order({
+      sellerId: sellerId,
+      buyerId: buyerId,
+      items: items,
+      shippingAddress: shippingAddress,
+      paymentMethod: paymentMethod,
+      totalAmount: totalAmount,
+      status: "Pending",
+    });
+
+  const order =  await newOrder.save();
+
+    // Clear the user's cart after placing the order
+    await Cart.deleteMany({ sellerId: sellerId });
+
+    res
+      .status(200)
+      .json({ message: "Order placed successfully", order });
+      console.log(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get user's orders
+productRouter.get("/api/orders/:userId", auth, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = productRouter;

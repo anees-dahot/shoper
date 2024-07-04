@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ import 'package:shoper/features/product%20detail/services/product_service.dart';
 import 'package:shoper/features/product%20detail/widgets/images_carousel.dart';
 import 'package:shoper/features/product%20detail/widgets/review_card.dart';
 import '../../../model/product.dart';
+import '../../cart/controller/cart_controller.dart';
 
 class ProductDetail extends StatefulWidget {
   ProductDetail({super.key, required this.products});
@@ -25,6 +28,7 @@ class _ProductDetailState extends State<ProductDetail> {
   ProductSerivce productSerivce = ProductSerivce();
   ProductDetailController productDetailController =
       Get.put(ProductDetailController());
+  CartController cartController = Get.put(CartController());
 
   String? selectedColor;
   String? selectedSize;
@@ -43,12 +47,10 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.products.name!, style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
+        title: Text(widget.products.name!,
+            style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop(),
@@ -68,28 +70,38 @@ class _ProductDetailState extends State<ProductDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                    widget.products.name!,
-                    style: GoogleFonts.lato(fontSize: 26, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                 Column(
-                  children: [
-                     Text(
-                    '\$${widget.products.price!.toStringAsFixed(2)}',
-                    style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w600, ),
-                  ),
-                   Text(
-                    '${widget.products.quantity!} In Stock',
-                    style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600, color: widget.products.quantity! == 0 ? Colors.red : Colors.green),
-                  ),
-                  ],
-                 )
+                        widget.products.name!,
+                        style: GoogleFonts.lato(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: [
+                          Text(
+                            '\$${widget.products.price!.toStringAsFixed(2)}',
+                            style: GoogleFonts.roboto(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '${widget.products.quantity!} In Stock',
+                            style: GoogleFonts.roboto(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: widget.products.quantity! == 0
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'Description',
-                    style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.lato(
+                        fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     widget.products.description!,
@@ -98,7 +110,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   const SizedBox(height: 16),
                   Text(
                     'Colors',
-                    style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.lato(
+                        fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
                     height: 50,
@@ -132,7 +145,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   const SizedBox(height: 16),
                   Text(
                     'Sizes',
-                    style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.lato(
+                        fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   Wrap(
                     spacing: 10,
@@ -144,16 +158,21 @@ class _ProductDetailState extends State<ProductDetail> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: selectedSize == size.toString() ? Colors.black : Colors.white,
+                            color: selectedSize == size.toString()
+                                ? Colors.black
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: Colors.black),
                           ),
                           child: Text(
                             size.toString(),
                             style: GoogleFonts.lato(
-                              color: selectedSize == size.toString() ? Colors.white : Colors.black,
+                              color: selectedSize == size.toString()
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                         ),
@@ -163,7 +182,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   const SizedBox(height: 24),
                   Text(
                     'Reviews',
-                    style: GoogleFonts.raleway(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.raleway(
+                        fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
                   _buildReviewInput(),
@@ -190,7 +210,8 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             Text(
               'Add Your Review',
-              style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w600),
+              style:
+                  GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             RatingBar.builder(
@@ -230,7 +251,9 @@ class _ProductDetailState extends State<ProductDetail> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Submit Review', style: GoogleFonts.lato(textStyle: const TextStyle(color: Colors.white))),
+              child: Text('Submit Review',
+                  style: GoogleFonts.lato(
+                      textStyle: const TextStyle(color: Colors.white))),
             ),
           ],
         ),
@@ -241,16 +264,18 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget _buildReviewList() {
     return Obx(
       () => productDetailController.isLoading.value
-          ? const Center(child: CircularProgressIndicator()) 
-          : productDetailController.reviews.isEmpty ?  Container() :  Column(
-              children: productDetailController.reviews
-                  .map((review) => ReviewCard(
-                        user: review.user,
-                        content: review.review,
-                        stars: review.stars,
-                      ))
-                  .toList(),
-            ),
+          ? const Center(child: CircularProgressIndicator())
+          : productDetailController.reviews.isEmpty
+              ? Container()
+              : Column(
+                  children: productDetailController.reviews
+                      .map((review) => ReviewCard(
+                            user: review.user,
+                            content: review.review,
+                            stars: review.stars,
+                          ))
+                      .toList(),
+                ),
     );
   }
 
@@ -285,7 +310,8 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 Text(
                   widget.quantity.toString(),
-                  style: GoogleFonts.lato(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.lato(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
@@ -298,37 +324,38 @@ class _ProductDetailState extends State<ProductDetail> {
               ],
             ),
           ),
-       Expanded(
-  flex: 2,
-  child: Obx(
-    () => ElevatedButton(
-      onPressed: productDetailController.isAddingToCart.value ? null : _addToCart,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      child: productDetailController.isAddingToCart.value
-          ? const SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-          : Text(
-              'Add to Cart',
-              style: GoogleFonts.lato(
-                fontSize: 16,
-                color: Colors.white,
+          Expanded(
+            flex: 2,
+            child: Obx(
+              () => ElevatedButton(
+                onPressed:
+                    cartController.isAddingToCart.value ? null : _addToCart,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: cartController.isAddingToCart.value
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Add to Cart',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
-    ),
-  ),
-)
+          )
         ],
       ),
     );
@@ -336,13 +363,15 @@ class _ProductDetailState extends State<ProductDetail> {
 
   void _submitReview() {
     if (addReview.text.isNotEmpty) {
-      productSerivce.postReview(
+      productSerivce
+          .postReview(
         context: context,
         review: addReview.text,
         time: DateTime.now().toString(),
         stars: widget.rating,
         productId: widget.products.id.toString(),
-      ).then((_) {
+      )
+          .then((_) {
         addReview.clear();
         setState(() {
           productDetailController.getReviews(widget.products.id!);
@@ -360,7 +389,7 @@ class _ProductDetailState extends State<ProductDetail> {
       return;
     }
 
-    productDetailController.addToCart(
+    cartController.addToCart(
       sellerId: widget.products.seller!,
       productName: widget.products.name!,
       productId: widget.products.id!,
