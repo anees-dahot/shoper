@@ -137,6 +137,29 @@ class AdminService {
     }
   }
 
+  void deleteOrder(String orderId) async {
+    final user = userBox.values.first;
+    final res = await http.post(
+      Uri.parse('$baseUrl/api/orders/delete/$orderId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': user.token
+      },
+    );
+
+    if (res.statusCode == 200) {
+      successMessage(jsonDecode(res.body)['msg']);
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
+    }
+  }
+
   void becomeBuyer(BuildContext context) async {
     final user = userBox.values.first;
     AuthService authService = AuthService();
@@ -205,6 +228,30 @@ class AdminService {
     }
   }
 
+  void markAsCompleted(String orderId) async {
+    final user = userBox.values.first;
+  
+
+    final res = await http.post(Uri.parse('$baseUrl/api/orders/complete/$orderId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': user.token
+        },
+       );
+    if (res.statusCode == 200) {
+   successMessage(jsonDecode(res.body)['message']);
+      print('Updated');
+    } else if (res.statusCode == 400) {
+      errorsMessage(jsonDecode(res.body)['msg']);
+      print("400 ${jsonDecode(res.body)['msg']}");
+    } else {
+      errorsMessage(
+        jsonDecode(res.body)['error'],
+      );
+      print("500 ${jsonDecode(res.body)['error']}");
+    }
+  }
+
   Future<List<Order>> getOrders() async {
     List<Order> orders = [];
     try {
@@ -237,6 +284,8 @@ class AdminService {
     }
     return orders;
   }
+
+
 
 }
   

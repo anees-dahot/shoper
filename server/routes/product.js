@@ -361,9 +361,32 @@ productRouter.post("/api/orders/delete/:id", auth, async (req, res) => {
     const id = req.params.id;
     await Order.findOneAndDelete({ _id: id });
 
-    res.status(200).json({ msg: "deleted succesfully" });
+    res.status(200).json({ msg: "Deleted succesfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+//* make order as completed
+productRouter.post("/api/orders/complete/:id", auth, async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // // Find the product by ID
+    const order = await Order.findByIdAndUpdate(
+      id,
+      { status: "completed" },
+      {
+        new: true,
+      }
+    );
+    if (!order) {
+      return res.status(400).json({ msg: "No order" });
+    }
+
+    res.status(200).json({ message: "Order is now marked as completed!" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

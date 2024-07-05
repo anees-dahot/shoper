@@ -167,7 +167,8 @@ adminRouter.post("/admin/become-buyer", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-//* become a user
+
+//* Update product
 adminRouter.post("/admin/update-product/:productId", auth, async (req, res) => {
   const productId = req.params.productId;
   const updateData = req.body; // Object containing fields to update

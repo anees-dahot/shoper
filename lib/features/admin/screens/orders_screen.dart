@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoper/features/admin/controller/admin_controller.dart';
 import 'package:shoper/features/orders/controller/order_controller.dart';
 import '../../../model/order.dart';
 
@@ -14,6 +15,7 @@ class AdminOrderScreen extends StatefulWidget {
 
 class _AdminOrderScreenState extends State<AdminOrderScreen> {
   final OrderController orderController = Get.put(OrderController());
+  final AdminController adminController = Get.put(AdminController());
 
   @override
   void initState() {
@@ -50,7 +52,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
       builder: (controller) {
         return Obx(() {
           final orders = controller.orders
-              .where((order) => order.status.toLowerCase() == status.toLowerCase())
+              .where(
+                  (order) => order.status.toLowerCase() == status.toLowerCase())
               .toList();
 
           print('Status: $status, Orders count: ${orders.length}');
@@ -68,7 +71,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
                   margin: const EdgeInsets.all(8),
                   child: ExpansionTile(
                     title: Text('Order #${order.id ?? (index + 1)}'),
-                    subtitle: Text('Total: \$${order.totalAmount.toStringAsFixed(2)}'),
+                    subtitle: Text(
+                        'Total: \$${order.totalAmount.toStringAsFixed(2)}'),
                     children: [
                       _buildOrderDetails(order),
                       _buildActionButtons(order),
@@ -101,7 +105,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
 
   Widget _buildOrderItem(OrderItem item) {
     return ListTile(
-      leading: Image.network(item.imageUrl, width: 50, height: 50, fit: BoxFit.cover),
+      leading: Image.network(item.imageUrl,
+          width: 50, height: 50, fit: BoxFit.cover),
       title: Text(item.productName),
       subtitle: Text('Size: ${item.size}, Color: ${item.color}'),
       trailing: Text('${item.quantity} x \$${item.price.toStringAsFixed(2)}'),
@@ -118,15 +123,17 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
             onPressed: order.status.toLowerCase() == 'completed'
                 ? null
                 : () => _markAsCompleted(order),
-            icon:  const Icon(    Icons.check_sharp,color: Colors.green,),
+            icon: const Icon(
+              Icons.check_sharp,
+              color: Colors.green,
+            ),
           ),
           IconButton(
             onPressed: order.status.toLowerCase() == 'completed'
                 ? null
-                : () => _markAsCompleted(order),
+                : () => _deleteOrder(order),
             icon: const Icon(Icons.delete),
           ),
-         
         ],
       ),
     );
@@ -139,7 +146,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Action'),
-          content: const Text('Are you sure you want to mark this order as completed?'),
+          content: const Text(
+              'Are you sure you want to mark this order as completed?'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -150,8 +158,7 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () {
-                // Call the method to mark the order as completed
-                // orderController.markOrderAsCompleted(order.id!);
+                adminController.markCompleted(order.id!);
                 Navigator.of(context).pop();
               },
             ),
@@ -168,7 +175,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this order? This action cannot be undone.'),
+          content: const Text(
+              'Are you sure you want to delete this order? This action cannot be undone.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -180,7 +188,7 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
               child: const Text('Delete'),
               onPressed: () {
                 // Call the method to delete the order
-                // orderController.deleteOrder(order.id!);
+                orderController.deleteOrder(order.id!);
                 Navigator.of(context).pop();
               },
             ),

@@ -6,7 +6,7 @@ class Order {
   final String shippingAddress;
   final String paymentMethod;
   final double totalAmount;
-  final String status;
+   String status;
 
   Order({
 this.id,
