@@ -56,23 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           )
         ],
       ),
-      floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 100.0, right: 40),
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-                color: Colors.black, borderRadius: BorderRadius.circular(50)),
-            child: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(AddProduct.routeName);
-              },
-              icon: const Icon(
-                CupertinoIcons.add,
-                color: Colors.white,
-              ),
-            ),
-          )),
+    
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

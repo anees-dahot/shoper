@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shoper/features/admin/screens/add_product.dart';
+import 'package:shoper/features/admin/screens/orders_screen.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
 import 'package:shoper/features/category/screen/category_products.dart';
+import 'package:shoper/features/orders/screen/orders_screen.dart';
 import 'package:shoper/features/product%20detail/screen/product_detail.dart';
 import 'package:shoper/features/search/screen/search_products.dart';
 import 'package:shoper/features/wishlist/screens/wishlist_screen.dart';
@@ -21,6 +23,16 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AuthScreen(),
       );
+    case OrdersPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrdersPage(),
+      );
+    case AdminOrderScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => AdminOrderScreen(),
+      );
     case ProductDetail.routeName:
       final product = routeSettings.arguments as ProductModel;
       return MaterialPageRoute(
@@ -32,17 +44,17 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case WishlistScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  const WishlistScreen(),
+        builder: (_) => const WishlistScreen(),
       );
     case CheckoutScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  const CheckoutScreen(),
+        builder: (_) => const CheckoutScreen(),
       );
     case WishlistScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) =>  const WishlistScreen(),
+        builder: (_) => const WishlistScreen(),
       );
     case SearchProducts.routeName:
       final query = routeSettings.arguments as String;

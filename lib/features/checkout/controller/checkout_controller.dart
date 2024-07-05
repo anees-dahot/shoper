@@ -11,8 +11,10 @@ class CheckoutController extends GetxController {
   CheckoutService checkoutService = CheckoutService();
   CartController cartController = Get.put(CartController());
 
+
+ 
   void placeOrder({
-   required List<OrderItem> items,
+    required List<OrderItem> items,
     required String sellerId,
     required String buyerId,
     required String shippingAddress,
@@ -28,13 +30,14 @@ class CheckoutController extends GetxController {
           shippingAddress: shippingAddress,
           paymentMethod: paymentMethod,
           totalAmount: totalAmount);
-          cartController.cartItems.clear();
-          cartController.cartItemsLength.value = 0;
-       orderPlaced(true);
-
+      cartController.cartItems.clear();
+      cartController.cartItemsLength.value = 0;
+      orderPlaced(true);
     } finally {
       isLoading(false);
-successMessage('Order placed successfully');
+      successMessage('Order placed successfully');
     }
   }
+
+  
 }

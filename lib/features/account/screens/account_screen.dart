@@ -5,6 +5,7 @@ import 'package:shoper/features/account/widgets/bottom_appbar.dart';
 import 'package:shoper/features/auth/services/auth_service.dart';
 import '../../../splash_screen.dart';
 import '../../../utils.dart';
+import '../../orders/screen/orders_screen.dart';
 import '../../wishlist/screens/wishlist_screen.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -31,7 +32,9 @@ class AccountScreen extends StatelessWidget {
             children: [
               ProfileButtons(
                 text: 'Your Orders',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, OrdersPage.routeName);
+                },
               ),
               ProfileButtons(
                 text: 'Become Seller',

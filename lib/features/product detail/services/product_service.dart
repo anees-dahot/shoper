@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoper/constants/flutter_toast.dart';
-import 'package:shoper/model/cart.dart';
 import 'package:shoper/model/reviews.dart';
 import '../../../model/product.dart';
 import '../../../utils.dart';
@@ -46,8 +45,6 @@ class ProductSerivce {
       errorsMessage(e.toString());
     }
   }
-
-  
 
   Future<List<ReviewsModel>> fetchReviews(String productId) async {
     List<ReviewsModel> reviews = [];

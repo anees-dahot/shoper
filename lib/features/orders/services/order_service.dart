@@ -1,35 +1,17 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:shoper/model/order.dart';
-
 import '../../../constants/flutter_toast.dart';
+import '../../../model/order.dart';
 import '../../../utils.dart';
 
-class CheckoutService {
-  //* place order
-  void placeOrder({
-    required String sellerId,
-    required String buyerId,
-    required List<OrderItem> items,
-    required String shippingAddress,
-    required String paymentMethod,
-    required double totalAmount,
-  }) async {
+class OrderServices {
+  Future<List<Order>> getOrders() async {
+    List<Order> orders = [];
     try {
       final user = userBox.values.first;
-      Order order = Order(
-          sellerId: sellerId,
-          buyerId: buyerId,
-          items: items,
-          shippingAddress: shippingAddress,
-          paymentMethod: paymentMethod,
-          totalAmount: totalAmount);
 
-      final jsonBody = jsonEncode(order);
-      final res = await http.post(
-        Uri.parse('$baseUrl/api/orders'),
-        body: jsonBody,
+      final res = await http.get(
+        Uri.parse('$baseUrl/api/orders/buyer/${user.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': user.token
@@ -37,6 +19,8 @@ class CheckoutService {
       );
 
       if (res.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(res.body)['orders'];
+        orders = jsonData.map((json) => Order.fromJson(json)).toList();
         print(res.body);
       } else if (res.statusCode == 400) {
         errorsMessage(jsonDecode(res.body)['msg']);
@@ -51,7 +35,6 @@ class CheckoutService {
       errorsMessage(e.toString());
       print(e.toString());
     }
+    return orders;
   }
-
-  
 }
