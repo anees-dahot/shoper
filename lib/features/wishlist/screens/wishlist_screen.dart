@@ -103,7 +103,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                     product.id!,
                                                     userBox.values.first.id);
                                           },
-                                          icon: Icon(Icons.delete),
+                                          icon: const Icon(Icons.delete),
                                         ),
                                       ],
                                     ),

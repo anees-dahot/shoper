@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoper/constants/flutter_toast.dart';
@@ -6,7 +7,7 @@ import '../../../model/cart.dart';
 import '../../checkout/screens/checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
-  CartScreen({super.key});
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -203,7 +204,7 @@ class StickyHeader extends StatelessWidget {
         if (!isTotal && salePercent != null && salePercent > 0)
           Text(
             '${salePercent.toStringAsFixed(0)}% OFF',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.green,
               fontWeight: FontWeight.bold,
@@ -215,7 +216,7 @@ class StickyHeader extends StatelessWidget {
               if (!isTotal && salePercent != null && salePercent > 0)
                 TextSpan(
                   text: '\$${amount.toStringAsFixed(2)} ',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                     decoration: TextDecoration.lineThrough,
@@ -255,11 +256,15 @@ class CartItemTile extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              item.imageUrl,
+            child: CachedNetworkImage(
+              imageUrl: item.imageUrl,
               width: 80,
               height: 80,
               fit: BoxFit.cover,
+               placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           const SizedBox(width: 16),

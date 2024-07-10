@@ -389,5 +389,33 @@ productRouter.post("/api/orders/complete/:id", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+productRouter.get("/api/get-users", async (req, res) => {
+  try {
+    const user = await User.find({}); 
+    if (!user) {
+      return res.status(400).json({ msg: "No user" });
+    }
+
+    res.status(200).json({ user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+productRouter.post("/api/delete-users/:id", async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({_id: req.params.id}); 
+    if (!user) {
+      return res.status(400).json({ msg: "No user" });
+    }
+
+    res.status(200).json({ message: 'deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
 
 module.exports = productRouter;

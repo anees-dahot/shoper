@@ -1,15 +1,17 @@
 import 'package:get/get.dart';
-import 'package:shoper/constants/flutter_toast.dart';
 import 'package:shoper/features/cart/controller/cart_controller.dart';
 import 'package:shoper/features/checkout/services/checkout_service.dart';
 
 import '../../../model/order.dart';
+import '../../orders/controller/order_controller.dart';
 
 class CheckoutController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool orderPlaced = false.obs;
   CheckoutService checkoutService = CheckoutService();
   CartController cartController = Get.put(CartController());
+  OrderController orderController = Get.put(OrderController());
+  
 
 
  
@@ -33,9 +35,11 @@ class CheckoutController extends GetxController {
       cartController.cartItems.clear();
       cartController.cartItemsLength.value = 0;
       orderPlaced(true);
+      orderController.getOrders();
+
     } finally {
       isLoading(false);
-      successMessage('Order placed successfully');
+     
     }
   }
 

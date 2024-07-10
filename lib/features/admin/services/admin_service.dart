@@ -16,7 +16,7 @@ import '../../../utils.dart';
 
 class AdminService {
  
-      bool saved = true;
+ 
 
   void sellProduct(
       {required BuildContext context,
@@ -30,7 +30,6 @@ class AdminService {
       required List<int> sizes
       }) async {
     try {
-      saved == false;
       final user = userBox.values.first;
       final cloudinary = CloudinaryPublic('doaewaso1', 'one9vigp');
       List<String> imageUrl = [];
@@ -75,10 +74,9 @@ class AdminService {
         );
         print(jsonDecode(res.body)['error']);
       }
-      saved == true;
     } catch (e) {
       errorsMessage(e.toString());
-      saved == true;
+      print(e.toString());
     }
   }
 

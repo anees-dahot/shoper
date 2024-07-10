@@ -26,12 +26,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case OrdersPage.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => OrdersPage(),
+        builder: (_) => const OrdersPage(),
       );
     case AdminOrderScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => AdminOrderScreen(),
+        builder: (_) => const AdminOrderScreen(),
       );
     case ProductDetail.routeName:
       final product = routeSettings.arguments as ProductModel;

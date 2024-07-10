@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add this line
 
 import '../../../model/product.dart';
 import '../../../utils.dart';
@@ -49,7 +50,7 @@ class _OnSaleState extends State<OnSale> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'New Arrivals',
+                    'Sale',
                     style: GoogleFonts.lato(
                       textStyle: const TextStyle(
                           fontSize: 22.0, fontWeight: FontWeight.bold),
@@ -67,12 +68,12 @@ class _OnSaleState extends State<OnSale> {
                       separatorBuilder: (context, index) =>
                           const SizedBox(width: 10.0),
                       itemBuilder: (context, index) {
-                        final product = homeController.saleProducts[index];
+                        final product =
+                            homeController.saleProducts[index];
                         final hasSale = product.sale! > 0.0;
                         final isInWishlist =
-                            wishListController.wishlistStatus[product.id] ??
-                                false;
-
+                           wishListController.wishlistStatus[product.id] ?? false;
+      
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
                             context,
@@ -83,7 +84,7 @@ class _OnSaleState extends State<OnSale> {
                             width: MediaQuery.of(context).size.width * 0.6,
                             margin: const EdgeInsets.symmetric(vertical: 10.0),
                             decoration: BoxDecoration(
-                              color: const Color(0xffFFF5E1),
+                              color:  Colors.white,
                               borderRadius: BorderRadius.circular(15.0),
                               boxShadow: [
                                 BoxShadow(
@@ -103,13 +104,20 @@ class _OnSaleState extends State<OnSale> {
                                       top: Radius.circular(15.0)),
                                   child: Stack(
                                     children: [
-                                      Image.network(
-                                        product.images![0],
-                                        width: double.infinity,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        fit: BoxFit.cover,
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: product.images![0],
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context).size.width * 0.4,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        
+                                          
+                                        ),
                                       ),
                                       if (hasSale)
                                         Positioned(
@@ -147,20 +155,23 @@ class _OnSaleState extends State<OnSale> {
                                       // Product name
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
+                                            horizontal: 0.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(product.name!,
-                                                maxLines: 2,
+                                            Container(
+                                              width: 180,
+                                              child: Text(product.name!,
+                                                maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.lato(
                                                   textStyle: const TextStyle(
-                                                    fontSize: 22.0,
+                                                    fontSize: 16.0,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 )),
+                                            ),
                                             const SizedBox(height: 8.0),
                                             // Prices
                                             priceRow(product, hasSale),
@@ -169,44 +180,29 @@ class _OnSaleState extends State<OnSale> {
                                       ),
                                       const SizedBox(height: 8.0),
                                       // Rating section
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           ReviewWidget(product: product),
                                           Obx(() {
-                                            final isInWishlist =
-                                                wishListController
-                                                            .wishlistStatus[
-                                                        product.id] ??
-                                                    false;
+                                            final isInWishlist = wishListController.wishlistStatus[product.id] ?? false;
                                             return IconButton(
                                               onPressed: () async {
-                                                final userId =
-                                                    userBox.values.first.id;
+                                                final userId = userBox.values.first.id;
                                                 if (isInWishlist) {
-                                                  wishListController
-                                                      .removedFromWishlist(
-                                                          product.id!, userId);
+                                                  wishListController.removedFromWishlist(product.id!, userId);
                                                 } else {
-                                                  wishListController
-                                                      .addToWishList(
-                                                          product.id!, userId);
+                                                  wishListController.addToWishList(product.id!, userId);
                                                 }
                                               },
                                               icon: isInWishlist
-                                                  ? const Icon(
-                                                      CupertinoIcons
-                                                          .heart_solid,
-                                                      color: Colors.red)
-                                                  : const Icon(
-                                                      CupertinoIcons.heart,
-                                                      color: Colors.red),
+                                                  ? const Icon(CupertinoIcons.heart_solid, color: Colors.red)
+                                                  : const Icon(CupertinoIcons.heart, color: Colors.red),
                                             );
                                           }),
                                         ],
                                       )
-
+      
                                       //* WishList button
                                     ],
                                   ),
@@ -247,7 +243,7 @@ class _OnSaleState extends State<OnSale> {
           Text(
             "\$${product.price!.toStringAsFixed(2)}",
             style: const TextStyle(
-              fontSize: 12.0,
+              fontSize: 10.0,
               color: Colors.red,
               decoration: TextDecoration.lineThrough,
             ),
@@ -255,7 +251,7 @@ class _OnSaleState extends State<OnSale> {
         Text(
           "\$${calculateSalePrice(product.price!, product.sale!)}",
           style: const TextStyle(
-            fontSize: 16.0,
+            fontSize: 13.0,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 94, 93, 93),
           ),

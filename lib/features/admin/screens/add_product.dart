@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/constants/utils.dart';
+import 'package:shoper/features/admin/controller/admin_controller.dart';
 import 'package:shoper/features/admin/widgets/categories_dropdown.dart';
 import 'package:shoper/features/admin/widgets/color_picker.dart';
 import 'package:shoper/features/admin/widgets/product_image_slider.dart';
@@ -26,6 +28,7 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController productDescController = TextEditingController();
 
   final TextEditingController productPriceController = TextEditingController();
+  final AdminController adminController = Get.put(AdminController());
 
   final productDetailsForm = GlobalKey<FormState>();
   List<String> colors = [];
@@ -158,6 +161,10 @@ class _AddProductState extends State<AddProduct> {
                         'Nike',
                         'Puma',
                         'Converse',
+                        'Gucci',
+                        'Skechers',
+                        'Power',
+                        'Batac',
                       ],
                       selectedValue: selectedValue,
                       onChanged: (value) {
@@ -170,11 +177,11 @@ class _AddProductState extends State<AddProduct> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomButton(
-                      text: adminService.saved == true ? 'Save' : 'Saving....',
+                   Obx(() =>  adminController.isLoading.value ? const Center(child: CircularProgressIndicator(),) : CustomButton(
+                      text: 'Save',
                       onTap: () {
                         if (productDetailsForm.currentState!.validate()) {
-                          adminService.sellProduct(
+                          adminController.addProduct(
                             context: context,
                             name: productNameController.text,
                             description: productDescController.text,
@@ -189,7 +196,7 @@ class _AddProductState extends State<AddProduct> {
                       },
                       color: Colors.black,
                     ),
-                
+                ),
 
                     const SizedBox(
                       height: 80,

@@ -69,11 +69,14 @@ class _ProductDetailState extends State<ProductDetail> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                     Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child:  Text(
                         widget.products.name!,
                         style: GoogleFonts.lato(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),
+                     ),
                       const SizedBox(height: 8),
                       Column(
                         children: [

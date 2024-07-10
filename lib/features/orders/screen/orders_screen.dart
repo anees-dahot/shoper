@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoper/features/orders/controller/order_controller.dart';
@@ -6,7 +7,7 @@ import '../../../model/order.dart';
 class OrdersPage extends StatefulWidget {
   static const String routeName = 'buyer-order-screen';
 
-  const OrdersPage({Key? key}) : super(key: key);
+  const OrdersPage({super.key});
 
   @override
   State<OrdersPage> createState() => _OrdersPageState();
@@ -30,15 +31,19 @@ class _OrdersPageState extends State<OrdersPage> {
         body: GetBuilder<OrderController>(
           builder: (controller) {
             return Obx(() {
+              final orders = controller.orders
+                  .where((order) =>
+                      order.status.toLowerCase() == 'pending'.toLowerCase())
+                  .toList();
               if (controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (controller.orders.isEmpty) {
-                return const Center(child:  Text('No orders'));
+              } else if (orders.isEmpty) {
+                return const Center(child: Text('No orders'));
               } else {
                 return ListView.builder(
-                  itemCount: controller.orders.length,
+                  itemCount: orders.length,
                   itemBuilder: (context, index) {
-                    final order = controller.orders[index];
+                    final order = orders[index];
                     return Card(
                       margin: const EdgeInsets.all(8),
                       child: ExpansionTile(
@@ -76,8 +81,16 @@ class _OrdersPageState extends State<OrdersPage> {
 
   Widget _buildOrderItem(OrderItem item) {
     return ListTile(
-      leading: Image.network(item.imageUrl,
-          width: 50, height: 50, fit: BoxFit.cover),
+      leading: CachedNetworkImage(
+        imageUrl: item.imageUrl,
+        width: 50,
+        height: 50,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+      ),
       title: Text(item.productName),
       subtitle: Text('Size: ${item.size}, Color: ${item.color}'),
       trailing: Text('${item.quantity} x \$${item.price.toStringAsFixed(2)}'),

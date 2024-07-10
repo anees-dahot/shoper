@@ -36,6 +36,7 @@ class ProductModel  extends HiveObject {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      
       'seller': seller,
       'name': name,
       'price': price,
@@ -76,8 +77,8 @@ class ProductModel  extends HiveObject {
       ProductModel.fromMap(json.decode(source));
 
   ProductModel copyWith({
-    String? id,
     String? seller,
+    String? id,
     String? name,
     double? price,
     int? sale,
@@ -91,6 +92,7 @@ class ProductModel  extends HiveObject {
   }) {
     return ProductModel(
       id: id ?? this.id,
+      seller: seller ?? this.seller,
       name: name ?? this.name,
       price: price ?? this.price,
       sale: sale ?? this.sale,

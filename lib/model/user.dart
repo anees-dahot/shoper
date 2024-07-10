@@ -6,19 +6,19 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class UserModel extends HiveObject{
   @HiveField(0)
-  final String id;
+   String id;
   @HiveField(1)
-  final String name;
+   String name;
   @HiveField(2)
-  final String email;
+   String email;
   @HiveField(3)
-  final String password;
+   String password;
   @HiveField(4)
-  final String address;
+   String address;
   @HiveField(5)
-  final String type;
+   String type;
   @HiveField(6)
-  final String token;
+   String token;
   @HiveField(7)
    List<CartModel?>? cartItems;
 

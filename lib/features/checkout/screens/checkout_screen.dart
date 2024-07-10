@@ -8,7 +8,7 @@ import '../controller/checkout_controller.dart';
 
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = 'checkout-screen';
-  const CheckoutScreen({Key? key}) : super(key: key);
+  const CheckoutScreen({super.key});
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();

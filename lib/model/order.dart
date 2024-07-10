@@ -6,10 +6,10 @@ class Order {
   final String shippingAddress;
   final String paymentMethod;
   final double totalAmount;
-   String status;
+  final String status;
 
   Order({
-this.id,
+    this.id,
     required this.sellerId,
     required this.buyerId,
     required this.items,
@@ -19,11 +19,31 @@ this.id,
     this.status = 'pending',
   });
 
-  
+  Order copyWith({
+    String? id,
+    String? sellerId,
+    String? buyerId,
+    List<OrderItem>? items,
+    String? shippingAddress,
+    String? paymentMethod,
+    double? totalAmount,
+    String? status,
+  }) {
+    return Order(
+      id: id ?? this.id,
+      sellerId: sellerId ?? this.sellerId,
+      buyerId: buyerId ?? this.buyerId,
+      items: items ?? this.items,
+      shippingAddress: shippingAddress ?? this.shippingAddress,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      totalAmount: totalAmount ?? this.totalAmount,
+      status: status ?? this.status,
+    );
+  }
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-       id: json['_id'] ?? '',
+      id: json['_id'] ?? '',
       sellerId: json['sellerId'],
       buyerId: json['buyerId'],
       items: (json['items'] as List)
@@ -68,6 +88,26 @@ class OrderItem {
     required this.color,
     required this.size,
   });
+
+  OrderItem copyWith({
+    String? productId,
+    String? productName,
+    int? quantity,
+    double? price,
+    String? imageUrl,
+    String? color,
+    int? size,
+  }) {
+    return OrderItem(
+      productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
+      color: color ?? this.color,
+      size: size ?? this.size,
+    );
+  }
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(

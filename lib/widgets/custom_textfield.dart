@@ -8,12 +8,12 @@ class CustomTextField extends StatelessWidget {
   String? labelText;
 
   CustomTextField({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.controller,
     this.numberOfLines,
      this.labelText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -129,9 +129,7 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
             ),
           ),
           IconButton(
-            onPressed: order.status.toLowerCase() == 'completed'
-                ? null
-                : () => _deleteOrder(order),
+            onPressed:  () => _deleteOrder(order),
             icon: const Icon(Icons.delete),
           ),
         ],
@@ -158,7 +156,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () {
-                adminController.markCompleted(order.id!);
+                // adminController.markCompleted(order.id!);
+                orderController.markOrderAsCompleted(order.id!);
                 Navigator.of(context).pop();
               },
             ),

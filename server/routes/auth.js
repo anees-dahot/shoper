@@ -101,5 +101,8 @@ authRouter.post("/api/become-seller/:id", auth, async (req, res) => {
 });
 
 
+
+
+
 module.exports = authRouter;
 

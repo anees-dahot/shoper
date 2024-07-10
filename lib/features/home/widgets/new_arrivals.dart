@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/home/provider/home_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add this line
 
 import '../../../model/product.dart';
 import '../../../utils.dart';
@@ -24,7 +25,7 @@ class _NewArrivalsState extends State<NewArrivals> {
   Future<void> fetchWishlistStatus() async {
     final userId = userBox.values.first.id; // Your user ID
     await wishListController.fetchWishlistStatus(
-        homeController.trendingProducts, userId);
+        homeController.newArrivalProducts, userId);
   }
 
   @override
@@ -68,11 +69,11 @@ class _NewArrivalsState extends State<NewArrivals> {
                           const SizedBox(width: 10.0),
                       itemBuilder: (context, index) {
                         final product =
-                            homeController.newArrivalProducts[index];
+                            homeController.trendingProducts[index];
                         final hasSale = product.sale! > 0.0;
                         final isInWishlist =
                            wishListController.wishlistStatus[product.id] ?? false;
-
+      
                         return GestureDetector(
                           onTap: () => Navigator.pushNamed(
                             context,
@@ -83,7 +84,7 @@ class _NewArrivalsState extends State<NewArrivals> {
                             width: MediaQuery.of(context).size.width * 0.6,
                             margin: const EdgeInsets.symmetric(vertical: 10.0),
                             decoration: BoxDecoration(
-                              color: const Color(0xffFFF5E1),
+                              color:  Colors.white,
                               borderRadius: BorderRadius.circular(15.0),
                               boxShadow: [
                                 BoxShadow(
@@ -103,13 +104,20 @@ class _NewArrivalsState extends State<NewArrivals> {
                                       top: Radius.circular(15.0)),
                                   child: Stack(
                                     children: [
-                                      Image.network(
-                                        product.images![0],
-                                        width: double.infinity,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        fit: BoxFit.cover,
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: product.images![0],
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context).size.width * 0.4,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        
+                                          
+                                        ),
                                       ),
                                       if (hasSale)
                                         Positioned(
@@ -147,20 +155,23 @@ class _NewArrivalsState extends State<NewArrivals> {
                                       // Product name
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
+                                            horizontal: 0.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(product.name!,
-                                                maxLines: 2,
+                                            SizedBox(
+                                              width: 180,
+                                              child: Text(product.name!,
+                                                maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.lato(
                                                   textStyle: const TextStyle(
-                                                    fontSize: 22.0,
+                                                    fontSize: 16.0,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 )),
+                                            ),
                                             const SizedBox(height: 8.0),
                                             // Prices
                                             priceRow(product, hasSale),
@@ -191,7 +202,7 @@ class _NewArrivalsState extends State<NewArrivals> {
                                           }),
                                         ],
                                       )
-
+      
                                       //* WishList button
                                     ],
                                   ),
@@ -232,7 +243,7 @@ class _NewArrivalsState extends State<NewArrivals> {
           Text(
             "\$${product.price!.toStringAsFixed(2)}",
             style: const TextStyle(
-              fontSize: 12.0,
+              fontSize: 10.0,
               color: Colors.red,
               decoration: TextDecoration.lineThrough,
             ),
@@ -240,7 +251,7 @@ class _NewArrivalsState extends State<NewArrivals> {
         Text(
           "\$${calculateSalePrice(product.price!, product.sale!)}",
           style: const TextStyle(
-            fontSize: 16.0,
+            fontSize: 13.0,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 94, 93, 93),
           ),

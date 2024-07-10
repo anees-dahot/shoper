@@ -28,10 +28,8 @@ class HomeController extends GetxController {
     try {
       isLoading(true);
       var products = await productService.getSaleProducts();
-      if (products != null) {
-        saleProducts.assignAll(products);
-      }
-    } catch (e) {
+      saleProducts.assignAll(products);
+        } catch (e) {
       Get.snackbar('Error', e.toString());
       errorsMessage(e.toString());
     } finally {
@@ -43,10 +41,8 @@ class HomeController extends GetxController {
     try {
       isLoading(true);
       var products = await productService.getTrendingProducts();
-      if (products != null) {
-        trendingProducts.assignAll(products);
-      }
-    } catch (e) {
+      trendingProducts.assignAll(products);
+        } catch (e) {
       Get.snackbar('Error', e.toString());
       errorsMessage(e.toString());
     } finally {
@@ -58,10 +54,8 @@ class HomeController extends GetxController {
     try {
       isLoading(true);
       var products = await productService.getNewArrivalProducts();
-      if (products != null) {
-        newArrivalProducts.assignAll(products);
-      }
-    } catch (e) {
+      newArrivalProducts.assignAll(products);
+        } catch (e) {
       Get.snackbar('Error', e.toString());
       errorsMessage(e.toString());
     } finally {
@@ -72,7 +66,7 @@ class HomeController extends GetxController {
   void addToWishlist(ProductModel product) async {
     try {
       
-      wishlistBox!.add(product);
+      wishlistBox.add(product);
      
       successMessage('Added to wishlist');
     } catch (e) {

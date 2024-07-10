@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoper/features/search/services/search_service.dart';
@@ -88,14 +89,17 @@ class ProductCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
-             product.images!.isEmpty
+              child: CachedNetworkImage(
+                imageUrl: product.images!.isEmpty
                     ? 'https://fastly.picsum.photos/id/807/2000/2000.jpg?hmac=QF7ItcVSx-ffgZAFjn_pa1Tiwn9LLi1UzMNmX8W6uaQ'
                     : product.images![0],
                 width: MediaQuery.of(context).size.width * 0.4,
                 height: MediaQuery.of(context).size.height * 0.2,
                 fit: BoxFit.cover,
-               
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             Padding(
@@ -103,15 +107,18 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    product.name!,
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      product.name!,
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      maxLines: 2,
                     ),
-                    maxLines: 2,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.45,

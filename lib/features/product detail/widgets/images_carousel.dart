@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -26,14 +27,17 @@ class _ProductImageSliderState extends State<ImageCarousel> {
                 builder: (BuildContext context) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
+                    child: 
+                    CachedNetworkImage(
+                      imageUrl: imageUrl,
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.20,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Center(child: Text('Error loading image'));
-                      },
+                    
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   );
                 },
@@ -52,7 +56,8 @@ class _ProductImageSliderState extends State<ImageCarousel> {
               },
             ),
           ),
-          const SizedBox(height: 10.0), // Add spacing between slider and previews
+          const SizedBox(
+              height: 10.0), // Add spacing between slider and previews
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: widget.imageUrls.asMap().entries.map((entry) {
@@ -62,15 +67,20 @@ class _ProductImageSliderState extends State<ImageCarousel> {
                   margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
-                    child: Image.network(
-                      entry.value,
-                      fit: BoxFit.cover,
-                      width: 50.0,
-                      height: 50.0,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Center(child: Text('Error'));
-                      },
-                    ),
+                    child: 
+
+                    CachedNetworkImage(
+                                          imageUrl: entry.value,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        
+                                          
+                                        ),
                   ),
                 ),
               );

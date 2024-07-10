@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final SharedPreferences ref = await SharedPreferences.getInstance();
         String? token = ref.getString('x-auth-token');
     authService.getUserData().then((value) {
-   print(userBox.values.first.id)
+   print(userBox.values.first.name)
 ;      // Future.delayed(const Duration(seconds: 10), () {
        userBox.values.first.token.isNotEmpty
           ? userBox.values.first.type ==

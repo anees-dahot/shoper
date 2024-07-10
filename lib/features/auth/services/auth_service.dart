@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoper/features/admin/widgets/admin_bottombar.dart';
+import 'package:shoper/features/auth/screens/loginscreen.dart';
 import 'package:shoper/utils.dart';
-import 'package:shoper/widgets/bottom_navbar.dart';
 import '../../../constants/flutter_toast.dart';
 import '../../../model/user.dart';
+import '../../../splash_screen.dart';
 
 class AuthService {
   // sign up user
@@ -100,26 +101,43 @@ class AuthService {
         final SharedPreferences ref = await SharedPreferences.getInstance();
         ref.setString('x-auth-token', jsonDecode(res.body)['token']);
         var userData = jsonDecode(res.body);
+        var token = jsonDecode(res.body)['token'];
+        if (userBox.values.isEmpty || userBox.values.first.token.isEmpty) {
+          UserModel userModel = UserModel(
+            id: userData['_id'],
+            name: userData['name'],
+            email: userData['email'],
+            password: userData['password'],
+            address: userData['address'],
+            type: userData['type'],
+            token: token,
+          );
 
-        UserModel userModel = UserModel(
-          id: userData['_id'],
-          name: userData['name'],
-          email: userData['email'],
-          password: userData['password'],
-          address: userData['address'],
-          type: userData['type'],
-          token: userData['token'],
-          // cartItems:productDetailController.cartItems.isNotEmpty ? productDetailController.cartItems : []
-        );
+          try {
+            await userBox.add(userModel);
+            print('User added successfully');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              SplashScreen.routeName,
+              (route) => false,
+            );
+          } catch (error) {
+            print('Error saving user: $error');
+            // Handle the error appropriately
+          }
+        } else {
+          userBox.values
+          .where((element) => element.id == userBox.values.first.id)
+          .first
+          .token = token;
 
-        userBox.add(userModel);
-        print(userBox.values.first.name);
-        await getUserData();
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          BottomNavbr.routeName,
-          (route) => false,
-        );
+      userBox.values
+          .where((element) => element.id == userBox.values.first.id)
+          .first
+          .save();
+          print('User already exists');
+          // Maybe update the existing user instead?
+        }
       } else if (res.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(jsonDecode(res.body)['msg'])),
@@ -133,6 +151,7 @@ class AuthService {
           ),
         );
       }
+      //  userBox.values.; 
     } catch (e) {
       print('error $e');
     }
@@ -172,7 +191,7 @@ class AuthService {
         var userData = jsonDecode(userRes.body);
         print('id: ${userBox.values.length}');
 
-        if (userBox.values.first.token.length == 0) {
+        if (userBox.values.first.token.isEmpty) {
           UserModel userModel = UserModel(
             id: userData['_id'],
             name: userData['name'],
@@ -228,6 +247,23 @@ class AuthService {
     } else {
       errorsMessage(jsonDecode(res.body)['error']);
       print("500 ${jsonDecode(res.body)['error']}");
+    }
+  }
+
+  void logoutUser(BuildContext context) {
+    try {
+      userBox.values
+          .where((element) => element.id == userBox.values.first.id)
+          .first
+          .token = '';
+
+      userBox.values
+          .where((element) => element.id == userBox.values.first.id)
+          .first
+          .save();
+      Navigator.pushNamed(context, AuthScreen.routeName);
+    } catch (e) {
+      errorsMessage(e.toString());
     }
   }
 }

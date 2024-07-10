@@ -16,6 +16,7 @@ class ProductDetailController extends GetxController {
 
   void getReviews(String productId) async {
     try {
+      reviews.clear();
       isLoading(true);
 
       final response = await _productService.fetchReviews(productId);

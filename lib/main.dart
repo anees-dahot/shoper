@@ -13,7 +13,8 @@ WidgetsFlutterBinding.ensureInitialized();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(UserModelAdapter()); // Register adapter
   await Hive.openBox<UserModel>('user');
-  print(userBox.values.first.id);
+ 
+  print(userBox.values.first.token);
  
   runApp(
     const MyApp());
@@ -24,6 +25,8 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
+
 
 class _MyAppState extends State<MyApp> {
   @override

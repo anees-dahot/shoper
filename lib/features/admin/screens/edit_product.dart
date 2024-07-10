@@ -31,8 +31,8 @@ class _EditProductState extends State<EditProduct> {
         TextEditingController(text: widget.products.price.toString());
     final TextEditingController productQuantityController =
         TextEditingController(text: widget.products.quantity.toString());
-    final TextEditingController productSaleController = TextEditingController(
-        text: widget.products.sale.toString());
+    final TextEditingController productSaleController =
+        TextEditingController(text: widget.products.sale.toString());
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;

@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(userBox.values.first.type);
+    print(userBox.values.first.name);
   }
 
   @override
@@ -49,21 +49,21 @@ class _HomeScreenState extends State<HomeScreen> {
           () => homeController.isLoading.value
               ? const Center(child: CircularProgressIndicator())
               : (homeController.newArrivalProducts.isNotEmpty
-                  ? NewArrivals()
+                  ? const NewArrivals()
                   : const SizedBox()), // Empty container while loading or no products
         ),
         Obx(
           () => homeController.isLoading.value
               ? const Center(child: CircularProgressIndicator())
               : (homeController.saleProducts.isNotEmpty
-                  ? OnSale()
+                  ? const OnSale()
                   : const SizedBox()), // Empty container while loading or no products
         ),
         Obx(
           () => homeController.isLoading.value
               ? const Center(child: CircularProgressIndicator())
               : (homeController.trendingProducts.isNotEmpty
-                  ? DealOFDay()
+                  ? const DealOFDay()
                   : const SizedBox()), // Empty container while loading or no products
         ),
 

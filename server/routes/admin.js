@@ -38,6 +38,11 @@ adminRouter.post("/admin/sell-product", admin, async (req, res) => {
 
     product = await product.save();
 
+    if(!product){
+      res.status(400).json({ msg: "Product not added" });
+      console.log('not added');
+      
+    }
     res.status(200).json({ msg: "product added successfully" });
     console.log(product);
   } catch (e) {

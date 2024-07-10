@@ -26,7 +26,7 @@ class _BottomNavbrState extends State<BottomNavbr> {
     const HomeScreen(), // Replace with your home screen
     const WishlistScreen(), // Replace with your home screen
     const AccountScreen(), // Replace with your account screen
-     CartScreen(), // Replace with your cart screen
+     const CartScreen(), // Replace with your cart screen
   ];
 
   void updatePage(int page) {

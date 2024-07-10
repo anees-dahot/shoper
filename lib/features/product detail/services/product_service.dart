@@ -115,7 +115,7 @@ class ProductSerivce {
     List<ProductModel> products = [];
     try {
       DateTime sdate = DateTime.now().subtract(const Duration(days: 5));
-      DateTime edate = DateTime.now().add(Duration(days: 1));
+      DateTime edate = DateTime.now().add(const Duration(days: 1));
       String startDate =
           '${sdate.year}-${sdate.month}-${sdate.day}'; // Replace with your desired start date
       String endDate =

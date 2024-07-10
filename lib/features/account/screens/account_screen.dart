@@ -40,11 +40,11 @@ class AccountScreen extends StatelessWidget {
                 text: 'Become Seller',
                 onTap: () {
                   authService.becomeSeller(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SplashScreen()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => const SplashScreen()),
+                  // );
                 },
               )
             ],
@@ -63,14 +63,16 @@ class AccountScreen extends StatelessWidget {
               ),
               ProfileButtons(
                 text: 'Log Out',
-                onTap: () {},
+                onTap: () {
+                  authService.logoutUser(context);
+                },
               )
             ],
           ),
           const SizedBox(
             height: 30,
           ),
-          YourOrdersWidget()
+          const YourOrdersWidget()
         ],
       ),
     );

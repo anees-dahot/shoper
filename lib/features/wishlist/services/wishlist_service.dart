@@ -9,7 +9,7 @@ import '../../../model/product.dart';
 class WishListService {
   void addToWishlist(String userId, String productId) async {
     final userToken = userBox.values.first.token;
-    print('userId: ${userId}, productId: ${productId}');
+    print('userId: $userId, productId: $productId');
     try {
       final res = await http.post(
         Uri.parse("$baseUrl/api/product/add-to-wishlist"),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoper/features/orders/screen/orders_screen.dart';
@@ -5,7 +6,7 @@ import '../../orders/controller/order_controller.dart';
 import '../../../model/order.dart'; // Make sure to import your Order and OrderItem models
 
 class YourOrdersWidget extends StatefulWidget {
-  YourOrdersWidget({Key? key}) : super(key: key);
+  const YourOrdersWidget({super.key});
 
   @override
   State<YourOrdersWidget> createState() => _YourOrdersWidgetState();
@@ -27,8 +28,9 @@ class _YourOrdersWidgetState extends State<YourOrdersWidget> {
       height: MediaQuery.of(context).size.height * 0.5,
       child: Column(
         children: [
-           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -37,12 +39,13 @@ class _YourOrdersWidgetState extends State<YourOrdersWidget> {
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                 ),
                 GestureDetector(
-                  onTap: (){
-Navigator.pushNamed(context, OrdersPage.routeName);
+                  onTap: () {
+                    Navigator.pushNamed(context, OrdersPage.routeName);
                   },
                   child: const Text(
                     'See All',
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
@@ -57,10 +60,14 @@ Navigator.pushNamed(context, OrdersPage.routeName);
                   } else if (controller.orders.isEmpty) {
                     return const Center(child: Text('No orders'));
                   } else {
-                    // Flatten the list of items from all orders
-                    List<OrderItem> allItems = controller.orders
-                        .expand((order) => order.items)
+                    final orders = controller.orders
+                        .where((order) =>
+                            order.status.toLowerCase() ==
+                            'pending'.toLowerCase())
                         .toList();
+                    // Flatten the list of items from all orders
+                    List<OrderItem> allItems =
+                        orders.expand((order) => order.items).toList();
 
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -80,11 +87,17 @@ Navigator.pushNamed(context, OrdersPage.routeName);
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10.0),
-                                child: Image.network(
-                                  item.imageUrl,
+                                child: CachedNetworkImage(
+                                  imageUrl: item.imageUrl,
                                   width: double.infinity,
-                                  height: MediaQuery.of(context).size.width * 0.4,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 ),
                               ),
                               Padding(
